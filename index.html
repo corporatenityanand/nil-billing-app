@@ -342,7 +342,7 @@ const EDITABLE = Object.keys(KEY);   // meta, flags: read-only here; audit: appe
 const NUMC = { base: 1, total: 1, ret: 1, adv: 1, oth: 1, tds: 1, pay: 1, held: 1, amt: 1, payAdj: 1 };
 const BOOLC = { dateEst: 1, deleted: 1 };
 
-let USER = null, TOKEN = null, TOKEN_EXP = 0, tokenClient = null, onTokenError = null;
+let USER = null, TOKEN = null, TOKEN_EXP = 0, tokenClient = null, onTokenError = null, NEED_CONSENT = false;
 let HDR = {}, SHEET_IDS = {}, BASE = null, LOADED_AT = 0;
 let DIRTY = false, SAVING = false, EDITS = 0, SAVE_ERR = "";
 
@@ -547,9 +547,15 @@ function requestToken(prompt) {
     onTokenError = e => rej(new Error(e && e.type === "popup_closed" ? "The Google sign-in window was closed." : e && e.type === "popup_failed_to_open" ? "The browser blocked the Google sign-in window. Allow pop-ups for this site and try again." : "Google sign-in failed."));
     tokenClient.callback = r => {
       if (!r || r.error) { rej(new Error("Google sign-in failed: " + ((r && (r.error_description || r.error)) || "unknown error"))); return; }
-      if (!google.accounts.oauth2.hasGrantedAllScopes(r, SHEETS_SCOPE)) { rej(new Error("Please tick the Google Sheets permission so the tool can read and save data.")); return; }
+      if (!google.accounts.oauth2.hasGrantedAllScopes(r, SHEETS_SCOPE)) {
+        NEED_CONSENT = true;   // next attempt shows Google's permission screen again instead of reusing the partial grant
+        rej(new Error("Google did not give access to the sheet: the box \u201CSee, edit, create and delete all your Google Sheets spreadsheets\u201D was not ticked. Click Sign in with Google again and tick that box on Google's permission screen, then Continue."));
+        return;
+      }
+      NEED_CONSENT = false;
       TOKEN = r.access_token; TOKEN_EXP = Date.now() + (Math.max(120, +r.expires_in || 3600) - 60) * 1000; res();
     };
+    if (NEED_CONSENT) prompt = "consent";
     tokenClient.requestAccessToken(USER ? { prompt: prompt, login_hint: USER.email } : { prompt: prompt });
   });
 }
