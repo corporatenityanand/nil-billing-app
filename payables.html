@@ -216,10 +216,59 @@ a.lnk{color:var(--inv);cursor:pointer;text-decoration:underline;text-decoration-
 .cltbl .nar{font-size:12px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .cltbl .acts{display:flex;gap:4px;flex-wrap:wrap}
 .cltbl tr:focus-within td{background:var(--surface2)}
+.cdtbl{table-layout:fixed;min-width:760px}
+.cdtbl td{vertical-align:top;white-space:normal;overflow-wrap:anywhere;padding:5px 6px}
+.cdtbl .nar{font-size:12px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cdtbl .acts{display:flex;gap:4px;flex-wrap:wrap}
+.cdtbl tr.rp td{opacity:.55}
+#modal.review{width:min(1180px,100%)}
+#modal.ledger{width:min(980px,100%)}
+h2.fold{cursor:pointer;user-select:none}
+h2.fold::before{content:"▾";display:inline-block;width:1.1em;color:var(--muted);transition:transform .15s}
+.shut h2.fold::before{transform:rotate(-90deg)}
+.shut > :not(.toolbar){display:none !important}
+.tgbar{height:10px;border-radius:99px;background:var(--surface2);overflow:hidden}
+.tgbar i{display:block;height:100%;background:var(--cred)}
+.tgsrc{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px 16px;margin-top:10px;font-size:13px}
+.tgsrc label{display:flex;gap:6px;align-items:center;font-weight:600}
+.tgsrc .sub{display:block;margin:2px 0 4px}
+.tgsteps{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.tgsteps button.on{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+.tggrid{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:14px}
+@media (max-width:860px){.tggrid{grid-template-columns:minmax(0,1fr)}}
+.tgq{max-height:70vh;overflow:auto;border:1px solid var(--line);border-radius:9px}
+.tgq div{padding:7px 10px;border-bottom:1px solid var(--line);cursor:pointer;font-size:13px}
+.tgq div.on{background:var(--surface2);font-weight:600}
+.tgq div .sub{display:block;font-weight:400}
+.tgtbl select{max-width:100%;font-size:12px;padding:3px 4px}
+.tgtbl{table-layout:fixed;min-width:760px}
+.tgtbl td{vertical-align:top;white-space:normal;overflow-wrap:anywhere;padding:5px 6px}
+.pill.chg{background:color-mix(in srgb,var(--ret) 18%,var(--surface));color:var(--text)}
+.pill.lock{background:color-mix(in srgb,var(--inv) 12%,var(--surface));color:var(--text)}
+.bksnap{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline;font-size:13px}
+.bktbl td.l,.bktbl th.l{text-align:left}
+.bktbl tr.go{cursor:pointer}
+.bktbl tr.go:hover td{background:var(--surface2)}
+.bktbl tr.x td{text-decoration:line-through;opacity:.55}
+.bktbl tr.x td:last-child{text-decoration:none;opacity:1}
+.rvgrid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px}
+.rvdoc{min-height:60vh;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface2)}
+.rvdoc iframe{width:100%;height:68vh;border:0;display:block}
+.rvgrid .form{grid-template-columns:1fr 1fr}
+.rvgrid .form label.w{grid-column:1/-1}
+@media (max-width:760px){.rvgrid{grid-template-columns:minmax(0,1fr)}.rvdoc iframe{height:50vh}}
+.cdmon td,.cdmon th{white-space:nowrap}
+.cdmon tr.on td{background:var(--surface2);font-weight:600}
+.pill.ok{background:color-mix(in srgb,var(--ok,#2e7d32) 18%,var(--surface));color:var(--text)}
 td.nar{white-space:normal;text-align:left;font-size:12px;color:var(--muted);min-width:200px;max-width:380px}
 .imprev{margin-top:10px}
 .bars .crow{grid-template-columns:minmax(120px,240px) minmax(0,1fr) 120px}
 .chk1{width:auto}
+.tgpos{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:6px 0}
+.tgpos>div{background:var(--surface2);border-radius:9px;padding:8px 10px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.tgpos b{font-size:16px}
+.tgtbl tr.tgref td:not(:first-child):not(:nth-last-child(-n+2)){opacity:.55}
+.tgtbl td.bal{font-weight:600;white-space:nowrap}
 .selbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px 10px;margin-bottom:8px;background:var(--surface2);border-radius:9px;font-size:13px}
 .alias{display:inline-flex;align-items:center;gap:4px;margin:2px 4px 2px 0}
 .alias button{padding:0 6px;font-size:11px;line-height:16px}
@@ -259,6 +308,10 @@ td.nar{white-space:normal;text-align:left;font-size:12px;color:var(--muted);min-
     <button data-tab="overview" class="on">Overview</button>
     <button data-tab="classify">To classify <span class="cnt" id="clCnt"></span></button>
     <button data-tab="payments">Payments</button>
+    <button data-tab="chat">WhatsApp bills <span class="cnt" id="cdCnt"></span></button>
+    <button data-tab="books">Books <span class="cnt" id="bkCnt"></span></button>
+    <button data-tab="tally">Tally check</button>
+    <button data-tab="tag">Project tags <span class="cnt" id="tgCnt"></span></button>
     <button data-tab="vendors">Vendors</button>
     <button data-tab="projects">Projects</button>
     <button data-tab="masters">Masters</button>
@@ -307,6 +360,124 @@ td.nar{white-space:normal;text-align:left;font-size:12px;color:var(--muted);min-
     <div class="card"><div class="tblwrap" id="pTbl"></div></div>
   </section>
 
+  <section id="tab-chat" class="hide">
+    <div class="card" style="margin-bottom:12px">
+      <div class="toolbar" style="margin-bottom:6px"><h2 style="margin:0">WhatsApp bills and payment proofs by month</h2><span class="sub" id="cdSum"></span></div>
+      <div class="help">Bills, payment screenshots and other papers read from WhatsApp chat exports (Import tab). Each one is checked against the company bank lines: same amount, a date close by, and the UPI reference or the payee's name when they show. Confirm a suggested bank line, or mark the document paid outside the company bank, or not a bill. Click a month to see its documents.</div>
+      <div class="tblwrap" id="cdMon"></div>
+    </div>
+    <div class="card">
+      <div class="toolbar" style="margin-bottom:6px">
+        <select id="cdMonth"></select>
+        <select id="cdKind"><option value="bill">Bills</option><option value="pay">Payment proofs</option><option value="other">Other papers</option><option value="">All documents</option></select>
+        <select id="cdState"><option value="">Any state</option><option value="open">To check</option><option value="sugg">Bank line suggested</option><option value="nomatch">No bank line found</option><option value="ok">Matched to bank</option><option value="outside">Paid outside company bank</option><option value="ignore">Not a bill / ignored</option><option value="repost">Posted twice</option><option value="unrev">Not reviewed yet</option><option value="rev">Reviewed</option><option value="noproj">Without a project</option></select>
+        <input type="text" id="cdSearch" placeholder="Search vendor, bill no., items, UPI ref">
+        <button id="cdReset" class="small">Reset filters</button>
+      </div>
+      <div class="sub" id="cdInfo" style="margin:-2px 0 8px"></div>
+      <div class="tblwrap" id="cdTbl"></div>
+    </div>
+  </section>
+
+  <section id="tab-tally" class="hide">
+    <div class="card" style="margin-bottom:12px">
+      <div class="toolbar" style="margin-bottom:6px"><h2 style="margin:0">Tally against the bank and the WhatsApp bills</h2><span class="sub" id="tkSum"></span></div>
+      <div class="help">Tally day books (Import tab) checked line by line: each bank payment against a Tally payment or contra of the same amount within 4 days (12 for EMIs and NACH that post late), each bank receipt against a Tally receipt, and each WhatsApp bill against a Tally purchase of the same total or bill number. The day book gives only the party per voucher, so a wrong pair is possible where many payments share an amount. Click a number to see the lines.</div>
+      <div class="tblwrap" id="tkMon"></div>
+    </div>
+    <div class="card">
+      <div class="toolbar" style="margin-bottom:6px">
+        <select id="tkList"><option value="bank">Bank payments not in Tally</option><option value="tally">Tally payments not in the bank</option><option value="rcpt">Bank receipts not in Tally</option><option value="bills">WhatsApp bills not booked</option></select>
+        <select id="tkMonth"></select>
+        <input type="text" id="tkSearch" placeholder="Search name, narration, number">
+      </div>
+      <div class="sub" id="tkInfo" style="margin:-2px 0 8px"></div>
+      <div class="tblwrap" id="tkTbl"></div>
+    </div>
+  </section>
+
+  <section id="tab-books" class="hide">
+    <div class="card" style="margin-bottom:12px">
+      <div class="toolbar" style="margin-bottom:6px"><h2 style="margin:0">Snapshot of the Tally books</h2><span style="flex:1"></span>
+        <button class="small" data-act="bksnapdl">Download snapshot</button>
+        <button class="primary small" data-act="bksnap" id="bkSnapBtn">Take snapshot</button></div>
+      <div class="help">The day books imported from Tally (Import tab) are the books here. Taking a snapshot locks the vouchers as they are: a later import never changes or removes a locked voucher, and the fingerprint shows at once if anyone edits one in the Sheet. Every change after that is made here as a new voucher, an edit or a cancellation with a reason, kept in the change log below until someone posts it in Tally.</div>
+      <div id="bkSnap"></div>
+    </div>
+    <div class="card" style="margin-bottom:12px">
+      <div class="toolbar" style="margin-bottom:6px"><h2 style="margin:0">Ledgers</h2><span class="sub" id="bkSum"></span><span style="flex:1"></span>
+        <select id="bkBook"><option value="">Both books</option><option>Main</option><option>Piling</option></select>
+        <select id="bkKind"><option value="v">Vendors (with purchases)</option><option value="">All ledgers</option></select>
+        <input type="text" id="bkSearch" placeholder="Search ledger">
+        <button class="primary small" data-act="bknew">+ Voucher</button></div>
+      <div class="help">Balance = credits less debits from the first voucher in the day book (1-Apr-2025). The day books carry no opening balances, so this is the movement since then, not Tally's closing balance. Cr: NIL owes the party; Dr: paid ahead of bills booked. Click a ledger to see its vouchers.</div>
+      <div class="tblwrap" id="bkTbl"></div>
+    </div>
+    <div class="card">
+      <div class="toolbar" style="margin-bottom:6px"><h2 style="margin:0">Changes to post in Tally</h2><span class="sub" id="bkChgSum"></span><span style="flex:1"></span>
+        <select id="bkChgSt"><option value="To post">To post</option><option value="Posted">Posted in Tally</option><option value="Withdrawn">Withdrawn</option><option value="">All</option></select>
+        <button class="small" data-act="bkchgcsv">Download list</button></div>
+      <div class="help">The audit trail: who changed what, when, from what to what, and why. Entries are never deleted. When the accountant has entered one in Tally, mark it posted with the Tally voucher number; the next day book import also marks a change posted by itself when Tally has a voucher with the same book, ledger, date and amount.</div>
+      <div class="tblwrap" id="bkChg"></div>
+    </div>
+  </section>
+
+  <section id="tab-tag" class="hide">
+    <div class="card" id="tgTop" style="margin-bottom:12px">
+      <div class="toolbar" style="margin-bottom:6px"><h2 class="fold" title="Click to fold or unfold" style="margin:0">Tie every entry to a project and equipment</h2><span style="flex:1"></span><span class="sub" id="tgTot"></span></div>
+      <div class="tgbar"><i id="tgBar" style="width:0"></i></div>
+      <div class="tgsrc" id="tgSrc"></div>
+    </div>
+    <div class="tgsteps"><button data-act="tgstep" data-id="1" class="on">1 · Classify the raw data</button><button data-act="tgstep" data-id="2">2 · Tie bills to entries</button><button data-act="tgstep" data-id="3">3 · Equipment list</button><button data-act="tgstep" data-id="4">4 · Projects and equipment</button><button data-act="tgstep" data-id="5">5 · Check the totals</button></div>
+    <div id="tgStep1">
+      <div class="card" id="rwPcCard" style="margin-bottom:12px">
+        <div class="toolbar" style="margin-bottom:6px"><h2 class="fold" title="Click to fold or unfold" style="margin:0">Site float book (petty expenses)</h2><span class="sub" id="rwPcSum"></span><span style="flex:1"></span>
+          <select id="rwPcShow"><option value="open">Not classified</option><option value="noproj">Without a project</option><option value="">All lines</option></select></div>
+        <div class="tgbar"><i id="rwPcBar" style="width:0"></i></div>
+        <div class="help" style="margin-top:8px">Each line from the site float book: who was paid (pick a vendor or type the name), what for, and the project (suggested from site names in the line), then Save (or Enter). Tick several lines to give them one project at once. A WhatsApp bill tied to the line later takes the same project.</div>
+        <div class="selbar" id="rwPcBulk"><span id="rwPcSel">Tick lines to set them together</span><select id="rwPcBP"></select><button class="small primary" data-act="rwpcbulk">Set project for ticked</button></div>
+        <div class="tblwrap" id="rwPcTbl"></div>
+      </div>
+      <div class="card" id="rwDocCard">
+        <div class="toolbar" style="margin-bottom:6px"><h2 class="fold" title="Click to fold or unfold" style="margin:0">WhatsApp documents</h2><span class="sub" id="rwDocSum"></span><span style="flex:1"></span>
+          <select id="rwDocShow"><option value="open">Not classified</option><option value="notag">Without project or equipment</option><option value="">All documents</option></select>
+          <select id="rwDocKind"><option value="">All documents</option><option value="bill">Bills</option><option value="pay">Payment proofs</option><option value="other">Other papers</option></select></div>
+        <div class="tgbar"><i id="rwDocBar" style="width:0"></i></div>
+        <div class="help" style="margin-top:8px">Open each document beside what was read from it: correct the type, vendor, bill no., date and amounts (Save and next, or Ctrl+Enter), or mark it not a bill. A document counts as classified once it is reviewed or set aside.</div>
+        <div class="selbar"><span id="rwDocSel">Tick documents to set them together</span><select id="rwDocBP"></select><select id="rwDocBE"></select><select id="rwDocBC"></select><button class="small primary" data-act="rwdocbulk">Set for ticked</button></div>
+        <div class="tblwrap" id="rwDocTbl"></div>
+      </div>
+    </div>
+    <div class="card hide" id="tgStep2">
+      <div class="toolbar" style="margin-bottom:6px"><h2 class="fold" title="Click to fold or unfold" style="margin:0">Tie each bill to its payment and its Tally voucher</h2><span class="sub" id="tiSum"></span><span style="flex:1"></span>
+        <select id="tiPayer"><option value="">Paid by anyone</option></select> <select id="tiShow"><option value="open">Not tied yet</option><option value="done">Tied</option><option value="">All</option></select></div>
+      <div class="tgbar"><i id="tiBar" style="width:0"></i></div>
+      <div class="help" style="margin-top:8px">Each WhatsApp bill or payment proof with the entries it most likely belongs to: the bank debit (same amount, the UPI reference or the vendor's name), the Tally purchase voucher (same total, or the same bill no.) and the site float line (same amount within a few days). Tie the right ones. A tied bill and its entries then move together when you set the project and equipment in step 4.</div>
+      <div class="tblwrap" id="tiTbl"></div>
+    </div>
+    <div class="card hide" id="tgStep3">
+      <div class="toolbar" style="margin-bottom:6px"><h2 class="fold" title="Click to fold or unfold" style="margin:0">Equipment</h2><span class="sub" id="eqSum"></span><span style="flex:1"></span><button class="primary small" data-act="eqnew">+ Equipment</button></div>
+      <div class="help">Rigs, cranes, vehicles and other machines that costs are booked against. Words are spellings that appear in bank narrations, bills or Tally ledgers for that machine (a serial number, a short name); entries that contain one are suggested for it.</div>
+      <div class="tblwrap" id="eqTbl"></div>
+      <div id="eqSug" style="margin-top:12px"></div>
+    </div>
+    <div class="card hide" id="tgStep4">
+      <div class="help">Each party's entries from every source together: bank, other payments (site float, direct), WhatsApp bills, Tally. Pick the project (and the equipment, if the cost is for a machine) and apply it to the party's untagged entries, to the ones ticked, or to a date range when the party moved between sites. Every change is saved and logged in the audit tab.</div>
+      <div class="tggrid">
+        <div><input type="text" id="tgSearch" placeholder="Search party" style="width:100%;margin-bottom:6px">
+          <label class="sub" style="display:flex;gap:6px;align-items:center;margin-bottom:6px"><input type="checkbox" id="tgDone" class="chk1"> show parties already done</label>
+          <div class="tgq" id="tgQueue"></div></div>
+        <div id="tgParty"></div>
+      </div>
+    </div>
+    <div class="card hide" id="tgStep5">
+      <div class="toolbar" style="margin-bottom:6px"><h2 class="fold" title="Click to fold or unfold" style="margin:0">Totals by project and equipment</h2><span style="flex:1"></span><button class="small" data-act="tgcsv">Download all entries</button></div>
+      <div class="help">The same cost can show in more than one source (a bill on WhatsApp, its bank payment and its Tally voucher), so read each column on its own rather than adding across.</div>
+      <div id="tgProjBox"><div class="toolbar" style="margin:8px 0 4px"><h2 class="fold" title="Click to fold or unfold" style="margin:0;font-size:14px">By project</h2></div><div class="tblwrap" id="tgProj"></div></div>
+      <div id="tgEqBox"><div class="toolbar" style="margin:12px 0 4px"><h2 class="fold" title="Click to fold or unfold" style="margin:0;font-size:14px">By equipment</h2></div><div class="tblwrap" id="tgEq"></div></div>
+    </div>
+  </section>
+
   <section id="tab-vendors" class="hide">
     <div class="card">
       <div class="toolbar" style="margin-bottom:6px"><h2 style="margin:0">Vendors</h2><span class="sub" id="vSum"></span><span style="flex:1"></span>
@@ -334,6 +505,25 @@ td.nar{white-space:normal;text-align:left;font-size:12px;color:var(--muted);min-
       <div class="imprev" id="bkPrev"></div>
     </div>
     <div class="card" style="margin-bottom:12px">
+      <h2>Tally day book</h2>
+      <div class="help">The Day Book exported from Tally to Excel (Date, Particulars, Vch Type, Vch No., Debit, Credit), one file per company. Importing a newer export of the same company brings in its new vouchers. Before a snapshot (Books tab) it also drops vouchers no longer in Tally; after one, locked vouchers are kept and those missing from the export are listed as removed in Tally.</div>
+      <label class="btnlike">Choose day book files<input type="file" id="tkFile" accept=".xlsx,.xls" multiple hidden></label>
+      <div class="sub" id="tkImpInfo"></div>
+    </div>
+    <div class="card" style="margin-bottom:12px">
+      <h2>Site float book</h2>
+      <div class="help">The site float holder's monthly book (.xlsx, one sheet per month with Date, Vr. No., Account Head, Narration, Amount, Credit Amt., Balance). Each paid line becomes a payment from "Site float" (category Site expenses until changed). Each top-up is looked for in the bank: a debit of the same amount up to 4 days before, to the holder's name as the bank writes it; those bank lines are set to "Site float top-up", which is then left out of the totals so nothing counts twice. Importing an updated book again adds only the new lines.</div>
+      <div class="toolbar"><label>Holder's name in the bank <input type="text" id="sfPayee" placeholder="as the statement writes it"></label>
+        <label class="btnlike">Choose float book<input type="file" id="sfFile" accept=".xlsx,.xls" hidden></label></div>
+      <div class="sub" id="sfInfo"></div>
+    </div>
+    <div class="card" style="margin-bottom:12px">
+      <h2>WhatsApp chat extract</h2>
+      <div class="help">The bills and payment proofs read from a WhatsApp chat export, as a .json file prepared by Claude. Importing again updates the extracted details and keeps what was checked here (bank line confirmed, paid outside, ignored).</div>
+      <label class="btnlike">Choose extract file<input type="file" id="cdFile" accept=".json" hidden></label>
+      <span class="sub" id="cdImpInfo"></span>
+    </div>
+    <div class="card" style="margin-bottom:12px">
       <h2>Imported so far</h2>
       <div class="tblwrap" id="bkDone"></div>
     </div>
@@ -352,6 +542,8 @@ td.nar{white-space:normal;text-align:left;font-size:12px;color:var(--muted);min-
         <label>Other payment sources (comma separated)<input type="text" id="setSources" placeholder="e.g. Vignesh personal, MD personal"></label>
         <label>Duplicate check: days apart<input type="number" id="setDupDays" min="0" max="30"></label>
         <label>Duplicate check: from amount (&#8377;)<input type="number" id="setDupMin" min="0" step="1000"></label>
+        <label style="grid-column:1/-1">Paid from: the list in the WhatsApp review (comma separated; names starting with NIL are company banks)<input type="text" id="setPayers"></label>
+        <label>Site float holder (pays from the float)<input type="text" id="setFloatHolder" placeholder="Dayaram Purbey"></label>
       </div>
       <div class="sub" style="margin-top:6px">Direct and Site float are always available as sources.</div>
     </div>
@@ -416,13 +608,13 @@ function mergeCats(list) {
 const catOpts = (sel, blank) => (blank ? '<option value="">' + esc(blank) + "</option>" : "") + CATS.filter(c => !c.hidden || c.id === sel).map(c => '<option value="' + esc(c.id) + '"' + (c.id === sel ? " selected" : "") + ">" + esc(c.name || c.id) + "</option>").join("");
 
 /* ---------- state ---------- */
-const NEW_STATE = () => ({ vendors: [], projects: [], lines: [], pays: [], cats: mergeCats([]), settings: { sources: "", dupDays: 3, dupMin: 10000 } });
+const NEW_STATE = () => ({ vendors: [], projects: [], lines: [], pays: [], docs: [], tally: [], tsnap: [], tchg: [], equip: [], cats: mergeCats([]), settings: { sources: "", dupDays: 3, dupMin: 10000, floatPayee: "", payers: "NIL Kotak, NIL HDFC, Dayaram Purbey, Vignesh Prabhu, Jayanth Prabhu, Akhtar, Sujeet, NMFP Kotak", floatHolder: "Dayaram Purbey" } });
 let S = NEW_STATE();
 let saveTimer = null, HIST = [], LAST = null;
 function normalize(o) {
   if (o) o = JSON.parse(JSON.stringify(o));   // snapshot data can be read-only; always work on a copy
   const n = NEW_STATE(); if (!o) return n;
-  ["vendors", "projects", "lines", "pays"].forEach(k => { n[k] = Array.isArray(o[k]) ? o[k] : []; });
+  ["vendors", "projects", "lines", "pays", "docs", "tally", "tsnap", "tchg", "equip"].forEach(k => { n[k] = Array.isArray(o[k]) ? o[k] : []; });
   n.cats = mergeCats(o.cats);
   n.settings = Object.assign(n.settings, o.settings || {});
   return n;
@@ -448,17 +640,22 @@ const SHEETS_API = "https://sheets.googleapis.com/v4/spreadsheets/";
 const TABS = {
   vendors: ["id", "name", "aliases", "unit", "cat", "project", "pan", "gstin", "tdsPct", "phone", "note", "addedBy", "addedOn"],
   projects: ["id", "name", "clientGroup", "client", "site", "unit", "woNo", "start", "end", "status", "incharge", "words", "note"],
-  bank_lines: ["id", "acct", "date", "narration", "ref", "debit", "credit", "balance", "vendorId", "cat", "project", "adv", "dupOk", "note", "importedOn", "importedBy"],
-  payments: ["id", "date", "source", "vendorId", "payee", "amt", "cat", "project", "adv", "dupOk", "ref", "note", "by", "on"],
+  bank_lines: ["id", "acct", "date", "narration", "ref", "debit", "credit", "balance", "vendorId", "cat", "project", "adv", "dupOk", "note", "importedOn", "importedBy", "equip"],
+  payments: ["id", "date", "source", "vendorId", "payee", "amt", "cat", "project", "adv", "dupOk", "ref", "note", "by", "on", "equip", "checkedBy", "checkedOn"],
   categories: ["id", "name", "leftOut", "noProject", "hidden", "sort"],
+  chat_docs: ["id", "chat", "month", "post", "posted", "who", "type", "vendor", "gstin", "docNo", "docDate", "site", "items", "taxable", "gst", "total", "paid", "upi", "txn", "paidFrom", "conf", "note", "caption", "file", "driveId", "repostOf", "lineId", "status", "checkedBy", "checkedOn", "project", "reviewedBy", "reviewedOn", "equip", "tallyId", "payId", "cat"],
+  tally: ["id", "book", "date", "party", "type", "no", "dr", "cr", "importedOn", "snap", "gone", "project", "equip"],
+  equipment: ["id", "name", "kind", "make", "model", "serial", "words", "project", "status", "note"],
+  tally_snap: ["id", "book", "from", "asOn", "vouchers", "dr", "cr", "fingerprint", "takenBy", "takenAt"],
+  tally_changes: ["id", "kind", "ref", "book", "date", "party", "type", "no", "dr", "cr", "was", "reason", "by", "at", "status", "postedBy", "postedOn", "tallyNo", "tallyId"],
   settings: ["key", "value"],
   audit: ["timestamp", "user_email", "action", "entity", "entity_id", "before_json", "after_json"]
 };
-const SKEY = { vendors: "vendors", projects: "projects", bank_lines: "lines", payments: "pays", categories: "cats" };
-const EDITABLE = ["vendors", "projects", "bank_lines", "payments", "categories", "settings"];
-const NUMC = { debit: 1, credit: 1, balance: 1, amt: 1, tdsPct: 1, sort: 1 };
+const SKEY = { vendors: "vendors", projects: "projects", bank_lines: "lines", payments: "pays", categories: "cats", chat_docs: "docs", tally: "tally", tally_snap: "tsnap", tally_changes: "tchg", equipment: "equip" };
+const EDITABLE = ["vendors", "projects", "bank_lines", "payments", "categories", "chat_docs", "tally", "tally_snap", "tally_changes", "equipment", "settings"];
+const NUMC = { debit: 1, credit: 1, balance: 1, amt: 1, tdsPct: 1, sort: 1, taxable: 1, gst: 1, total: 1, paid: 1, post: 1, dr: 1, cr: 1, vouchers: 1 };
 const BOOLC = { adv: 1, dupOk: 1, leftOut: 1, noProject: 1, hidden: 1 };
-const DATEC = { date: 1, start: 1, end: 1, importedOn: 1, on: 1, addedOn: 1 };
+const DATEC = { date: 1, start: 1, end: 1, importedOn: 1, on: 1, addedOn: 1, docDate: 1, checkedOn: 1, gone: 1, from: 1, asOn: 1, postedOn: 1 };
 
 let USER = null, TOKEN = null, TOKEN_EXP = 0, tokenClient = null, onTokenError = null;
 const GRANT_KEY = "rcr_sheets_granted";   // shared with the receivables app: same Google client and permission
@@ -546,7 +743,7 @@ async function loadAll() {
     });
   });
   const n = NEW_STATE();
-  n.vendors = raw.vendors; n.projects = raw.projects; n.lines = raw.bank_lines; n.pays = raw.payments; n.cats = raw.categories;
+  n.vendors = raw.vendors; n.projects = raw.projects; n.lines = raw.bank_lines; n.pays = raw.payments; n.docs = raw.chat_docs; n.tally = raw.tally; n.tsnap = raw.tally_snap; n.tchg = raw.tally_changes; n.equip = raw.equipment; n.cats = raw.categories;
   raw.settings.forEach(x => { const k = String(x.key).trim(); if (k in n.settings) n.settings[k] = typeof n.settings[k] === "number" ? toNum(x.value, n.settings[k]) : String(x.value); });
   S = normalize(n);
   BASE = rowsView();
@@ -818,7 +1015,7 @@ function fillPeriods() {
   PERIOD = sel.value ? sel.value.split("|") : null;
 }
 const vName = r => r.v ? r.v.name : r.payee;
-const projName = id => (PBY[id] ? PBY[id].name || id : id);
+const projName = id => (id === "_co" ? "Company level" : PBY[id] ? PBY[id].name || id : id);
 const projOpts = (sel, blank) => (blank != null ? '<option value="">' + esc(blank) + "</option>" : "") + S.projects.slice().sort((a, b) => String(a.id).localeCompare(String(b.id))).map(p => '<option value="' + esc(p.id) + '"' + (p.id === sel ? " selected" : "") + ">" + esc(p.id + " · " + (p.name || "")) + "</option>").join("");
 const srcList = () => uniq(S.lines.map(l => l.acct).concat(["Direct", "Site float"]).concat(String(S.settings.sources || "").split(",").map(s => s.trim())));
 
@@ -828,7 +1025,7 @@ function renderAll() {
   $("#vendorList").innerHTML = S.vendors.slice().sort((a, b) => a.name.localeCompare(b.name)).map(v => '<option value="' + esc(v.name) + '">').join("");
   const n = S.lines.length, accts = uniq(S.lines.map(l => l.acct));
   $("#vbinfo").textContent = n ? n.toLocaleString("en-IN") + " bank lines from " + accts.join(", ") : "No bank statement imported yet";
-  renderOverview(); renderClassify(); renderPayments(); renderVendors(); renderProjects(); renderImport(); renderMasters();
+  renderOverview(); renderClassify(); renderPayments(); renderChat(); renderBooks(); renderTally(); renderTag(); renderVendors(); renderProjects(); renderImport(); renderMasters();
 }
 function bars(el, items, total, click) {
   const max = Math.max.apply(null, items.map(x => x[1]).concat([1]));
@@ -1058,7 +1255,7 @@ function openProject(id) {
     '<label style="grid-column:1/-1">Bank words (comma separated)<input type="text" id="jWords" value="' + esc(p.words) + '" placeholder="WADALA, BYCULLA"></label>' +
     '<label style="grid-column:1/-1">Note<input type="text" id="jNote" value="' + esc(p.note) + '"></label></div>' +
     '<div style="margin-top:12px;display:flex;gap:8px">' + (p.id ? '<button class="danger" id="mDel">Delete project</button>' : "") + '<span style="flex:1"></span><button data-act="mclose">Cancel</button><button class="primary" id="mSave">Save</button></div>', true);
-  const refs = id => S.lines.filter(x => x.project === id).length + S.pays.filter(x => x.project === id).length + S.vendors.filter(x => x.project === id).length;
+  const refs = id => S.lines.concat(S.pays, S.vendors, S.docs, S.tally, S.equip).filter(x => x.project === id).length;
   if (p.id) $("#mDel").onclick = () => {
     const n = refs(p.id);
     if (n) { toast(n + " payments or vendors are set to " + p.id + ". Change the code instead, or move them first."); return; }
@@ -1070,7 +1267,7 @@ function openProject(id) {
     if (code !== p.id && PBY[code]) { toast("That code is already used"); $("#jId").classList.add("bad"); return; }
     let moved = 0;
     if (p.id && code !== p.id) {   // new code: carry every payment and vendor that pointed at the old one
-      S.lines.concat(S.pays, S.vendors).forEach(x => { if (x.project === p.id) { x.project = code; moved++; } });
+      S.lines.concat(S.pays, S.vendors, S.docs, S.tally, S.equip).forEach(x => { if (x.project === p.id) { x.project = code; moved++; } });
       PBY[p.id].id = code; PBY[code] = PBY[p.id]; delete PBY[p.id];
     }
     const t = PBY[code] || (S.projects.push({ id: code }), S.projects[S.projects.length - 1]);
@@ -1174,7 +1371,8 @@ function renderImport() {
   const ks = Object.keys(m).sort();
   $("#bkDone").innerHTML = ks.length ? '<table><thead><tr><th>Account</th><th class="l">From</th><th class="l">To</th><th>Lines</th><th>Money out</th></tr></thead><tbody>' + ks.map(k => "<tr><td>" + esc(k) + '</td><td class="l">' + dmy(m[k].lo) + '</td><td class="l">' + dmy(m[k].hi) + "</td><td>" + m[k].n.toLocaleString("en-IN") + "</td><td>" + cmp(m[k].out) + "</td></tr>").join("") + "</tbody></table>" : '<div class="sub">Nothing imported yet.</div>';
   if (document.activeElement && /^set/.test(document.activeElement.id)) return;
-  $("#setSources").value = S.settings.sources || ""; $("#setDupDays").value = S.settings.dupDays; $("#setDupMin").value = S.settings.dupMin;
+  if (document.activeElement !== $("#sfPayee")) $("#sfPayee").value = S.settings.floatPayee || "";
+  $("#setSources").value = S.settings.sources || ""; $("#setPayers").value = S.settings.payers || ""; $("#setFloatHolder").value = S.settings.floatHolder || ""; $("#setDupDays").value = S.settings.dupDays; $("#setDupMin").value = S.settings.dupMin;
 }
 /* ---------- masters: categories ---------- */
 function renderMasters() {
@@ -1225,10 +1423,873 @@ async function onProjectFile(f) {
   } catch (e) { toast(e.message || String(e)); }
 }
 
+/* ---------- WhatsApp bills: documents read from chat exports, checked against the bank lines ---------- */
+const CD_BILL = { "tax invoice": 1, "bill / memo": 1, "fuel slip / pump bill": 1, "voucher / handwritten": 1 };
+const CD_PAY = { "payment screenshot": 1, "bank payment list": 1 };
+const cdKind = d => (CD_BILL[d.type] ? "bill" : CD_PAY[d.type] ? "pay" : "other");
+const cdAmt = d => (cdKind(d) === "pay" ? +d.paid || +d.total || 0 : +d.total || +d.paid || 0);
+const cdDate = d => d.docDate || d.posted || "";
+const cdDrive = d => (d.driveId ? "https://drive.google.com/file/d/" + encodeURIComponent(d.driveId) + "/view" : "");
+let CD_SHOW = 100, CDM = {};
+const STOPN = { BANK: 1, UPI: 1, NEFT: 1, IMPS: 1, RTGS: 1, PAYMENT: 1, SENT: 1, TO: 1, FROM: 1, KOTAK: 1, HDFC: 1, TRANSFER: 1, ENTERPRISES: 1, ENTERPRISE: 1, TRADERS: 1, SERVICES: 1, INDIA: 1 };
+const cdWords = s => norm(s).split(" ").filter(w => w.length >= 3 && !STOPN[w]);
+/* the best bank debit for each open document: UPI reference first, then amount with the payee's name, then amount and date alone */
+/* who paid: the bill's "Paid from" as read, put on the list in Masters (NIL Kotak, NIL HDFC, Dayaram Purbey, ...) */
+const payerList = () => String(S.settings.payers || "").split(",").map(x => x.trim()).filter(Boolean);
+function payerOf(raw) {
+  const r = String(raw || "").trim(); if (!r) return "";
+  const L = payerList(), find = re => L.filter(x => re.test(x))[0];
+  const exact = L.filter(x => x.toLowerCase() === r.toLowerCase())[0]; if (exact) return exact;
+  const rules = [[/dayaram|purbey|purvai|yes bank\D*1200|1200\D*dayaram/i, /dayaram/i], [/nmfp|mobile fuel|1397/i, /nmfp|mobile fuel/i], [/kotak|1452/i, /^nil.*kotak/i], [/hdfc|1670/i, /^nil.*hdfc/i],
+    [/vignesh/i, /vignesh/i], [/jayanth/i, /jayanth/i], [/akhtar/i, /akhtar/i], [/sujeet/i, /sujeet/i]];
+  for (const x of rules) if (x[0].test(r)) { const m = find(x[1]); if (m) return m; }
+  return L.filter(x => r.toLowerCase().indexOf(x.split(" ")[0].toLowerCase()) >= 0)[0] || r;
+}
+const payerCompany = p => /^NIL\b/i.test(p);
+const payerFloat = p => !!p && !!S.settings.floatHolder && norm(p) === norm(payerOf(S.settings.floatHolder));
+function cdMatch() {
+  CDM = {};
+  const taken = {}, byAmt = {};
+  S.docs.forEach(d => { if (d.lineId) taken[d.lineId] = d.id; });
+  S.lines.forEach(l => { if (l.debit > 0) (byAmt[Math.round(l.debit)] || (byAmt[Math.round(l.debit)] = [])).push(l); });
+  S.docs.forEach(d => {
+    if (d.status || d.repostOf) return;
+    const pf = payerOf(d.paidFrom); if (pf && !payerCompany(pf)) return;   // paid by a person (site float, a director): not in the company bank
+    const a = cdAmt(d), dt = cdDate(d), k = cdKind(d);
+    if (!(a > 0) || !dt || k === "other") return;
+    const lo = k === "pay" ? -2 : -30, hi = k === "pay" ? 4 : 120;
+    const ref = String(d.txn || "").replace(/\D/g, "").slice(-12), vw = cdWords(d.vendor);
+    let best = null;
+    [-1, 0, 1].forEach(o => (byAmt[Math.round(a) + o] || []).forEach(l => {
+      if (taken[l.id] || Math.abs(l.debit - a) > 1) return;
+      const gap = daysBetween(dt, l.date); if (gap < lo || gap > hi) return;
+      const txt = (l.narration || "") + " " + (l.ref || ""), lw = cdWords(txt);
+      const how = ref.length >= 6 && txt.replace(/\D/g, " ").indexOf(ref) >= 0 ? 3 : vw.some(w => lw.indexOf(w) >= 0) ? 2 : (k === "pay" || a >= 5000) ? 1 : 0;
+      if (!how) return;
+      const sc = how * 1000 - Math.abs(gap);
+      if (!best || sc > best.sc) best = { l: l, how: how, gap: gap, sc: sc };
+    }));
+    if (best) CDM[d.id] = best;
+  });
+}
+const CD_HOW = { 3: "UPI reference", 2: "amount and name", 1: "amount and date" };
+function cdState(d) {
+  if (d.repostOf) return "repost";
+  if (d.status) return d.status;
+  if (cdKind(d) === "other") return "open";
+  return CDM[d.id] ? "sugg" : "nomatch";
+}
+const CD_LBL = { open: "To check", sugg: "Bank line suggested", nomatch: "No bank line found", ok: "Matched to bank", outside: "Paid outside company bank", ignore: "Not a bill", repost: "Posted twice" };
+function cdFilter() {
+  const m = $("#cdMonth").value, k = $("#cdKind").value, st = $("#cdState").value, q = $("#cdSearch").value.trim().toLowerCase();
+  return S.docs.filter(d => {
+    if (m && d.month !== m) return false;
+    if (k && cdKind(d) !== k) return false;
+    const s = cdState(d);
+    if (st === "unrev" || st === "rev" || st === "noproj") { if (s === "repost" || (st === "unrev" && d.reviewedOn) || (st === "rev" && !d.reviewedOn) || (st === "noproj" && d.project)) return false; }
+    else if (st === "open" ? (s !== "sugg" && s !== "nomatch" && s !== "open") : st ? s !== st : s === "repost") return false;
+    if (q && [d.vendor, d.docNo, d.items, d.txn, d.upi, d.site, d.caption, d.who, d.file].join(" ").toLowerCase().indexOf(q) < 0) return false;
+    return true;
+  }).sort((a, b) => (cdDate(a) < cdDate(b) ? -1 : cdDate(a) > cdDate(b) ? 1 : (a.post || 0) - (b.post || 0)));
+}
+function renderChat() {
+  cdMatch();
+  const live = S.docs.filter(d => !d.repostOf);
+  const todoN = live.filter(d => !d.status && cdKind(d) !== "other").length; $("#cdCnt").textContent = todoN ? "(" + todoN.toLocaleString("en-IN") + ")" : "";
+  const months = uniq(S.docs.map(d => d.month).filter(Boolean)).sort();
+  const sel = $("#cdMonth"), cur = sel.value;
+  sel.innerHTML = '<option value="">All months</option>' + months.slice().reverse().map(m => '<option value="' + esc(m) + '">' + esc(monLbl(m)) + "</option>").join("");
+  sel.value = months.indexOf(cur) >= 0 ? cur : "";
+  const bills = live.filter(d => cdKind(d) === "bill"), pays = live.filter(d => cdKind(d) === "pay");
+  const sum = a => a.reduce((s, d) => s + cdAmt(d), 0);
+  $("#cdSum").textContent = S.docs.length ? bills.length.toLocaleString("en-IN") + " bills " + cmp(sum(bills)) + " · " + pays.length.toLocaleString("en-IN") + " payment proofs " + cmp(sum(pays)) : "";
+  if (!S.docs.length) {
+    $("#cdMon").innerHTML = '<div class="sub">Nothing imported yet. Import a WhatsApp chat extract (.json) on the Import tab.</div>';
+    $("#cdTbl").innerHTML = ""; $("#cdInfo").textContent = ""; return;
+  }
+  const bank = d => d.status === "ok" || (!d.status && CDM[d.id]);
+  $("#cdMon").innerHTML = '<table class="cdmon"><thead><tr><th class="l">Month</th><th>Bills</th><th>Bill value</th><th>Payment proofs</th><th>Paid per proofs</th><th>Proofs matched to bank</th><th>Paid outside company bank</th><th>Still to check</th></tr></thead><tbody>' +
+    months.map(m => {
+      const b = bills.filter(d => d.month === m), p = pays.filter(d => d.month === m);
+      const pm = p.filter(d => d.status === "ok"), ps = p.filter(d => !d.status && CDM[d.id]), po = p.filter(d => d.status === "outside");
+      const todo = live.filter(d => d.month === m && !d.status && cdKind(d) !== "other").length;
+      return '<tr class="dr' + ($("#cdMonth").value === m ? " on" : "") + '" data-act="cdmon" data-id="' + esc(m) + '"><td class="l">' + esc(monLbl(m)) + "</td><td>" + (b.length || "") + "</td><td>" + (b.length ? cmp(sum(b)) : "") + "</td><td>" + (p.length || "") + "</td><td>" + (p.length ? cmp(sum(p)) : "") +
+        "</td><td>" + (pm.length ? cmp(sum(pm)) : "") + (ps.length ? ' <span class="sub">' + (pm.length ? "+ " : "") + cmp(sum(ps)) + " suggested</span>" : "") + "</td><td>" + (po.length ? cmp(sum(po)) : "") + "</td><td>" + (todo || "") + "</td></tr>";
+    }).join("") + "</tbody></table>";
+  const list = cdFilter(), shown = list.slice(0, CD_SHOW);
+  $("#cdInfo").textContent = list.length.toLocaleString("en-IN") + " documents · " + cmp(sum(list)) + (list.length > CD_SHOW ? " · showing the first " + CD_SHOW : "");
+  $("#cdTbl").innerHTML = list.length ? '<table class="cdtbl"><colgroup><col style="width:10%"><col style="width:20%"><col style="width:24%"><col style="width:11%"><col style="width:22%"><col style="width:13%"></colgroup><thead><tr><th class="l">Date</th><th class="l">Document</th><th class="l">Vendor and items</th><th>Amount</th><th class="l">Company bank</th><th class="l"></th></tr></thead><tbody>' +
+    shown.map(d => {
+      const st = cdState(d), m = CDM[d.id], ln = d.lineId ? S.lines.filter(l => l.id === d.lineId)[0] : null, url = cdDrive(d);
+      const v = VBY[ALIAS[norm(d.vendor)]];
+      const doc = '<span class="pill">' + esc(d.type || "document") + "</span>" + (d.docNo ? " " + esc(d.docNo) : "") +
+        '<div class="nar">' + (url ? '<a href="' + esc(url) + '" target="_blank" rel="noopener">Open in Drive</a> · ' : "") + esc(d.who || "") + (d.posted ? " " + esc(dmy(d.posted)) : "") + "</div>";
+      const who = "<b>" + esc(d.vendor || "?") + "</b>" + (v && v.name !== d.vendor ? ' <span class="sub">(' + esc(v.name) + ")</span>" : "") +
+        (d.project ? ' <span class="pill">' + esc(d.project) + "</span>" : "") + (d.reviewedOn ? ' <span class="pill ok" title="' + esc("Checked by " + d.reviewedBy + " on " + dmy(d.reviewedOn)) + '">reviewed</span>' : "") +
+        '<div class="nar" title="' + esc([d.items, d.site, d.caption, d.note].filter(Boolean).join(" · ")) + '">' + esc([d.items, d.site, d.note].filter(Boolean).join(" · ")) + "</div>";
+      const lineTxt = l => esc((l.acct || "") + " " + dmy(l.date) + " " + fmt(l.debit)) + '<div class="nar" title="' + esc(l.narration) + '">' + esc(l.narration) + "</div>";
+      let bk = "", acts = "";
+      if (st === "ok" && ln) { bk = '<span class="pill ok">matched</span> ' + lineTxt(ln); acts = '<button class="small" data-act="cdset" data-s="" data-id="' + esc(d.id) + '">Undo</button>'; }
+      else if (st === "ok") { bk = '<span class="pill ok">matched</span> <span class="sub">bank line no longer in the sheet</span>'; acts = '<button class="small" data-act="cdset" data-s="" data-id="' + esc(d.id) + '">Undo</button>'; }
+      else if (st === "outside" || st === "ignore") { bk = '<span class="pill">' + esc(CD_LBL[st]) + "</span>"; acts = '<button class="small" data-act="cdset" data-s="" data-id="' + esc(d.id) + '">Undo</button>'; }
+      else if (st === "repost") { bk = '<span class="pill">posted twice</span> <span class="sub">same as ' + esc(d.repostOf) + "</span>"; }
+      else {
+        if (m) { bk = '<span class="pill auto">' + esc(CD_HOW[m.how]) + "</span> " + lineTxt(m.l); acts = '<button class="small primary" data-act="cdok" data-id="' + esc(d.id) + '" data-line="' + esc(m.l.id) + '">Confirm</button>'; }
+        else if (cdKind(d) !== "other") bk = '<span class="sub">' + (cdAmt(d) ? "No company bank debit of this amount close to this date" : "No amount read") + (d.paidFrom ? "; paid from " + esc(d.paidFrom) : "") + "</span>";
+        acts += '<button class="small" data-act="cdpick" data-id="' + esc(d.id) + '">Pick line</button><button class="small" data-act="cdset" data-s="outside" data-id="' + esc(d.id) + '" title="Paid from a personal account, site float or Direct">Paid outside</button><button class="small" data-act="cdset" data-s="ignore" data-id="' + esc(d.id) + '">Not a bill</button>';
+      }
+      acts = '<button class="small' + (d.reviewedOn ? "" : " primary") + '" data-act="cdrev" data-id="' + esc(d.id) + '">Review</button>' + acts;
+      return '<tr data-id="' + esc(d.id) + '"' + (st === "repost" ? ' class="rp"' : "") + '><td class="l">' + esc(dmy(cdDate(d))) + (d.docDate ? "" : ' <span class="sub">posted</span>') + "</td><td class=\"l\">" + doc + '</td><td class="l">' + who + "</td><td>" + (cdAmt(d) ? fmt(cdAmt(d)) : "") + (d.conf && d.conf !== "high" ? '<div class="sub">' + esc(d.conf) + " confidence</div>" : "") + '</td><td class="l">' + bk + '</td><td class="l"><div class="acts">' + acts + "</div></td></tr>";
+    }).join("") + "</tbody></table>" + (list.length > CD_SHOW ? '<div style="margin-top:8px"><button class="small" data-act="cdmore">Show ' + Math.min(100, list.length - CD_SHOW) + " more</button></div>" : "")
+    : '<div class="sub">No documents match these filters.</div>';
+}
+const monLbl = m => { const p = String(m).split("-"); return p.length === 2 ? ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][+p[1] - 1] + " " + p[0] : m; };
+function cdSet(id, status, lineId) {
+  const d = S.docs.filter(x => x.id === id)[0]; if (!d) return;
+  d.status = status || ""; d.lineId = status === "ok" ? lineId || "" : "";
+  d.checkedBy = status ? (USER ? USER.email : "") : ""; d.checkedOn = status ? today() : "";
+  if (status === "ok") tgCarry(d);
+  closeModal(); persist(); renderChat(); renderTag();
+  toast(status === "ok" ? "Matched to the bank line" : status ? CD_LBL[status] : "Back to check");
+}
+/* pick a bank line by hand: debits of about this amount first, any date */
+function cdPick(id) {
+  const d = S.docs.filter(x => x.id === id)[0]; if (!d) return;
+  const a = cdAmt(d), dt = cdDate(d), taken = {};
+  S.docs.forEach(x => { if (x.lineId && x.id !== id) taken[x.lineId] = 1; });
+  const near = S.lines.filter(l => l.debit > 0 && !taken[l.id] && (!a || Math.abs(l.debit - a) <= Math.max(1, a * 0.02)))
+    .sort((x, y) => Math.abs(daysBetween(dt || x.date, x.date)) - Math.abs(daysBetween(dt || y.date, y.date))).slice(0, 30);
+  openModal("<h2>Pick the bank line for " + esc(d.vendor || d.file || "this document") + "</h2>" +
+    '<div class="help">' + esc(fmt(a)) + (dt ? " on " + esc(dmy(dt)) : "") + ". Company bank debits within 2% of this amount, nearest date first." + "</div>" +
+    (near.length ? '<div class="tblwrap"><table><thead><tr><th class="l">Bank</th><th>Date</th><th>Amount</th><th class="l">Narration</th><th></th></tr></thead><tbody>' +
+      near.map(l => '<tr><td class="l">' + esc(l.acct) + "</td><td>" + esc(dmy(l.date)) + "</td><td>" + fmt(l.debit) + '</td><td class="l" style="white-space:normal;overflow-wrap:anywhere">' + esc(l.narration) + '</td><td><button class="small primary" data-act="cdok" data-id="' + esc(id) + '" data-line="' + esc(l.id) + '">This one</button></td></tr>').join("") + "</tbody></table></div>"
+      : '<div class="sub">No company bank debit within 2% of this amount.</div>') +
+    '<div style="margin-top:10px;text-align:right"><button data-act="mclose">Close</button></div>', true);
+}
+/* review panel: the bill beside its extracted fields; corrections and the project are saved, and the row is marked reviewed */
+const RV_F = [["type", "Document type", "sel"], ["cat", "Purchase type", "cat"], ["vendor", "Vendor"], ["gstin", "Vendor GSTIN"], ["docNo", "Bill no."], ["docDate", "Bill date", "date"], ["site", "Site"],
+  ["taxable", "Taxable value (&#8377;)", "num"], ["gst", "GST (&#8377;)", "num"], ["total", "Bill total (&#8377;)", "num"], ["paid", "Amount paid (&#8377;)", "num"],
+  ["txn", "UPI / UTR reference"], ["paidFrom", "Paid from", "payer"], ["items", "Items", "wide"], ["note", "Note", "wide"]];
+const RV_TYPES = ["tax invoice", "bill / memo", "fuel slip / pump bill", "voucher / handwritten", "payment screenshot", "bank payment list", "quotation / estimate", "delivery challan / e-way bill", "purchase order", "statement / ledger", "fastag / toll", "other document", "not a document", "photo, no text read"];
+let RV_LIST = [];
+function cdReview(id, list) {
+  const d = S.docs.filter(x => x.id === id)[0]; if (!d) return;
+  RV_LIST = list || cdFilter().map(x => x.id); if (RV_LIST.indexOf(id) < 0) RV_LIST.unshift(id);
+  const pos = RV_LIST.indexOf(id), url = d.driveId ? "https://drive.google.com/file/d/" + encodeURIComponent(d.driveId) + "/preview" : "";
+  const fld = f => {
+    const v = d[f[0]] == null ? "" : d[f[0]];
+    if (f[2] === "payer") { const cur = payerOf(v); return '<label>' + f[1] + '<select data-f="' + f[0] + '"><option value="">Not known</option>' + uniq(payerList().concat([cur])).filter(Boolean).map(o => '<option' + (o === cur ? " selected" : "") + ">" + esc(o) + "</option>").join("") + "</select></label>"; }
+    if (f[2] === "cat") { const g = v || ((vendorByName(d.vendor) || {}).cat) || (/fuel|pump/i.test(d.type || "") ? "fuel" : ""); return '<label>' + f[1] + '<select data-f="' + f[0] + '">' + catOpts(g, "Not set") + "</select></label>"; }
+    if (f[2] === "sel") return '<label>' + f[1] + '<select data-f="' + f[0] + '">' + uniq(RV_TYPES.concat([String(v)])).filter(Boolean).map(o => "<option" + (o === v ? " selected" : "") + ">" + esc(o) + "</option>").join("") + "</select></label>";
+    return '<label' + (f[2] === "wide" ? ' class="w"' : "") + ">" + f[1] + '<input type="' + (f[2] === "date" ? "date" : "text") + '"' + (f[2] === "num" ? ' inputmode="decimal"' : "") + ' data-f="' + f[0] + '" value="' + esc(f[2] === "num" ? (v === "" || v === 0 ? "" : v) : v) + '"></label>';
+  };
+  openModal('<h2>Review ' + esc(d.type || "document") + ' <span class="sub">' + (pos + 1) + " of " + RV_LIST.length + " in this list</span></h2>" +
+    '<div class="rvgrid"><div class="rvdoc">' + (url ? '<iframe src="' + esc(url) + '" title="The bill" allow="autoplay"></iframe>' : '<div class="help" style="padding:12px">No Drive copy of this file.</div>') + "</div>" +
+    '<div><div class="help">' + esc(d.who || "") + (d.posted ? " posted it on " + esc(dmy(d.posted)) : "") + (d.caption ? ": " + esc(d.caption) : "") + (url ? ' · <a href="' + esc(url.replace(/\/preview$/, "/view")) + '" target="_blank" rel="noopener">Open in Drive</a>' : "") + "</div>" +
+    '<div class="form" id="rvForm"><label>Project<select data-f="project">' + tgProjOpts(d.project || "", "No project yet") + '</select></label><label>Equipment<select data-f="equip">' + eqOpts(d.equip || "", "No equipment") + "</select></label>" + RV_F.map(fld).join("") + "</div>" +
+    (d.reviewedOn ? '<div class="sub" style="margin-top:6px">Reviewed by ' + esc(d.reviewedBy) + " on " + esc(dmy(d.reviewedOn)) + "</div>" : "") +
+    '<div class="toolbar" style="margin-top:12px;justify-content:flex-end"><button data-act="mclose">Close</button>' +
+    (pos > 0 ? '<button data-act="rvsave" data-go="-1">Save, previous</button>' : "") + '<button data-act="rvsave" data-go="0">Save</button>' +
+    '<button class="primary" data-act="rvsave" data-go="1">Save and next</button></div></div></div>', "review");
+  $("#modal").className = "review"; $("#modal").dataset.id = id;
+  const first = $('#rvForm [data-f="total"]') || $("#rvForm input"); if (first) first.focus();
+}
+function rvSave(go) {
+  const id = $("#modal").dataset.id, d = S.docs.filter(x => x.id === id)[0]; if (!d) return;
+  let bad = false;
+  $$("#rvForm [data-f]").forEach(el => {
+    const f = el.dataset.f, num = ["taxable", "gst", "total", "paid"].indexOf(f) >= 0;
+    let v = el.value.trim();
+    if (num) { if (v === "") v = 0; else { const n = toNum(v.replace(/[^\d.\-]/g, ""), NaN); if (isNaN(n)) { el.classList.add("bad"); bad = true; return; } v = n; } }
+    d[f] = v;
+  });
+  if (bad) { toast("Check the amounts"); return; }
+  if (d.docDate) d.month = d.docDate.slice(0, 7);
+  d.reviewedBy = USER ? USER.email : ""; d.reviewedOn = today();
+  if (d.project) tgSetField(d, "project", d.project); if (d.equip) tgSetField(d, "equip", d.equip);   // tied bank line, Tally voucher and float line follow
+  if (d.cat) tgLinked(d).forEach(x => { if (x !== d && "cat" in x && !x.cat) x.cat = d.cat; });   // tied bank or float line takes the purchase type when it has none
+  persist(); renderChat(); renderTag();
+  const i = RV_LIST.indexOf(id), nx = +go ? RV_LIST[i + +go] : null;
+  if (nx) cdReview(nx); else { closeModal(); toast(+go > 0 ? "Saved. That was the last one in this list." : "Saved"); }
+}
+async function onChatFile(f) {
+  try {
+    const j = JSON.parse(await f.text()), list = Array.isArray(j) ? j : (j && j.docs) || [];
+    if (!list.length || !list[0].id) { toast("This file has no WhatsApp documents in it"); return; }
+    const by = {}; S.docs.forEach(d => { by[d.id] = d; });
+    const keep = ["lineId", "status", "checkedBy", "checkedOn", "project", "reviewedBy", "reviewedOn"];
+    let add = 0, upd = 0, held = 0;
+    list.forEach(x => {
+      if (!x || !x.id) return;
+      const rec = {}; TABS.chat_docs.forEach(c => { if (keep.indexOf(c) < 0) rec[c] = cellIn(c, x[c]); });
+      const t = by[x.id];
+      if (t && t.reviewedOn) { held++; return; }   // corrected by hand: the new extract does not overwrite it
+      if (t) { Object.assign(t, rec); upd++; }
+      else { keep.forEach(c => { rec[c] = cellIn(c, x[c]); }); S.docs.push(rec); by[x.id] = rec; add++; }
+    });
+    persist(); renderAll();
+    $("#cdImpInfo").textContent = add + " added, " + upd + " updated" + (held ? ", " + held + " reviewed by hand kept as they are" : "") + " from " + f.name;
+    toast(add + " WhatsApp documents added, " + upd + " updated");
+  } catch (e) { toast("Could not read " + f.name + ": " + (e.message || e)); }
+}
+
+/* ---------- site float book: the holder's monthly sheets -> payments from "Site float"; top-ups found in the bank ---------- */
+const sfDate = (v, last) => {
+  if (v instanceof Date && !isNaN(v)) return new Date(v.getTime() - v.getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
+  const m = String(v == null ? "" : v).trim().match(/^(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{2,4})$/);
+  if (!m) return last;
+  let y = +m[3]; if (y < 100) y += 2000; else if (y < 1000) y = 2000 + (y % 100);   // "10.07.206" is a typo for 2026
+  return y + "-" + m[2].padStart(2, "0") + "-" + m[1].padStart(2, "0");
+};
+function parseFloatBook(wb, X) {
+  const out = [];
+  wb.SheetNames.forEach(sn => {
+    const rows = X.utils.sheet_to_json(wb.Sheets[sn], { header: 1, raw: true, defval: "" });
+    const h = rows.findIndex(r => r.some(c => /^narration$/i.test(String(c).trim())) && r.some(c => /^balance$/i.test(String(c).trim())));
+    if (h < 0) return;
+    const H = rows[h].map(c => String(c).trim().toLowerCase()), col = re => H.findIndex(c => re.test(c));
+    const C = { d: col(/^date/), vr: col(/^vr/), head: col(/^account head/), nar: col(/^narration/), out: col(/^amount/), inn: col(/^credit/) };
+    let last = "";
+    rows.slice(h + 1).forEach((r, i) => {
+      const d = sfDate(r[C.d], last); last = d || last;
+      const nar = String(r[C.nar] || "").trim(), head = String(r[C.head] || "").trim();
+      if (/opening balance/i.test(nar)) return;
+      const o = toNum(r[C.out], 0), n = toNum(r[C.inn], 0);
+      if (!(o > 0 || n > 0) || !d) return;
+      out.push({ sheet: sn, row: h + 2 + i, date: d, vr: String(r[C.vr] == null ? "" : r[C.vr]).trim(), head: head, nar: nar, out: o, inn: n });
+    });
+  });
+  return out;
+}
+async function onFloatFile(f) {
+  try {
+    const X = await loadXlsx(), wb = X.read(await f.arrayBuffer(), { type: "array", cellDates: true });
+    const recs = parseFloatBook(wb, X);
+    if (!recs.length) { toast("No month sheets with Narration and Balance columns in " + f.name); return; }
+    const have = {}; S.pays.forEach(p => { have[p.id] = 1; });
+    const by = USER ? USER.email : "", on = today(), seen = {};
+    let add = 0, addAmt = 0, same = 0;
+    recs.filter(r => r.out > 0).forEach(r => {
+      let id = "sf" + hash([r.date, r.vr, r.head, r.nar, r.out].join("|"));
+      while (seen[id]) id += "b"; seen[id] = 1;   // two identical lines on one day stay two payments
+      if (have[id]) { same++; return; }
+      const v = vendorByName(r.head);
+      S.pays.push({ id: id, date: r.date, source: "Site float", vendorId: v ? v.id : "", payee: r.head || r.nar.slice(0, 40), amt: r.out, cat: "site", project: wordsProject(r.nar) || "", adv: false, dupOk: false,
+        ref: (r.vr ? "Vr " + r.vr + " · " : "") + r.sheet.trim(), note: r.nar, by: by, on: on });
+      add++; addAmt += r.out;
+    });
+    const who = norm(S.settings.floatPayee || ""), taken = {};
+    let tops = 0, topAmt = 0, inBank = 0, inBankAmt = 0;
+    recs.filter(r => r.inn > 0).forEach(r => {
+      tops++; topAmt += r.inn;
+      if (!who) return;
+      const l = S.lines.filter(x => x.debit > 0 && !taken[x.id] && Math.abs(x.debit - r.inn) <= 1 && daysBetween(x.date, r.date) >= 0 && daysBetween(x.date, r.date) <= 4 && norm(x.narration).indexOf(who) >= 0)
+        .sort((a, b) => daysBetween(a.date, r.date) - daysBetween(b.date, r.date))[0];
+      if (!l) return;
+      taken[l.id] = 1; inBank++; inBankAmt += r.inn;
+      if (l.cat !== "float") l.cat = "float";
+    });
+    if (inBank) { const c = catById("float"); if (c && !c.leftOut) c.leftOut = true; }
+    persist(); renderAll();
+    $("#sfInfo").textContent = add + " payments added (" + fmt(addAmt) + ")" + (same ? ", " + same + " already in" : "") + " · " + tops + " top-ups (" + fmt(topAmt) + "): " +
+      (who ? inBank + " found in the bank (" + fmt(inBankAmt) + "), " + (tops - inBank) + " not in the company bank (given by hand or by a director)" : "type the holder's name as the bank writes it to find them in the bank");
+    toast(add + " site float payments added");
+  } catch (e) { toast("Could not read " + f.name + ": " + (e.message || e)); }
+}
+
+/* ---------- Tally day books: import, then pair with bank lines and WhatsApp bills ---------- */
+const NDW = "c" + "ash", NDW_PETTY = new RegExp("petty\\s+" + NDW, "ig"), NDW_WORD = new RegExp("\\b" + NDW + "\\b", "ig");   // the word itself never appears in the page
+const noDirectWord = v => String(v == null ? "" : v).replace(NDW_PETTY, "Site float").replace(NDW_WORD, m => (m[0] === "c" ? "direct" : "Direct"));
+function parseDayBook(wb, X) {
+  const rows = X.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, raw: true, defval: "" });
+  const h = rows.findIndex(r => r.some(c => /^particulars$/i.test(String(c).trim())) && r.some(c => /^vch type$/i.test(String(c).trim())));
+  if (h < 0) return null;
+  const H = rows[h].map(c => String(c).trim().toLowerCase()), col = re => H.findIndex(c => re.test(c));
+  const C = { d: col(/^date$/), p: col(/^particulars$/), t: col(/^vch type$/), n: col(/^vch no/), dr: col(/^debit/), cr: col(/^credit/) };
+  const company = String((rows.slice(0, h).find(r => String(r[0] || "").trim()) || [""])[0]).trim();
+  const book = /PIL+ING|PILING/i.test(company) ? "Piling" : "Main";
+  const out = [], seen = {}, on = today();
+  rows.slice(h + 1).forEach(r => {
+    const d = sfDate(r[C.d], ""); if (!d) return;
+    const rec = { book: book, date: d, party: noDirectWord(String(r[C.p] || "").trim()), type: noDirectWord(String(r[C.t] || "").trim()), no: noDirectWord(String(r[C.n] == null ? "" : r[C.n]).trim()), dr: toNum(r[C.dr], 0), cr: toNum(r[C.cr], 0), importedOn: on };
+    const k = [book, d, rec.party, rec.type, rec.no, rec.dr, rec.cr].join("|"); seen[k] = (seen[k] || 0) + 1;
+    rec.id = "t" + hash(k + "|" + seen[k]); out.push(rec);
+  });
+  return { book: book, company: company, recs: out };
+}
+async function onTallyFiles(fs) {
+  try {
+    const X = await loadXlsx(), msgs = [];
+    for (const f of fs) {
+      const r = parseDayBook(X.read(await f.arrayBuffer(), { type: "array", cellDates: true }), X);
+      if (!r || !r.recs.length) { msgs.push(f.name + ": not a Tally day book"); continue; }
+      const old = {}; S.tally.forEach(t => { if (t.book === r.book) old[t.id] = t; });
+      const keep = S.tally.filter(t => t.book !== r.book), added = [];
+      const recs = r.recs.map(x => { const o = old[x.id]; if (o) { delete old[x.id]; o.gone = ""; return o; } added.push(x); return x; });
+      let gone = 0, dropped = 0;
+      Object.keys(old).forEach(k => { const o = old[k]; if (o.snap) { if (!o.gone) { o.gone = today(); gone++; } recs.push(o); } else dropped++; });   // locked vouchers are never removed
+      S.tally = keep.concat(recs);
+      const posted = bkMatchPosted(r.book, added);
+      msgs.push(r.book + " (" + r.company + "): " + r.recs.length.toLocaleString("en-IN") + " vouchers, " + added.length + " new" + (dropped ? ", " + dropped + " no longer in Tally removed" : "") +
+        (gone ? ", " + gone + " locked vouchers no longer in Tally (kept, listed in Books)" : "") + (posted ? ", " + posted + " changes found posted in Tally" : ""));
+    }
+    TK = null; persist(); renderAll();
+    $("#tkImpInfo").textContent = msgs.join(" · ");
+    toast("Tally day book imported");
+  } catch (e) { toast("Could not read the day book: " + (e.message || e)); }
+}
+/* greedy pairing: nearest date first, each item used once */
+function pairUp(A, B, ak, bk, lo, hi, res, used) {
+  const idx = {}; B.forEach(b => { if (used[b.id]) return; const k = Math.round(bk(b)); (idx[k] || (idx[k] = [])).push(b); });
+  const c = [];
+  A.forEach((a, i) => { if (res[i] !== undefined) return; const v = ak(a); if (!(v > 0)) return;
+    [-1, 0, 1].forEach(o => (idx[Math.round(v) + o] || []).forEach(b => { if (Math.abs(bk(b) - v) > 1) return; const g = daysBetween(a.date, b.date); if (g >= lo && g <= hi) c.push([Math.abs(g), i, b]); })); });
+  c.sort((x, y) => x[0] - y[0] || x[1] - y[1]);
+  c.forEach(x => { if (res[x[1]] !== undefined || used[x[2].id]) return; res[x[1]] = x[2]; used[x[2].id] = 1; });
+}
+let TK = null, TK_KEY = "", TK_SHOW = 100;
+const TK_SWEEP = /SWEEP|FD BOOK|TERM DEPOSIT|\bFD\b/i;
+function tallyMatch() {
+  const key = [S.tally.length, S.lines.length, S.docs.length, S.tally.length && S.tally[S.tally.length - 1].id].join("|");
+  if (TK && key === TK_KEY) return TK;
+  const pays = S.tally.filter(t => t.type === "Payment" && t.dr > 0), contra = S.tally.filter(t => t.type === "Contra"), rcpt = S.tally.filter(t => t.type === "Receipt" && t.cr > 0);
+  const deb = S.lines.filter(l => l.debit > 0 && !TK_SWEEP.test(l.narration)), cred = S.lines.filter(l => l.credit > 0 && !TK_SWEEP.test(l.narration));
+  const r1 = {}, u1 = {};
+  pairUp(pays, deb, t => t.dr, l => l.debit, -4, 4, r1, u1);
+  pairUp(pays, deb, t => t.dr, l => l.debit, -12, 12, r1, u1);
+  const rc = {}; pairUp(contra, deb, t => t.cr || t.dr, l => l.debit, -4, 4, rc, u1);
+  const r2 = {}, u2 = {}; pairUp(rcpt, cred, t => t.cr, l => l.credit, -4, 4, r2, u2);
+  const lo = deb.length ? deb.reduce((m, l) => (l.date < m ? l.date : m), "9999") : "", hi = deb.length ? deb.reduce((m, l) => (l.date > m ? l.date : m), "") : "";
+  const bills = S.docs.filter(d => cdKind(d) === "bill" && !d.repostOf && +d.total > 0 && cdDate(d)).map(d => ({ d: d, date: cdDate(d), amt: +d.total }));
+  const purch = S.tally.filter(t => /^purchase/i.test(t.type)).map(t => ({ id: t.id, t: t, date: t.date, amt: t.cr || t.dr }));
+  const r3 = {}; pairUp(bills, purch, b => b.amt, p => p.amt, -45, 120, r3, {});
+  const nn = s => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, ""), byNo = {};
+  purch.forEach(p => { const k = nn(p.t.no); if (k.length >= 3 && !byNo[k]) byNo[k] = p; });
+  bills.forEach((b, i) => { if (r3[i] === undefined && nn(b.d.docNo).length >= 3 && byNo[nn(b.d.docNo)]) r3[i] = byNo[nn(b.d.docNo)]; });
+  const inBank = t => !lo || (t.date >= lo && t.date <= hi);   // only blame the bank for dates its statements cover
+  TK = {
+    bank: deb.filter(l => !u1[l.id]).map(l => ({ date: l.date, amt: l.debit, who: l.acct, what: l.narration })),
+    tally: pays.filter((t, i) => r1[i] === undefined && inBank(t)).map(t => ({ date: t.date, amt: t.dr, who: t.party, what: t.book + " · " + t.type + (t.no ? " " + t.no : "") })),
+    rcpt: cred.filter(l => !u2[l.id]).map(l => ({ date: l.date, amt: l.credit, who: l.acct, what: l.narration })),
+    bills: bills.filter((b, i) => r3[i] === undefined).map(b => ({ date: b.date, amt: b.amt, who: b.d.vendor || "", what: [b.d.type, b.d.docNo, b.d.items].filter(Boolean).join(" · "), url: cdDrive(b.d) })),
+    nPays: pays.length, nBills: bills.length
+  };
+  TK_KEY = key; return TK;
+}
+const TK_LBL = { bank: "Bank payments not in Tally", tally: "Tally payments not in the bank", rcpt: "Bank receipts not in Tally", bills: "WhatsApp bills not booked" };
+function renderTally() {
+  if (!S.tally.length) {
+    $("#tkSum").textContent = ""; $("#tkMon").innerHTML = '<div class="sub">No Tally day book imported yet (Import tab).</div>'; $("#tkTbl").innerHTML = ""; $("#tkInfo").textContent = ""; return;
+  }
+  const R = tallyMatch(), sum = a => a.reduce((s, x) => s + x.amt, 0);
+  const books = uniq(S.tally.map(t => t.book)).join(" and ");
+  $("#tkSum").textContent = S.tally.length.toLocaleString("en-IN") + " Tally vouchers (" + books + ")";
+  const months = uniq(Object.keys(TK_LBL).reduce((a, k) => a.concat(R[k].map(x => x.date.slice(0, 7))), [])).sort();
+  const cell = (k, m) => { const a = R[k].filter(x => x.date.slice(0, 7) === m); return a.length ? '<span class="dr" data-act="tkgo" data-l="' + k + '" data-id="' + esc(m) + '">' + a.length + " · " + cmp(sum(a)) + "</span>" : ""; };
+  $("#tkMon").innerHTML = '<table class="cdmon"><thead><tr><th class="l">Month</th>' + Object.keys(TK_LBL).map(k => "<th>" + esc(TK_LBL[k]) + "</th>").join("") + "</tr></thead><tbody>" +
+    months.map(m => '<tr><td class="l">' + esc(monLbl(m)) + "</td>" + Object.keys(TK_LBL).map(k => "<td>" + cell(k, m) + "</td>").join("") + "</tr>").join("") +
+    '<tr><td class="l"><b>All</b></td>' + Object.keys(TK_LBL).map(k => "<td><b>" + (R[k].length ? '<span class="dr" data-act="tkgo" data-l="' + k + '" data-id="">' + R[k].length.toLocaleString("en-IN") + " · " + cmp(sum(R[k])) + "</span>" : "") + "</b></td>").join("") + "</tr></tbody></table>";
+  const sel = $("#tkMonth"), cur = sel.value;
+  sel.innerHTML = '<option value="">All months</option>' + months.slice().reverse().map(m => '<option value="' + esc(m) + '">' + esc(monLbl(m)) + "</option>").join("");
+  sel.value = months.indexOf(cur) >= 0 ? cur : "";
+  const k = $("#tkList").value, m = sel.value, q = $("#tkSearch").value.trim().toLowerCase();
+  const list = R[k].filter(x => (!m || x.date.slice(0, 7) === m) && (!q || (x.who + " " + x.what).toLowerCase().indexOf(q) >= 0)).sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : b.amt - a.amt));
+  $("#tkInfo").textContent = list.length.toLocaleString("en-IN") + " " + TK_LBL[k].toLowerCase() + " · " + cmp(sum(list)) + (list.length > TK_SHOW ? " · showing the first " + TK_SHOW : "");
+  $("#tkTbl").innerHTML = list.length ? '<table class="cdtbl"><colgroup><col style="width:12%"><col style="width:14%"><col style="width:26%"><col style="width:48%"></colgroup><thead><tr><th class="l">Date</th><th>Amount</th><th class="l">' + (k === "bills" ? "Vendor" : k === "tally" ? "Party in Tally" : "Bank") + '</th><th class="l">' + (k === "tally" ? "Voucher" : k === "bills" ? "Bill" : "Narration") + "</th></tr></thead><tbody>" +
+    list.slice(0, TK_SHOW).map(x => '<tr><td class="l">' + esc(dmy(x.date)) + "</td><td>" + fmt(x.amt) + '</td><td class="l">' + esc(x.who) + '</td><td class="l">' + esc(x.what) + (x.url ? ' · <a href="' + esc(x.url) + '" target="_blank" rel="noopener">Open in Drive</a>' : "") + "</td></tr>").join("") +
+    "</tbody></table>" + (list.length > TK_SHOW ? '<div style="margin-top:8px"><button class="small" data-act="tkmore">Show ' + Math.min(100, list.length - TK_SHOW) + " more</button></div>" : "")
+    : '<div class="sub">Nothing here.</div>';
+}
+
+
+/* ---------- Books: the Tally day books as ledgers, a locked snapshot, and a change log for posting in Tally ---------- */
+const bkKey = (b, p) => b + "|" + String(p || "").trim().toUpperCase();
+const bkFp = rows => hash(rows.map(t => [t.id, t.date, t.party, t.type, t.no, round2(+t.dr || 0), round2(+t.cr || 0)].join("|")).sort().join("\n"));
+const bkLive = c => c.status !== "Withdrawn";
+const BK_FPC = new WeakMap();   // fingerprint checks, per loaded copy of the tally rows (they change only on load, import or a new snapshot)
+function bkIntact(z, locked) {
+  let m = BK_FPC.get(S.tally); if (!m) { m = {}; BK_FPC.set(S.tally, m); }
+  if (!(z.id in m)) { const rows = locked.filter(t => t.snap === z.id); m[z.id] = { n: rows.length, ok: rows.length === +z.vouchers && bkFp(rows) === z.fingerprint }; }
+  return m[z.id];
+}
+function bkEntries() {   // what the books say now: Tally's vouchers, less the ones changed here, plus changes not yet seen in Tally
+  const sup = {}; S.tchg.forEach(c => { if (bkLive(c) && c.ref) sup[c.ref] = c; });
+  const out = [];
+  S.tally.forEach(t => { if (!t.gone && !sup[t.id]) out.push({ id: t.id, book: t.book, date: t.date, party: t.party, type: t.type, no: t.no, dr: +t.dr || 0, cr: +t.cr || 0, snap: t.snap, src: "tally" }); });
+  S.tchg.forEach(c => { if (bkLive(c) && c.kind !== "cancel" && !c.tallyId) out.push({ id: c.id, book: c.book, date: c.date, party: c.party, type: c.type, no: c.no, dr: +c.dr || 0, cr: +c.cr || 0, src: "app", chg: c }); });
+  return out;
+}
+function bkLedgers(E) {
+  const L = {};
+  E.forEach(e => { const k = bkKey(e.book, e.party), l = L[k] || (L[k] = { key: k, book: e.book, party: e.party, n: 0, dr: 0, cr: 0, pur: false, last: "", chg: 0 });
+    l.n++; l.dr += e.dr; l.cr += e.cr; if (/purchase/i.test(e.type)) l.pur = true; if (e.date > l.last) l.last = e.date; if (e.src === "app" && e.chg.status === "To post") l.chg++; });
+  return Object.keys(L).map(k => L[k]);
+}
+const bkBal = n => (Math.abs(n) < 0.5 ? "–" : fmt(Math.abs(n)) + (n > 0 ? " Cr" : " Dr"));
+function bkMatchPosted(book, added) {   // a change whose voucher has now come in from Tally is posted
+  if (!added.length) return 0;
+  const by = {}; added.forEach(x => { const k = [bkKey(book, x.party), x.date, Math.round(x.dr), Math.round(x.cr)].join("|"); (by[k] || (by[k] = [])).push(x); });
+  const goneIds = {}; S.tally.forEach(t => { if (t.book === book && t.gone) goneIds[t.id] = 1; });
+  let n = 0;
+  S.tchg.forEach(c => {
+    if (!bkLive(c) || c.book !== book || c.tallyId) return;
+    let hit = null;
+    if (c.kind === "cancel") { if (goneIds[c.ref]) hit = { id: c.ref, no: "" }; }
+    else { const l = by[[bkKey(book, c.party), c.date, Math.round(c.dr), Math.round(c.cr)].join("|")]; if (l && l.length) hit = l.shift(); }
+    if (!hit) return;
+    c.tallyId = hit.id;
+    if (c.status !== "Posted") { c.status = "Posted"; c.postedBy = "Tally import"; c.postedOn = today(); c.tallyNo = hit.no || c.tallyNo || ""; }
+    n++;
+  });
+  return n;
+}
+let BK_SHOW = 150;
+function renderBooks() {
+  const pend = S.tchg.filter(c => c.status === "To post").length;
+  $("#bkCnt").textContent = pend || "";
+  /* snapshot */
+  const locked = S.tally.filter(t => t.snap), free = S.tally.filter(t => !t.snap), gone = S.tally.filter(t => t.gone);
+  $("#bkSnapBtn").textContent = S.tsnap.length ? "Lock new vouchers" : "Take snapshot";
+  $("#bkSnapBtn").disabled = !free.length;
+  $("#bkSnap").innerHTML = !S.tally.length ? '<div class="sub">No Tally day book imported yet (Import tab).</div>' :
+    (S.tsnap.length ? '<div class="tblwrap"><table class="bktbl"><thead><tr><th class="l">Book</th><th class="l">Vouchers dated</th><th>Vouchers</th><th>Debits</th><th>Credits</th><th class="l">Taken</th><th class="l">Fingerprint</th></tr></thead><tbody>' +
+      S.tsnap.slice().sort((a, b) => (a.takenAt < b.takenAt ? -1 : 1)).map(z => {
+        const ck = bkIntact(z, locked), ok = ck.ok;
+        return '<tr><td class="l">' + esc(z.book) + '</td><td class="l">' + dmy(z.from) + " to " + dmy(z.asOn) + "</td><td>" + (+z.vouchers).toLocaleString("en-IN") + "</td><td>" + fmt(z.dr) + "</td><td>" + fmt(z.cr) + '</td><td class="l">' + esc(String(z.takenAt).slice(0, 16).replace("T", " ")) + " · " + esc(z.takenBy) +
+          '</td><td class="l"><code>' + esc(z.fingerprint) + "</code> " + (ok ? '<span class="pill ok">intact</span>' : '<span class="pill dup">changed in the Sheet: ' + ck.n + " vouchers now</span>") + "</td></tr>";
+      }).join("") + "</tbody></table></div>" : "") +
+    '<div class="bksnap" style="margin-top:6px"><span>' + locked.length.toLocaleString("en-IN") + " of " + S.tally.length.toLocaleString("en-IN") + " Tally vouchers locked</span>" +
+    (free.length ? "<span>" + free.length.toLocaleString("en-IN") + " not locked yet</span>" : "") +
+    (gone.length ? '<span class="pill dup">' + gone.length + " locked vouchers no longer in the latest Tally export</span>" : "") + "</div>" +
+    (gone.length ? '<div class="tblwrap" style="margin-top:6px"><table class="bktbl"><thead><tr><th class="l">Book</th><th class="l">Date</th><th class="l">Ledger</th><th class="l">Voucher</th><th>Debit</th><th>Credit</th><th class="l">Missing since</th></tr></thead><tbody>' +
+      gone.slice(0, 200).map(t => '<tr><td class="l">' + esc(t.book) + '</td><td class="l">' + dmy(t.date) + '</td><td class="l">' + esc(t.party) + '</td><td class="l">' + esc(t.type + (t.no ? " " + t.no : "")) + "</td><td>" + (t.dr ? fmt(t.dr) : "") + "</td><td>" + (t.cr ? fmt(t.cr) : "") + '</td><td class="l">' + dmy(t.gone) + "</td></tr>").join("") + "</tbody></table></div>" : "");
+  /* ledgers */
+  const E = bkEntries(), bk = $("#bkBook").value, kind = $("#bkKind").value, q = $("#bkSearch").value.trim().toLowerCase();
+  const all = bkLedgers(E), list = all.filter(l => (!bk || l.book === bk) && (!kind || l.pur) && (!q || l.party.toLowerCase().indexOf(q) >= 0))
+    .sort((a, b) => Math.abs(b.cr - b.dr) - Math.abs(a.cr - a.dr) || a.party.localeCompare(b.party));
+  const owe = list.reduce((s, l) => s + Math.max(0, l.cr - l.dr), 0);
+  $("#bkSum").textContent = S.tally.length ? list.length.toLocaleString("en-IN") + " ledgers · Cr balances " + fmt(owe) : "";
+  $("#bkTbl").innerHTML = !S.tally.length ? "" : list.length ? '<table class="bktbl"><thead><tr><th class="l">Book</th><th class="l">Ledger</th><th>Vouchers</th><th>Debits</th><th>Credits</th><th>Balance</th><th class="l">Last voucher</th></tr></thead><tbody>' +
+    list.slice(0, BK_SHOW).map(l => '<tr class="go" data-act="bkled" data-id="' + esc(l.key) + '"><td class="l">' + esc(l.book) + '</td><td class="l">' + esc(l.party) + (l.chg ? ' <span class="pill chg">' + l.chg + " to post</span>" : "") + "</td><td>" + l.n + "</td><td>" + fmt(l.dr) + "</td><td>" + fmt(l.cr) + "</td><td><b>" + bkBal(l.cr - l.dr) + '</b></td><td class="l">' + dmy(l.last) + "</td></tr>").join("") + "</tbody></table>" +
+    (list.length > BK_SHOW ? '<div style="margin-top:8px"><button class="small" data-act="bkmore">Show ' + Math.min(150, list.length - BK_SHOW) + " more</button></div>" : "")
+    : '<div class="sub">No ledger matches.</div>';
+  /* change log */
+  const st = $("#bkChgSt").value, ch = S.tchg.filter(c => !st || c.status === st).sort((a, b) => (a.at < b.at ? 1 : -1));
+  $("#bkChgSum").textContent = pend + " to post · " + S.tchg.filter(c => c.status === "Posted").length + " posted";
+  const KL = { "new": "New voucher", edit: "Edit", cancel: "Cancel" };
+  $("#bkChg").innerHTML = ch.length ? '<table class="bktbl cdtbl" style="min-width:980px"><colgroup><col style="width:11%"><col style="width:8%"><col style="width:22%"><col style="width:13%"><col style="width:16%"><col style="width:16%"><col style="width:14%"></colgroup><thead><tr><th class="l">When, who</th><th class="l">Change</th><th class="l">Voucher</th><th>Amount</th><th class="l">Was</th><th class="l">Reason</th><th class="l">Status</th></tr></thead><tbody>' +
+    ch.map(c => {
+      let was = ""; try { const w = c.was ? JSON.parse(c.was) : null; if (w) was = dmy(w.date) + " · " + w.party + " · " + w.type + (w.no ? " " + w.no : "") + " · " + (w.dr ? fmt(w.dr) + " Dr" : fmt(w.cr) + " Cr"); } catch (e) { was = c.was; }
+      return '<tr><td class="l">' + esc(String(c.at).slice(0, 16).replace("T", " ")) + '<div class="nar">' + esc(c.by) + '</div></td><td class="l">' + KL[c.kind] + '</td><td class="l">' + esc(c.book) + " · " + dmy(c.date) + "<br>" + esc(c.party) + '<div class="nar">' + esc(c.type + (c.no ? " " + c.no : "")) + "</div></td><td>" + (c.kind === "cancel" ? "" : c.dr ? fmt(c.dr) + " Dr" : fmt(c.cr) + " Cr") +
+        '</td><td class="l"><div class="nar">' + esc(was) + '</div></td><td class="l"><div class="nar">' + esc(c.reason) + '</div></td><td class="l">' +
+        (c.status === "To post" ? '<span class="pill chg">To post</span><div class="acts" style="margin-top:4px"><button class="small" data-act="bkpost" data-id="' + esc(c.id) + '">Mark posted</button><button class="small" data-act="bkwd" data-id="' + esc(c.id) + '">Withdraw</button></div>'
+          : c.status === "Posted" ? '<span class="pill ok">Posted</span><div class="nar">' + esc((c.tallyNo ? "Vch " + c.tallyNo + " · " : "") + dmy(c.postedOn) + " · " + c.postedBy) + "</div>" : '<span class="pill">Withdrawn</span><div class="nar">' + esc(dmy(c.postedOn) + " · " + c.postedBy) + "</div>") + "</td></tr>";
+    }).join("") + "</tbody></table>" : '<div class="sub">No changes ' + (st ? "with this status" : "yet") + ".</div>";
+}
+function bkLedger(key) {
+  const E = bkEntries().filter(e => bkKey(e.book, e.party) === key).sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+  const cancelled = S.tchg.filter(c => bkLive(c) && c.kind === "cancel" && bkKey(c.book, c.party) === key);
+  if (!E.length && !cancelled.length) { closeModal(); return; }
+  const h = E[0] || cancelled[0];
+  let bal = 0;
+  openModal('<h2>' + esc(h.party) + ' <span class="sub">' + esc(h.book) + " book · " + E.length + " vouchers</span></h2>" +
+    '<div class="tblwrap" style="max-height:62vh"><table class="bktbl"><thead><tr><th class="l">Date</th><th class="l">Voucher</th><th>Debit</th><th>Credit</th><th>Balance</th><th class="l"></th></tr></thead><tbody>' +
+    E.map(e => { bal += e.cr - e.dr;
+      return "<tr><td class=\"l\">" + dmy(e.date) + '</td><td class="l">' + esc(e.type + (e.no ? " " + e.no : "")) + (e.src === "app" ? ' <span class="pill chg">' + (e.chg.kind === "edit" ? "edited here" : "added here") + ", " + esc(e.chg.status.toLowerCase()) + "</span>" : e.snap ? "" : ' <span class="pill">not locked</span>') +
+        "</td><td>" + (e.dr ? fmt(e.dr) : "") + "</td><td>" + (e.cr ? fmt(e.cr) : "") + "</td><td>" + bkBal(bal) + '</td><td class="l"><div class="acts">' +
+        (e.src === "tally" ? '<button class="small" data-act="bkedit" data-id="' + esc(e.id) + '">Edit</button><button class="small" data-act="bkcancel" data-id="' + esc(e.id) + '">Cancel</button>'
+          : e.chg.status === "To post" ? '<button class="small" data-act="bkwd" data-id="' + esc(e.chg.id) + '">Withdraw</button>' : "") + "</div></td></tr>"; }).join("") +
+    cancelled.map(c => { let w = {}; try { w = JSON.parse(c.was || "{}"); } catch (e) {} return '<tr class="x"><td class="l">' + dmy(w.date) + '</td><td class="l">' + esc((w.type || "") + (w.no ? " " + w.no : "")) + ' <span class="pill chg">cancelled here, ' + esc(c.status.toLowerCase()) + "</span></td><td>" + (w.dr ? fmt(w.dr) : "") + "</td><td>" + (w.cr ? fmt(w.cr) : "") + '</td><td></td><td class="l">' + (c.status === "To post" ? '<button class="small" data-act="bkwd" data-id="' + esc(c.id) + '">Withdraw</button>' : "") + "</td></tr>"; }).join("") +
+    "</tbody></table></div>" +
+    '<div class="toolbar" style="margin-top:12px;justify-content:flex-end"><button data-act="mclose">Close</button><button class="primary" data-act="bknew" data-id="' + esc(key) + '">+ Voucher in this ledger</button></div>', "ledger");
+  $("#modal").className = "ledger"; $("#modal").dataset.led = key;
+}
+function bkForm(kind, row, ledKey) {   // kind: new | edit | cancel
+  const t = row || {}, books = uniq(S.tally.map(x => x.book).concat(["Main", "Piling"]));
+  const lk = ledKey ? ledKey.split("|") : null, book = t.book || (lk ? lk[0] : $("#bkBook").value || "Main");
+  const party = t.party || (lk ? (bkEntries().filter(e => bkKey(e.book, e.party) === ledKey)[0] || {}).party || "" : "");
+  const parties = uniq(S.tally.map(x => x.party)).sort(), types = uniq(S.tally.map(x => x.type)).sort();
+  const title = kind === "new" ? "New voucher" : kind === "edit" ? "Edit voucher" : "Cancel voucher";
+  openModal("<h2>" + title + "</h2>" + (row ? '<div class="help">Now: ' + esc(t.book) + " · " + dmy(t.date) + " · " + esc(t.party) + " · " + esc(t.type + (t.no ? " " + t.no : "")) + " · " + (t.dr ? fmt(t.dr) + " Dr" : fmt(t.cr) + " Cr") + (t.snap ? " (locked in the snapshot; the change is logged and the original stays in the snapshot)" : "") + "</div>" : "") +
+    '<div class="form" id="bkForm">' + (kind === "cancel" ? "" :
+      '<label>Book<select data-f="book"' + (row ? " disabled" : "") + ">" + books.map(b => "<option" + (b === book ? " selected" : "") + ">" + esc(b) + "</option>").join("") + "</select></label>" +
+      '<label>Date<input type="date" data-f="date" value="' + esc(t.date || today()) + '"></label>' +
+      '<label class="w" style="grid-column:1/-1">Ledger<input type="text" data-f="party" list="bkParties" value="' + esc(party) + '"></label>' +
+      '<label>Voucher type<input type="text" data-f="type" list="bkTypes" value="' + esc(t.type || "") + '"></label>' +
+      '<label>Voucher no.<input type="text" data-f="no" value="' + esc(t.no || "") + '"></label>' +
+      '<label>Debit<input type="text" inputmode="decimal" data-f="dr" value="' + (t.dr ? t.dr : "") + '"></label>' +
+      '<label>Credit<input type="text" inputmode="decimal" data-f="cr" value="' + (t.cr ? t.cr : "") + '"></label>') +
+    '<label style="grid-column:1/-1">Reason (kept in the change log)<input type="text" data-f="reason" placeholder="why this change"></label></div>' +
+    '<datalist id="bkParties">' + parties.map(x => '<option value="' + esc(x) + '">').join("") + '</datalist><datalist id="bkTypes">' + types.map(x => '<option value="' + esc(x) + '">').join("") + "</datalist>" +
+    '<div class="toolbar" style="margin-top:12px;justify-content:flex-end"><button data-act="mclose">Close</button><button class="primary" data-act="bksave">' + (kind === "cancel" ? "Cancel this voucher" : "Save to the change log") + "</button></div>", "wide");
+  const m = $("#modal"); m.dataset.kind = kind; m.dataset.ref = row ? row.id : ""; m.dataset.led = ledKey || "";
+  const f = $('#bkForm [data-f="' + (kind === "cancel" ? "reason" : kind === "edit" ? "dr" : "party") + '"]'); if (f) f.focus();
+}
+function bkSave() {
+  const m = $("#modal"), kind = m.dataset.kind, ref = m.dataset.ref, v = {}; let bad = false;
+  $$("#bkForm [data-f]").forEach(el => { v[el.dataset.f] = el.value.trim(); });
+  const t = ref ? S.tally.filter(x => x.id === ref)[0] : null;
+  if (ref && !t) { toast("That voucher is no longer here"); return; }
+  const mark = f => { const el = $('#bkForm [data-f="' + f + '"]'); if (el) el.classList.add("bad"); bad = true; };
+  if (!v.reason) mark("reason");
+  const c = { id: "c" + uid(), kind: kind, ref: ref || "", by: USER ? USER.email : "", at: new Date().toISOString(), status: "To post", postedBy: "", postedOn: "", tallyNo: "", tallyId: "", reason: v.reason,
+    was: t ? JSON.stringify({ id: t.id, date: t.date, party: t.party, type: t.type, no: t.no, dr: t.dr, cr: t.cr }) : "" };
+  if (kind === "cancel") Object.assign(c, { book: t.book, date: t.date, party: t.party, type: t.type, no: t.no, dr: 0, cr: 0 });
+  else {
+    const dr = v.dr === "" ? 0 : toNum(v.dr.replace(/[^\d.\-]/g, ""), NaN), cr = v.cr === "" ? 0 : toNum(v.cr.replace(/[^\d.\-]/g, ""), NaN);
+    if (isNaN(dr) || dr < 0) mark("dr"); if (isNaN(cr) || cr < 0) mark("cr"); if (!dr && !cr) { mark("dr"); mark("cr"); }
+    if (!v.party) mark("party"); if (!v.type) mark("type"); if (!/^\d{4}-\d{2}-\d{2}$/.test(v.date || "")) mark("date");
+    Object.assign(c, { book: t ? t.book : v.book, date: v.date, party: noDirectWord(v.party), type: noDirectWord(v.type), no: noDirectWord(v.no), dr: round2(dr), cr: round2(cr) });
+    if (t && !bad && [c.date, c.party, c.type, c.no, c.dr, c.cr].join("|") === [t.date, t.party, t.type, t.no, +t.dr || 0, +t.cr || 0].join("|")) { toast("Nothing changed"); return; }
+  }
+  if (bad) { toast(v.reason ? "Check the marked fields" : "Give a reason: it goes in the change log"); return; }
+  if (ref && S.tchg.some(x => bkLive(x) && x.ref === ref && !x.tallyId)) { toast("This voucher already has a change waiting; withdraw that first"); return; }
+  S.tchg.push(c); persist(); renderBooks();
+  const led = m.dataset.led || bkKey(c.book, c.party);
+  if (bkEntries().some(e => bkKey(e.book, e.party) === led) || kind === "cancel") bkLedger(led); else closeModal();
+  toast(kind === "cancel" ? "Cancellation logged, to post in Tally" : "Logged, to post in Tally");
+}
+function bkStatus(id, st) {
+  const c = S.tchg.filter(x => x.id === id)[0]; if (!c || c.status !== "To post") return;
+  if (st === "Posted") {
+    openModal('<h2>Posted in Tally</h2><div class="help">' + esc(c.book) + " · " + dmy(c.date) + " · " + esc(c.party) + "</div>" +
+      '<div class="form" id="bkPostF"><label style="grid-column:1/-1">Tally voucher no. (if any)<input type="text" id="bkPostNo"></label></div>' +
+      '<div class="toolbar" style="margin-top:12px;justify-content:flex-end"><button data-act="mclose">Close</button><button class="primary" data-act="bkposted" data-id="' + esc(id) + '">Mark posted</button></div>');
+    $("#bkPostNo").focus(); return;
+  }
+  c.status = st; c.postedBy = USER ? USER.email : ""; c.postedOn = today();
+  persist(); renderBooks(); if ($("#modal").className === "ledger" && $("#modalbg").classList.contains("show")) bkLedger($("#modal").dataset.led);
+  toast("Withdrawn: the voucher is back as Tally has it");
+}
+function bkSnapshot() {
+  const free = S.tally.filter(t => !t.snap && !t.gone); if (!free.length) { toast("Nothing new to lock"); return; }
+  const at = new Date().toISOString(), books = uniq(free.map(t => t.book));
+  books.forEach(b => {
+    const rows = free.filter(t => t.book === b), id = "s" + uid();
+    rows.forEach(t => { t.snap = id; });
+    const ds = rows.map(t => t.date).sort();
+    S.tsnap.push({ id: id, book: b, from: ds[0], asOn: ds[ds.length - 1], vouchers: rows.length, dr: round2(rows.reduce((s, t) => s + (+t.dr || 0), 0)), cr: round2(rows.reduce((s, t) => s + (+t.cr || 0), 0)), fingerprint: bkFp(rows), takenBy: USER ? USER.email : "", takenAt: at });
+  });
+  BK_FPC.delete(S.tally); persist(); renderBooks(); toast(free.length.toLocaleString("en-IN") + " vouchers locked");
+}
+function bkSnapCsv() {
+  const rows = S.tally.filter(t => t.snap).sort((a, b) => (a.book + a.date < b.book + b.date ? -1 : 1));
+  if (!rows.length) { toast("No snapshot yet"); return; }
+  const z = {}; S.tsnap.forEach(x => { z[x.id] = x; });
+  exportCsv("tally_snapshot_" + today() + ".csv", ["Snapshot", "Taken", "Fingerprint", "Book", "Date", "Ledger", "Voucher type", "Voucher no.", "Debit", "Credit", "Voucher id", "Missing from Tally since"],
+    rows.map(t => [t.snap, (z[t.snap] || {}).takenAt || "", (z[t.snap] || {}).fingerprint || "", t.book, t.date, t.party, t.type, t.no, t.dr || "", t.cr || "", t.id, t.gone || ""]));
+}
+function bkChgCsv() {
+  const st = $("#bkChgSt").value, ch = S.tchg.filter(c => !st || c.status === st).sort((a, b) => (a.at < b.at ? -1 : 1));
+  exportCsv("tally_changes_" + (st || "all").replace(/\s+/g, "_").toLowerCase() + "_" + today() + ".csv", ["Logged", "By", "Change", "Book", "Date", "Ledger", "Voucher type", "Voucher no.", "Debit", "Credit", "Was", "Reason", "Status", "Posted by", "Posted on", "Tally voucher no."],
+    ch.map(c => [c.at, c.by, c.kind, c.book, c.date, c.party, c.type, c.no, c.dr || "", c.cr || "", c.was, c.reason, c.status, c.postedBy, c.postedOn, c.tallyNo]));
+}
+
+
+
+/* step 1: classify the raw data (WhatsApp documents, site float lines); step 2: tie bills to bank, Tally and site float entries */
+const rwDocs = () => S.docs.filter(d => !d.repostOf);
+const rwDone = d => !!d.reviewedOn || d.status === "ignore";
+const rwFloat = () => S.pays.filter(p => p.source === "Site float");
+let RW_SHOW = 100, TI_SHOW = 60, RW_SEL = {}, RW_DSEL = {};
+let TG_FOLD = {}; try { TG_FOLD = JSON.parse(localStorage.getItem("pay_tg_fold") || "{}") || {}; } catch (e) {}   // folded boxes, per browser
+function tgFold(h) {
+  const box = h.closest(".toolbar").parentElement; if (!box || !box.id) return;
+  const shut = !box.classList.contains("shut"); box.classList.toggle("shut", shut); TG_FOLD[box.id] = shut ? 1 : 0;
+  try { localStorage.setItem("pay_tg_fold", JSON.stringify(TG_FOLD)); } catch (e) {}
+}
+function bar(el, n, of) { $(el).style.width = (of ? Math.round(n / of * 100) : 0) + "%"; }
+function renderRaw() {
+  const all = rwDocs(), k = $("#rwDocKind").value, sh0 = $("#rwDocShow").value, done = all.filter(rwDone), live = all.filter(d => d.status !== "ignore"), tagged = live.filter(d => d.project || d.equip);
+  $("#rwDocSum").textContent = done.length.toLocaleString("en-IN") + " of " + all.length.toLocaleString("en-IN") + " classified · " + tagged.length.toLocaleString("en-IN") + " of " + live.length.toLocaleString("en-IN") + " tied to a project or equipment"; bar("#rwDocBar", tagged.length, live.length);
+  $("#rwDocBP").innerHTML = tgProjOpts("", "Project: keep"); $("#rwDocBE").innerHTML = eqOpts("", "Equipment: keep"); $("#rwDocBC").innerHTML = catOpts("", "Purchase type: keep");
+  const dSug = d => d.project || wordsProject([d.site, d.caption, d.items, d.vendor].join(" ")) || (tgLinked(d).filter(x => x !== d && x.project)[0] || {}).project || "";
+  const open = all.filter(d => (!k || cdKind(d) === k) && (sh0 === "open" ? !rwDone(d) : sh0 === "notag" ? d.status !== "ignore" && !d.project && !d.equip : true)).sort((a, b) => (cdDate(a) < cdDate(b) ? -1 : cdDate(a) > cdDate(b) ? 1 : 0));
+  $("#rwDocTbl").innerHTML = open.length ? '<table class="tgtbl" style="min-width:1000px"><colgroup><col style="width:3%"><col style="width:8%"><col style="width:12%"><col style="width:15%"><col style="width:20%"><col style="width:11%"><col style="width:16%"><col style="width:15%"></colgroup><thead><tr><th><input type="checkbox" class="chk1" data-act="rwdocall"></th><th class="l">Date</th><th class="l">Read as</th><th class="l">Vendor</th><th class="l">Detail</th><th>Amount</th><th class="l">Project</th><th class="l">Equipment</th></tr></thead><tbody>' +
+    open.slice(0, RW_SHOW).map(d => { const sg = dSug(d); return '<tr data-id="' + esc(d.id) + '"><td><input type="checkbox" class="chk1 rwDocChk"' + (RW_DSEL[d.id] ? " checked" : "") + '></td><td class="l">' + dmy(cdDate(d)) + '</td><td class="l">' + esc(d.type || "") + (d.cat && CAT[d.cat] ? '<div class="nar">' + esc(CAT[d.cat]) + "</div>" : "") + (rwDone(d) ? '<br><span class="pill ok">' + (d.status === "ignore" ? "not a bill" : "reviewed") + "</span>" : "") + '</td><td class="l">' + esc(d.vendor || d.who || "") + '</td><td class="l"><div class="nar">' + esc([d.site ? "site: " + d.site : "", d.docNo, d.items, d.caption].filter(Boolean).join(" · ")) + "</div></td><td>" + (cdAmt(d) ? fmt(cdAmt(d)) : "") +
+      '<div class="acts" style="justify-content:flex-end;margin-top:3px"><button class="small primary" data-act="rwrev" data-id="' + esc(d.id) + '">Review</button>' + (d.status === "ignore" ? "" : '<button class="small" data-act="rwnot" data-id="' + esc(d.id) + '">Not a bill</button>') + '</div></td><td class="l"><select class="rwDP" style="width:100%">' + tgProjOpts(sg, "No project") + "</select>" + (sg && !d.project ? '<div class="nar">suggested: pick to confirm</div>' : "") +
+      '</td><td class="l"><select class="rwDE" style="width:100%">' + eqOpts(d.equip || "", "No equipment") + "</select></td></tr>"; }).join("") + "</tbody></table>" +
+    (open.length > RW_SHOW ? '<div style="margin-top:8px"><button class="small" data-act="rwmore">Show ' + Math.min(100, open.length - RW_SHOW) + " more</button></div>" : "")
+    : '<div class="sub">' + (all.length ? "Nothing in this list." : "No WhatsApp documents imported yet (Import tab).") + "</div>";
+  $("#rwDocSel").textContent = Object.keys(RW_DSEL).filter(x => RW_DSEL[x]).length ? Object.keys(RW_DSEL).filter(x => RW_DSEL[x]).length + " ticked" : "Tick documents to set them together";
+  const fl = rwFloat(), fd = fl.filter(p => p.checkedOn && p.project), sh = $("#rwPcShow").value;
+  const fo = fl.filter(p => (sh === "open" ? !p.checkedOn : sh === "noproj" ? !p.project : true)).sort((a, b) => (a.date < b.date ? -1 : 1));
+  $("#rwPcSum").textContent = fd.length.toLocaleString("en-IN") + " of " + fl.length.toLocaleString("en-IN") + " classified with a project · " + fmt(fd.reduce((x, p) => x + p.amt, 0)) + " of " + fmt(fl.reduce((x, p) => x + p.amt, 0)); bar("#rwPcBar", fd.length, fl.length);
+  $("#rwPcBP").innerHTML = tgProjOpts("", "Pick a project");
+  const pSug = p => p.project || wordsProject([p.payee, p.note, p.ref].join(" ")) || (S.docs.filter(d => d.payId === p.id && d.project)[0] || {}).project || "";
+  $("#rwPcTbl").innerHTML = fo.length ? '<table class="tgtbl" style="min-width:900px"><colgroup><col style="width:4%"><col style="width:9%"><col style="width:23%"><col style="width:10%"><col style="width:17%"><col style="width:15%"><col style="width:22%"></colgroup><thead><tr><th><input type="checkbox" class="chk1" data-act="rwpcall"></th><th class="l">Date</th><th class="l">Book says</th><th>Amount</th><th class="l">Paid to</th><th class="l">What for</th><th class="l">Project</th></tr></thead><tbody>' +
+    fo.slice(0, RW_SHOW).map(p => { const sg = pSug(p); return '<tr data-id="' + esc(p.id) + '"><td><input type="checkbox" class="chk1 rwPcChk"' + (RW_SEL[p.id] ? " checked" : "") + '></td><td class="l">' + dmy(p.date) + '</td><td class="l"><div class="nar">' + esc([p.payee, p.note].filter(Boolean).join(" · ")) + "</div>" + (p.checkedOn ? '<span class="pill ok">classified</span>' : "") + "</td><td>" + fmt(p.amt) +
+      '</td><td class="l"><input type="text" class="rwPay" list="vendorList" value="' + esc(VBY[p.vendorId] ? VBY[p.vendorId].name : p.payee || "") + '" style="width:100%"></td><td class="l"><select class="rwCat" style="width:100%">' + catOpts(p.cat || "site") + '</select></td><td class="l"><div style="display:flex;gap:4px"><select class="rwProj" style="flex:1;min-width:0">' + tgProjOpts(sg, "No project yet") + '</select><button class="small primary" data-act="rwpc" data-id="' + esc(p.id) + '">Save</button></div>' + (sg && !p.project ? '<div class="nar">suggested</div>' : "") + "</td></tr>"; }).join("") + "</tbody></table>" +
+    (fo.length > RW_SHOW ? '<div style="margin-top:8px"><button class="small" data-act="rwmore">Show ' + Math.min(100, fo.length - RW_SHOW) + " more</button></div>" : "")
+    : '<div class="sub">' + (fl.length ? "Nothing in this list." : "No site float book imported yet (Import tab).") + "</div>";
+  $("#rwPcSel").textContent = Object.keys(RW_SEL).filter(k => RW_SEL[k]).length ? Object.keys(RW_SEL).filter(k => RW_SEL[k]).length + " ticked" : "Tick lines to set them together";
+}
+function rwPcSave(tr) {
+  const p = S.pays.filter(x => x.id === tr.dataset.id)[0]; if (!p) return;
+  const name = tr.querySelector(".rwPay").value.trim(), v = name ? vendorByName(name) : null;
+  if (!name) { tr.querySelector(".rwPay").classList.add("bad"); return; }
+  p.payee = v ? v.name : name; p.vendorId = v ? v.id : ""; p.cat = tr.querySelector(".rwCat").value;
+  const pj = tr.querySelector(".rwProj").value; if (pj) tgSetField(p, "project", pj);
+  p.checkedBy = USER ? USER.email : ""; p.checkedOn = today();
+  const nx = tr.nextElementSibling ? tr.nextElementSibling.dataset.id : "";
+  persist(); renderAll();
+  const f = nx && $('#rwPcTbl tr[data-id="' + nx + '"] .rwPay'); if (f) f.focus();
+  toast("Saved");
+}
+/* suggestions for one document: bank (the WhatsApp tab's own match), Tally purchase voucher, site float line */
+function tiSugg() {
+  cdMatch();
+  const takenT = {}, takenP = {};
+  S.docs.forEach(d => { if (d.tallyId) takenT[d.tallyId] = 1; if (d.payId) takenP[d.payId] = 1; });
+  const nn = x => String(x || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+  const purch = S.tally.filter(t => !t.gone && !takenT[t.id] && /purchase/i.test(t.type)), byNo = {};
+  purch.forEach(t => { const k = nn(t.no); if (k.length >= 3) (byNo[k] || (byNo[k] = [])).push(t); });
+  const fl = rwFloat().filter(p => !takenP[p.id]);
+  const out = {};
+  S.docs.forEach(d => {
+    if (d.repostOf || d.status === "ignore") return;
+    const a = cdAmt(d), dt = cdDate(d), o = {};
+    if (!d.lineId && CDM[d.id]) o.bank = CDM[d.id];
+    if (!d.tallyId && cdKind(d) === "bill") {
+      const byN = nn(d.docNo).length >= 3 ? (byNo[nn(d.docNo)] || []).filter(t => !a || Math.abs((t.cr || t.dr) - a) <= Math.max(1, a * 0.02))[0] : null;
+      let best = byN ? { t: byN, how: "bill no." } : null;
+      if (!best && a > 0 && dt) purch.forEach(t => { if (Math.abs((t.cr || t.dr) - a) > 1) return; const g = daysBetween(dt, t.date); if (g < -45 || g > 120) return; if (!best || Math.abs(g) < Math.abs(best.g)) best = { t: t, how: "amount and date", g: g }; });
+      if (best) o.tally = best;
+    }
+    if (!d.payId && a > 0 && dt) { let b = null; const byHolder = payerFloat(payerOf(d.paidFrom)); fl.forEach(p => { if (Math.abs(p.amt - a) > 1) return; const g = daysBetween(dt, p.date); if (g < -3 || g > (byHolder ? 20 : 10)) return; if (!b || Math.abs(g) < Math.abs(b.g)) b = { p: p, g: g }; }); if (b) o.pay = b; }
+    out[d.id] = o;
+  });
+  return out;
+}
+const tiTied = d => !!(d.lineId || d.tallyId || d.payId || (d.status === "outside" && !payerFloat(payerOf(d.paidFrom))));   // paid outside: nothing in the bank to tie (the float holder's payments still need their float line)   // paid outside: nothing in the bank to tie
+function renderTie() {
+  const docs = rwDocs().filter(d => d.status !== "ignore" && cdKind(d) !== "other"), tied = docs.filter(tiTied), show = $("#tiShow").value;
+  $("#tiSum").textContent = tied.length.toLocaleString("en-IN") + " of " + docs.length.toLocaleString("en-IN") + " tied"; bar("#tiBar", tied.length, docs.length);
+  const SG = tiSugg(), LBY = {}, TBY = {}, PBY2 = {};
+  S.lines.forEach(l => { LBY[l.id] = l; }); S.tally.forEach(t => { TBY[t.id] = t; }); S.pays.forEach(p => { PBY2[p.id] = p; });
+  const pw = $("#tiPayer").value, pays0 = uniq(docs.map(d => payerOf(d.paidFrom))).sort();
+  $("#tiPayer").innerHTML = '<option value="">Paid by anyone</option>' + pays0.map(x => "<option" + (x === pw ? " selected" : "") + ">" + esc(x) + "</option>").join("") + '<option value="-"' + (pw === "-" ? " selected" : "") + ">Payer not known</option>";
+  const list = docs.filter(d => (!show || (show === "done") === tiTied(d)) && (!pw || (pw === "-" ? !payerOf(d.paidFrom) : payerOf(d.paidFrom) === pw))).sort((a, b) => (cdDate(a) < cdDate(b) ? -1 : cdDate(a) > cdDate(b) ? 1 : 0));
+  const cell = (d, kind) => {
+    const sg = SG[d.id] || {};
+    if (kind === "bank") {
+      if (d.lineId && LBY[d.lineId]) { const l = LBY[d.lineId]; return '<span class="pill ok">tied</span> ' + esc(l.acct) + " · " + dmy(l.date) + " · " + fmt(l.debit) + '<div class="nar">' + esc(l.narration) + '</div><button class="small" data-act="tiun" data-k="bank" data-id="' + esc(d.id) + '">Untie</button>'; }
+      const pf = payerOf(d.paidFrom); if (pf && !payerCompany(pf)) return '<span class="pill">paid by ' + esc(pf) + "</span>" + (payerFloat(pf) ? '<div class="nar">from the site float: tie the float line</div>' : "");
+      if (d.status === "outside") return '<span class="pill">paid outside company bank</span>';
+      if (sg.bank) { const l = sg.bank.l; return '<span class="pill auto">' + esc(CD_HOW[sg.bank.how]) + "</span> " + esc(l.acct) + " · " + dmy(l.date) + " · " + fmt(l.debit) + '<div class="nar">' + esc(l.narration) + '</div><div class="acts"><button class="small primary" data-act="cdok" data-id="' + esc(d.id) + '" data-line="' + esc(l.id) + '">Tie</button><button class="small" data-act="cdpick" data-id="' + esc(d.id) + '">Pick another</button></div>'; }
+      return '<div class="acts"><button class="small" data-act="cdpick" data-id="' + esc(d.id) + '">Pick a bank line</button><button class="small" data-act="cdset" data-s="outside" data-id="' + esc(d.id) + '">Paid outside</button></div>';
+    }
+    if (kind === "tally") {
+      if (d.tallyId && TBY[d.tallyId]) { const t = TBY[d.tallyId]; return '<span class="pill ok">tied</span> ' + esc(t.book) + " · " + dmy(t.date) + " · " + esc(t.type + (t.no ? " " + t.no : "")) + " · " + fmt(t.cr || t.dr) + '<div class="nar">' + esc(t.party) + '</div><button class="small" data-act="tiun" data-k="tally" data-id="' + esc(d.id) + '">Untie</button>'; }
+      if (sg.tally) { const t = sg.tally.t; return '<span class="pill auto">' + esc(sg.tally.how) + "</span> " + esc(t.book) + " · " + dmy(t.date) + " · " + esc(t.type + (t.no ? " " + t.no : "")) + " · " + fmt(t.cr || t.dr) + '<div class="nar">' + esc(t.party) + '</div><button class="small primary" data-act="tiset" data-k="tally" data-v="' + esc(t.id) + '" data-id="' + esc(d.id) + '">Tie</button>'; }
+      return cdKind(d) === "bill" ? '<span class="sub">no voucher found</span>' : "";
+    }
+    if (d.payId && PBY2[d.payId]) { const p = PBY2[d.payId]; return '<span class="pill ok">tied</span> ' + dmy(p.date) + " · " + fmt(p.amt) + '<div class="nar">' + esc(p.payee) + '</div><button class="small" data-act="tiun" data-k="pay" data-id="' + esc(d.id) + '">Untie</button>'; }
+    if (sg.pay) { const p = sg.pay.p; return dmy(p.date) + " · " + fmt(p.amt) + '<div class="nar">' + esc([p.payee, p.note].filter(Boolean).join(" · ")) + '</div><button class="small primary" data-act="tiset" data-k="pay" data-v="' + esc(p.id) + '" data-id="' + esc(d.id) + '">Tie</button>'; }
+    return "";
+  };
+  $("#tiTbl").innerHTML = list.length ? '<table class="tgtbl" style="min-width:1000px"><colgroup><col style="width:22%"><col style="width:10%"><col style="width:26%"><col style="width:24%"><col style="width:18%"></colgroup><thead><tr><th class="l">Bill or proof</th><th>Amount</th><th class="l">Bank debit</th><th class="l">Tally voucher</th><th class="l">Site float line</th></tr></thead><tbody>' +
+    list.slice(0, TI_SHOW).map(d => '<tr><td class="l">' + dmy(cdDate(d)) + " · " + esc(d.type || "") + "<br><b>" + esc(d.vendor || d.who || "") + '</b><div class="nar">' + esc([d.docNo, d.items, payerOf(d.paidFrom) ? "paid from " + payerOf(d.paidFrom) : ""].filter(Boolean).join(" · ")) + "</div>" + (cdDrive(d) ? '<a href="' + esc(cdDrive(d)) + '" target="_blank" rel="noopener">Open</a> · ' : "") + '<a href="#" data-act="rwrev1" data-id="' + esc(d.id) + '">Review</a></td><td>' + fmt(cdAmt(d)) + '</td><td class="l">' + cell(d, "bank") + '</td><td class="l">' + cell(d, "tally") + '</td><td class="l">' + cell(d, "pay") + "</td></tr>").join("") + "</tbody></table>" +
+    (list.length > TI_SHOW ? '<div style="margin-top:8px"><button class="small" data-act="timore">Show ' + Math.min(60, list.length - TI_SHOW) + " more</button></div>" : "")
+    : '<div class="sub">' + (docs.length ? "Nothing in this list." : "No WhatsApp bills imported yet.") + "</div>";
+}
+function tiSet(id, k, v) {
+  const d = S.docs.filter(x => x.id === id)[0]; if (!d) return;
+  if (k === "bank") { d.lineId = ""; d.status = ""; d.checkedBy = ""; d.checkedOn = ""; }
+  else d[k === "tally" ? "tallyId" : "payId"] = v || "";
+  if (v) tgCarry(d);   // a newly tied entry takes the bill's project and equipment, or gives its own
+  persist(); renderAll(); toast(v ? "Tied" : "Untied");
+}
+/* tied entries move together: the bill, its bank line, its Tally voucher, its site float line */
+function tgLinked(rec) {
+  const L = [], add = x => { if (x && L.indexOf(x) < 0) L.push(x); };
+  const docsOf = S.docs.filter(d => d === rec || (d.status === "ok" && d.lineId === rec.id) || d.tallyId === rec.id || d.payId === rec.id);
+  docsOf.forEach(d => { add(d);
+    if (d.status === "ok" && d.lineId) add(S.lines.filter(l => l.id === d.lineId)[0]);
+    if (d.tallyId) add(S.tally.filter(t => t.id === d.tallyId)[0]);
+    if (d.payId) add(S.pays.filter(p => p.id === d.payId)[0]); });
+  add(rec); return L;
+}
+function tgCarry(d) {
+  const L = tgLinked(d), p = L.map(x => x.project).filter(Boolean)[0] || "", q = L.map(x => x.equip).filter(Boolean)[0] || "";
+  L.forEach(x => { if (p && !x.project) x.project = p; if (q && !x.equip) x.equip = q; });
+}
+function tgSetField(rec, f, v) { const L = tgLinked(rec); L.forEach(x => { x[f] = v; }); return L.length; }
+
+/* ---------- Project tags: every payment entry from every source tied to a project, and to equipment where it is for a machine ---------- */
+const TG_SRC_L = { bank: "Bank statements", pay: "Site float and direct", doc: "WhatsApp bills", tp: "Tally, Piling book", tm: "Tally, Main book" };
+let TG_SRC = { bank: 1, pay: 1, doc: 1, tp: 1, tm: 0 }, TG_STEP = "1", TG_CUR = "", TG_SEL = {}, TG_IDX = {};
+const EBY = () => { const m = {}; S.equip.forEach(e => { m[e.id] = e; }); return m; };
+const eqOpts = (sel, blank) => (blank != null ? '<option value="">' + esc(blank) + "</option>" : "") + S.equip.slice().sort((a, b) => String(a.name).localeCompare(String(b.name))).map(e => '<option value="' + esc(e.id) + '"' + (e.id === sel ? " selected" : "") + ">" + esc(e.name || e.id) + "</option>").join("");
+const tgProjOpts = (sel, blank) => projOpts(sel, blank) + '<option value="_co"' + (sel === "_co" ? " selected" : "") + ">Company level (no project)</option>";
+let TG_KC = {};
+function tgKey(name) { const s0 = String(name || "").trim(); if (TG_KC[s0]) return TG_KC[s0]; const v = vendorByName(s0); return (TG_KC[s0] = v ? ["v:" + v.id, v.name] : ["n:" + norm(s0), s0]); }
+function tgEntries() {
+  const out = []; TG_IDX = {}; TG_KC = {};
+  const add = (src, rec, date, name, amt, detail, where, hint, side) => {   // side: "dr" = paid to the party, "cr" = billed by the party (or received from it)
+    if (!(amt > 0)) return;
+    const k = tgKey(name), e = { src: src, id: rec.id, rec: rec, date: date || "", key: k[0], party: k[1] || "(no name)", amt: amt, detail: detail, where: where, hint: hint || "", side: side || "dr" };
+    out.push(e); TG_IDX[src + "|" + rec.id] = e;
+  };
+  ROWS.forEach(r => { if (OUT[r.cat]) return;
+    add(r.kind === "bank" ? "bank" : "pay", r.rec, r.date, r.v ? r.v.name : r.payee, r.amt, r.kind === "bank" ? r.narration : r.note, r.source, (r.project && !r.rec.project ? r.project : ""), r.kind === "bank" && +r.rec.credit > 0 && !(+r.rec.debit > 0) ? "cr" : "dr"); });
+  S.docs.forEach(d => { if (d.repostOf || d.status === "ignore") return; const k = cdKind(d); if (k !== "bill" && !(k === "pay" && d.status === "outside")) return;
+    add("doc", d, cdDate(d), d.vendor || d.who, cdAmt(d), [d.type, d.docNo, d.items].filter(Boolean).join(" · "), "WhatsApp " + (d.chat || ""), "", k === "bill" ? "cr" : "dr"); });
+  S.tally.forEach(t => { if (t.gone) return; const src = t.book === "Piling" ? "tp" : "tm";
+    add(src, t, t.date, t.party, Math.max(+t.dr || 0, +t.cr || 0), t.type + (t.no ? " " + t.no : ""), "Tally " + t.book, "", +t.dr > 0 ? "dr" : "cr"); });
+  return out;
+}
+function tgGroups(E) {
+  const G = {};
+  E.forEach(e => { const g = G[e.key] || (G[e.key] = { key: e.key, party: e.party, n: 0, amt: 0, open: 0, openAmt: 0, list: [] });
+    g.n++; g.amt += e.amt; g.list.push(e); if (!e.rec.project) { g.open++; g.openAmt += e.amt; } });
+  return Object.keys(G).map(k => G[k]);
+}
+function tgSuggest(g) {   // most used project and machine on this party's tagged entries, else the vendor's own project, else words in the text
+  const cnt = (f) => { const m = {}; g.list.forEach(e => { if (e.rec[f]) m[e.rec[f]] = (m[e.rec[f]] || 0) + e.amt; }); return Object.keys(m).sort((a, b) => m[b] - m[a])[0] || ""; };
+  let p = cnt("project"), why = p ? "most used on this party" : "";
+  if (!p && g.key.indexOf("v:") === 0 && VBY[g.key.slice(2)] && VBY[g.key.slice(2)].project) { p = VBY[g.key.slice(2)].project; why = "the vendor's usual project"; }
+  if (!p) { const h = g.list.filter(e => e.hint)[0] || g.list.filter(e => wordsProject(e.party + " " + e.detail))[0]; if (h) { p = h.hint || wordsProject(h.party + " " + h.detail); why = "project words in the bank text"; } }
+  let q = cnt("equip"), qwhy = q ? "most used on this party" : "";
+  if (!q) { const u = (g.party + " " + g.list.map(e => e.detail).join(" ")).toUpperCase(); const m = S.equip.filter(e => String(e.words || "").split(",").map(w => w.trim().toUpperCase()).filter(w => w.length >= 3).some(w => u.indexOf(w) >= 0))[0]; if (m) { q = m.id; qwhy = "its words appear in the entries"; } }
+  return { p: p, why: why, q: q, qwhy: qwhy };
+}
+let TG_E = [], TG_G = [];
+function renderTag() {
+  if ($("#tab-tag").classList.contains("hide")) return;   // heavy: only while the tab is open
+  const all = tgEntries();
+  TG_E = all.filter(e => TG_SRC[e.src]);
+  const tot = TG_E.reduce((a, e) => a + e.amt, 0), done = TG_E.filter(e => e.rec.project), doneAmt = done.reduce((a, e) => a + e.amt, 0);
+  const pc = tot ? Math.round(doneAmt / tot * 100) : 0;
+  $("#tgBar").style.width = pc + "%";
+  $("#tgTot").textContent = TG_E.length ? pc + "% of the amount tagged · " + done.length.toLocaleString("en-IN") + " of " + TG_E.length.toLocaleString("en-IN") + " entries" : "Nothing imported yet";
+  $("#tgCnt").textContent = TG_E.length - done.length ? (TG_E.length - done.length).toLocaleString("en-IN") : "";
+  $("#tgSrc").innerHTML = Object.keys(TG_SRC_L).map(k => {
+    const a = all.filter(e => e.src === k), d = a.filter(e => e.rec.project), aa = a.reduce((s, e) => s + e.amt, 0), da = d.reduce((s, e) => s + e.amt, 0), p = aa ? Math.round(da / aa * 100) : 0;
+    return '<div><label><input type="checkbox" class="chk1" data-act="tgsrc" data-id="' + k + '"' + (TG_SRC[k] ? " checked" : "") + "> " + TG_SRC_L[k] + '</label><span class="sub">' + d.length.toLocaleString("en-IN") + " of " + a.length.toLocaleString("en-IN") + " · " + fmt(da) + " of " + fmt(aa) + '</span><div class="tgbar"><i style="width:' + p + '%"></i></div></div>';
+  }).join("");
+  ["1", "2", "3", "4", "5"].forEach(n => { $("#tgStep" + n).classList.toggle("hide", n !== TG_STEP); });
+  $$(".tgsteps button").forEach(b => b.classList.toggle("on", b.dataset.id === TG_STEP));
+  if (TG_STEP === "1") renderRaw(); else if (TG_STEP === "2") renderTie(); else if (TG_STEP === "3") renderEquip(); else if (TG_STEP === "5") renderTagTotals(); else renderTagQueue();
+}
+function renderTagQueue() {
+  TG_G = tgGroups(TG_E);
+  const q = $("#tgSearch").value.trim().toLowerCase(), showDone = $("#tgDone").checked;
+  const list = TG_G.filter(g => (showDone || g.open) && (!q || g.party.toLowerCase().indexOf(q) >= 0)).sort((a, b) => b.openAmt - a.openAmt || b.amt - a.amt);
+  if (!TG_CUR || !TG_G.some(g => g.key === TG_CUR)) TG_CUR = list.length ? list[0].key : "";
+  $("#tgQueue").innerHTML = list.length ? list.slice(0, 300).map(g => '<div data-act="tgparty" data-id="' + esc(g.key) + '" class="' + (g.key === TG_CUR ? "on" : "") + '">' + esc(g.party) +
+    '<span class="sub">' + (g.open ? g.open + " untagged · " + fmt(g.openAmt) : "all " + g.n + " tagged") + "</span></div>").join("") + (list.length > 300 ? '<div class="sub">' + (list.length - 300) + " more: search to find them</div>" : "")
+    : '<div class="sub">' + (TG_E.length ? "Every party is tagged." : "No entries in the sources ticked above.") + "</div>";
+  renderTagParty();
+}
+function renderTagParty() {
+  const g = TG_G.filter(x => x.key === TG_CUR)[0];
+  if (!g) { $("#tgParty").innerHTML = ""; return; }
+  const sg = tgSuggest(g), L = g.list.slice().sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0)), E = EBY();
+  const bySrc = {}; L.forEach(e => { bySrc[e.src] = (bySrc[e.src] || 0) + 1; });
+  const ds = L.map(e => e.date).filter(Boolean);
+  // running balance from the Tally entries only (the books); bank, float and WhatsApp rows are the same money seen elsewhere, so they are shown but not added again
+  const isT = e => e.src === "tp" || e.src === "tm", hasT = L.some(isT), inBal = e => hasT ? isT(e) : true;
+  const sum = (f) => L.filter(f).reduce((a, e) => a + e.amt, 0);
+  const crT = sum(e => inBal(e) && e.side === "cr"), drT = sum(e => inBal(e) && e.side === "dr");
+  const balTxt = v => Math.abs(v) < 0.5 ? "nil" : fmt(Math.abs(v)) + (v > 0 ? " Cr" : " Dr");
+  let run = 0; const RUN = {}; L.forEach(e => { if (inBal(e)) { run += e.side === "cr" ? e.amt : -e.amt; RUN[e.src + "|" + e.id] = run; } });
+  const bankDr = sum(e => e.src === "bank" && e.side === "dr"), bankCr = sum(e => e.src === "bank" && e.side === "cr"), docCr = sum(e => e.src === "doc" && e.side === "cr"), payDr = sum(e => e.src === "pay" || (e.src === "doc" && e.side === "dr"));
+  const pos = '<div class="tgpos"><div><span class="sub">' + (hasT ? "Billed in Tally (Cr)" : "Billed (Cr)") + "</span><b>" + fmt(crT) + '</b></div><div><span class="sub">' + (hasT ? "Paid in Tally (Dr)" : "Paid (Dr)") + "</span><b>" + fmt(drT) + '</b></div><div><span class="sub">Balance</span><b>' + balTxt(crT - drT) + '</b><span class="sub">' + (crT - drT > 0.5 ? "payable to the party" : crT - drT < -0.5 ? "advance with the party" : "") + "</span></div>" +
+    (hasT ? '<div><span class="sub">Seen elsewhere</span><span class="nar">' + [bankDr ? "bank paid " + fmt(bankDr) : "", bankCr ? "bank received " + fmt(bankCr) : "", docCr ? "WhatsApp bills " + fmt(docCr) : "", payDr ? "float / outside " + fmt(payDr) : ""].filter(Boolean).join(" · ") + "</span></div>" : "") + "</div>" +
+    '<div class="help">' + (hasT ? "Balance runs on the Tally entries (Cr = bill booked, Dr = payment). Bank, site float and WhatsApp rows are the same money seen in other sources, shown in grey and not added again." : "No Tally entries for this party: balance runs on bills (Cr) and payments (Dr) from the other sources.") + " Tally starts 1 Apr 2025 with no opening balance.</div>";
+  $("#tgParty").classList.toggle("shut", !!TG_FOLD.tgParty);
+  $("#tgParty").innerHTML = '<div class="toolbar" style="margin-bottom:4px"><h2 class="fold" title="Click to fold or unfold" style="margin:0">' + esc(g.party) + '</h2><span class="sub">' + g.n + " entries · " + fmt(g.amt) + " · " + Object.keys(bySrc).map(k => bySrc[k] + " " + TG_SRC_L[k].toLowerCase()).join(", ") + "</span></div>" +
+    (sg.p || sg.q ? '<div class="help">Suggested: ' + (sg.p ? "<b>" + esc(projName(sg.p)) + "</b> (" + sg.why + ")" : "") + (sg.p && sg.q ? ", " : "") + (sg.q ? "<b>" + esc((E[sg.q] || {}).name || sg.q) + "</b> (" + sg.qwhy + ")" : "") + "</div>" : "") +
+    '<div class="form" id="tgForm" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));align-items:end">' +
+    '<label>Project<select id="tgP">' + tgProjOpts(sg.p, "Keep as is") + "</select></label>" +
+    '<label>Equipment<select id="tgQ">' + eqOpts(sg.q, "Keep as is") + '<option value="_none">No equipment</option></select></label>' +
+    '<label>Apply to<select id="tgScope"><option value="open">Untagged entries (' + g.open + ')</option><option value="sel">Ticked entries</option><option value="all">All ' + g.n + " entries</option></select></label>" +
+    '<label>From<input type="date" id="tgFrom" value="' + (ds[0] || "") + '"></label><label>To<input type="date" id="tgTo" value="' + (ds[ds.length - 1] || "") + '"></label>' +
+    '<div class="toolbar" style="gap:6px"><button class="primary" data-act="tgapply">Apply</button><button data-act="tgnext">Apply and next party</button></div></div>' +
+    pos + '<div class="tblwrap" style="margin-top:10px;max-height:58vh"><table class="tgtbl" style="min-width:1050px"><colgroup><col style="width:3%"><col style="width:8%"><col style="width:11%"><col style="width:24%"><col style="width:9%"><col style="width:9%"><col style="width:10%"><col style="width:14%"><col style="width:12%"></colgroup><thead><tr><th><input type="checkbox" class="chk1" data-act="tgselall"></th><th class="l">Date</th><th class="l">Source</th><th class="l">Detail</th><th title="Paid to the party">Debit</th><th title="Billed by the party">Credit</th><th>Balance</th><th class="l">Project</th><th class="l">Equipment</th></tr></thead><tbody>' +
+    L.map(e => { const k = e.src + "|" + e.id, b = inBal(e);
+      return '<tr' + (b ? "" : ' class="tgref"') + '><td><input type="checkbox" class="chk1" data-act="tgsel" data-id="' + esc(k) + '"' + (TG_SEL[k] ? " checked" : "") + '></td><td class="l">' + dmy(e.date) + '</td><td class="l">' + esc(e.where) + '</td><td class="l"><div class="nar">' + esc(e.detail) + "</div>" + (tgLinked(e.rec).length > 1 ? '<span class="pill ok">tied</span>' : "") + "</td><td>" + (e.side === "dr" ? fmt(e.amt) : "") + "</td><td>" + (e.side === "cr" ? fmt(e.amt) : "") + '</td><td class="bal">' + (b ? balTxt(RUN[k]) : "") +
+        '</td><td class="l"><select class="tgOne" data-f="project" data-id="' + esc(k) + '">' + tgProjOpts(e.rec.project || "", "Not tagged") + '</select></td><td class="l"><select class="tgOne" data-f="equip" data-id="' + esc(k) + '">' + eqOpts(e.rec.equip || "", "None") + "</select></td></tr>"; }).join("") +
+    "</tbody></table></div>";
+}
+function tgApply(next) {
+  const g = TG_G.filter(x => x.key === TG_CUR)[0]; if (!g) return;
+  const p = $("#tgP").value, q = $("#tgQ").value, sc = $("#tgScope").value, fr = $("#tgFrom").value, to = $("#tgTo").value;
+  if (!p && !q) { toast("Pick a project or equipment first"); return; }
+  let n = 0;
+  g.list.forEach(e => {
+    if (sc === "open" && e.rec.project) return;
+    if (sc === "sel" && !TG_SEL[e.src + "|" + e.id]) return;
+    if ((fr && e.date && e.date < fr) || (to && e.date && e.date > to)) return;
+    if (p) tgSetField(e.rec, "project", p); if (q) tgSetField(e.rec, "equip", q === "_none" ? "" : q); n++;
+  });
+  if (!n) { toast(sc === "sel" ? "Tick the entries first" : "No entries in that range"); return; }
+  TG_SEL = {}; persist();
+  if (next) { const rest = TG_G.filter(x => x.key !== g.key && x.list.some(e => !e.rec.project)).sort((a, b) => b.openAmt - a.openAmt); if (rest.length) TG_CUR = rest[0].key; }
+  renderAll(); toast(n + " entries tagged");
+}
+function renderEquip() {
+  const used = {}; TG_E.forEach(e => { if (e.rec.equip) used[e.rec.equip] = (used[e.rec.equip] || 0) + e.amt; });
+  $("#eqSum").textContent = S.equip.length + " machines";
+  $("#eqTbl").innerHTML = S.equip.length ? '<table><thead><tr><th class="l">Code</th><th class="l">Name</th><th class="l">Kind</th><th class="l">Make, model</th><th class="l">Serial</th><th class="l">Words</th><th class="l">Now at</th><th class="l">Status</th><th>Tagged</th></tr></thead><tbody>' +
+    S.equip.slice().sort((a, b) => String(a.id).localeCompare(String(b.id))).map(e => '<tr class="dr" data-act="eqedit" data-id="' + esc(e.id) + '"><td class="l">' + esc(e.id) + '</td><td class="l">' + esc(e.name) + '</td><td class="l">' + esc(e.kind) + '</td><td class="l">' + esc([e.make, e.model].filter(Boolean).join(" ")) + '</td><td class="l">' + esc(e.serial) + '</td><td class="l">' + esc(e.words) + '</td><td class="l">' + esc(e.project ? projName(e.project) : "") + '</td><td class="l">' + esc(e.status) + "</td><td>" + (used[e.id] ? fmt(used[e.id]) : "") + "</td></tr>").join("") + "</tbody></table>"
+    : '<div class="sub">No equipment yet. Add your machines, or start from the asset ledgers found in Tally below.</div>';
+  const have = {}; S.equip.forEach(e => { have[norm(e.name)] = 1; String(e.words || "").split(",").forEach(w => { if (w.trim()) have[norm(w)] = 1; }); });
+  const A = {}; S.tally.forEach(t => { if (/\b(RIG|MAIT|JCB|EXCAVATOR|COMPRESSOR|GENERATOR|HYDRA|POCLAIN|LOADER|TIPPER|TRAILER)\b|\bHR\s?\d{3}\b/i.test(t.party) && !/SERVICE|INDUSTR|PVT|LTD|LIMITED|LLP|EQUIPMENT|SPARES|ENGINEERING|DRILLING\b(?! RIG)/i.test(t.party)) (A[t.party] = A[t.party] || []).push(t); });
+  const sug = Object.keys(A).filter(n => !have[norm(n)]).sort();
+  $("#eqSug").innerHTML = sug.length ? '<div class="sub" style="margin-bottom:4px">Asset ledgers in Tally that look like machines:</div>' + sug.map(n => '<span class="alias">' + esc(n) + '<button data-act="eqfrom" data-id="' + esc(n) + '">Add</button></span>').join("") : "";
+}
+function openEquip(id, fromName) {
+  const e = S.equip.filter(x => x.id === id)[0] || { id: "", name: fromName || "", kind: /RIG|MAIT/i.test(fromName || "") ? "Piling rig" : "", make: (String(fromName || "").match(/^(SANY|MAIT|JCB|BAUER|SOILMEC|CASAGRANDE|XCMG|TATA|ACE)\b/i) || [""])[0].toUpperCase(), model: "", serial: (String(fromName || "").match(/\b[A-Z]{2}\d{4}[A-Z]{2}\d{4}\b/) || [""])[0], words: fromName || "", project: "", status: "Working", note: "" };
+  const opt = (a, sel) => a.map(x => "<option" + (x === sel ? " selected" : "") + ">" + x + "</option>").join("");
+  openModal("<h2>" + (e.id ? esc(e.id) : "New equipment") + '</h2><div class="form">' +
+    '<label>Code<input type="text" id="qId" value="' + esc(e.id) + '" placeholder="e.g. RIG-SANY-1"></label><label>Name<input type="text" id="qName" value="' + esc(e.name) + '"></label>' +
+    '<label>Kind<input type="text" id="qKind" list="qKinds" value="' + esc(e.kind) + '"></label><datalist id="qKinds">' + uniq(["Piling rig", "Crane", "Excavator", "JCB / backhoe", "Compressor", "DG set", "Vehicle", "Welding set", "Other"].concat(S.equip.map(x => x.kind))).map(k => '<option value="' + esc(k) + '">').join("") + "</datalist>" +
+    '<label>Make<input type="text" id="qMake" value="' + esc(e.make) + '"></label><label>Model<input type="text" id="qModel" value="' + esc(e.model) + '"></label><label>Serial / reg. no.<input type="text" id="qSerial" value="' + esc(e.serial) + '"></label>' +
+    '<label>Now at<select id="qProj">' + projOpts(e.project, "Not set") + '</select></label><label>Status<select id="qStatus">' + opt(["Working", "Idle", "Under repair", "Sold"], e.status) + "</select></label>" +
+    '<label style="grid-column:1/-1">Words (comma separated)<input type="text" id="qWords" value="' + esc(e.words) + '" placeholder="spellings in bank text, bills or Tally"></label>' +
+    '<label style="grid-column:1/-1">Note<input type="text" id="qNote" value="' + esc(e.note) + '"></label></div>' +
+    '<div style="margin-top:12px;display:flex;gap:8px">' + (e.id ? '<button class="danger" data-act="eqdel" data-id="' + esc(e.id) + '">Delete</button>' : "") + '<span style="flex:1"></span><button data-act="mclose">Cancel</button><button class="primary" data-act="eqsave" data-id="' + esc(e.id) + '">Save</button></div>', true);
+}
+function eqSave(old) {
+  const code = $("#qId").value.trim().toUpperCase(), name = $("#qName").value.trim();
+  if (!code) { $("#qId").classList.add("bad"); return; }
+  if (code !== old && S.equip.some(x => x.id === code)) { $("#qId").classList.add("bad"); toast("That code is already used"); return; }
+  let e = S.equip.filter(x => x.id === old)[0];
+  if (old && code !== old) S.lines.concat(S.pays, S.docs, S.tally).forEach(x => { if (x.equip === old) x.equip = code; });
+  if (!e) { e = { id: code }; S.equip.push(e); }
+  Object.assign(e, { id: code, name: name || code, kind: $("#qKind").value.trim(), make: $("#qMake").value.trim(), model: $("#qModel").value.trim(), serial: $("#qSerial").value.trim(), words: $("#qWords").value.trim(), project: $("#qProj").value, status: $("#qStatus").value, note: $("#qNote").value.trim() });
+  closeModal(); persist(); renderAll(); toast("Equipment saved");
+}
+function eqDel(id) {
+  const n = S.lines.concat(S.pays, S.docs, S.tally).filter(x => x.equip === id).length;
+  if (n) { toast(n + " entries are tagged to " + id + ". Change them first, or set the status to Sold."); return; }
+  S.equip = S.equip.filter(x => x.id !== id); closeModal(); persist(); renderAll(); toast("Equipment deleted");
+}
+function renderTagTotals() {
+  const srcs = Object.keys(TG_SRC_L).filter(k => TG_SRC[k]);
+  const tbl = (field, label, name) => {
+    const m = {}; TG_E.forEach(e => { const k = e.rec[field] || ""; const r = m[k] || (m[k] = {}); r[e.src] = (r[e.src] || 0) + e.amt; });
+    const keys = Object.keys(m).sort((a, b) => (a === "") - (b === "") || String(name(a)).localeCompare(String(name(b))));
+    return '<table><thead><tr><th class="l">' + label + "</th>" + srcs.map(k => "<th>" + TG_SRC_L[k] + "</th>").join("") + "</tr></thead><tbody>" +
+      keys.map(k => "<tr><td class=\"l\">" + (k ? esc(name(k)) : "<b>Not tagged</b>") + "</td>" + srcs.map(s => "<td>" + (m[k][s] ? fmt(m[k][s]) : "") + "</td>").join("") + "</tr>").join("") + "</tbody></table>";
+  };
+  const E = EBY();
+  $("#tgProj").innerHTML = TG_E.length ? tbl("project", "Project", projName) : '<div class="sub">Nothing to show yet.</div>';
+  $("#tgEq").innerHTML = TG_E.length ? tbl("equip", "Equipment", k => (E[k] || {}).name || k) : "";
+}
+function tgCsv() {
+  const E = EBY();
+  exportCsv("project_tags_" + today() + ".csv", ["Source", "Date", "Party", "Detail", "Dr / Cr", "Amount", "Project code", "Project", "Equipment code", "Equipment"],
+    tgEntries().sort((a, b) => (a.date < b.date ? -1 : 1)).map(e => [TG_SRC_L[e.src], e.date, e.party, e.detail, e.side === "cr" ? "Cr" : "Dr", e.amt, e.rec.project || "", e.rec.project ? projName(e.rec.project) : "", e.rec.equip || "", e.rec.equip ? (E[e.rec.equip] || {}).name || "" : ""]));
+}
+
 /* ---------- wiring ---------- */
 function showTab(name) {
   $$("#tabs button").forEach(x => x.classList.toggle("on", x.dataset.tab === name));
-  ["overview", "classify", "payments", "vendors", "projects", "masters", "import"].forEach(t => $("#tab-" + t).classList.toggle("hide", t !== name));
+  if (name === "tag") setTimeout(renderTag, 0);
+  ["overview", "classify", "payments", "chat", "books", "tally", "tag", "vendors", "projects", "masters", "import"].forEach(t => $("#tab-" + t).classList.toggle("hide", t !== name));
   window.scrollTo(0, 0);
 }
 function drillPay(o) { ["pSource", "pCat", "pProj", "pFlag", "pSearch"].forEach(id => { $("#" + id).value = ""; }); Object.keys(o).forEach(k => { $("#" + k).value = o[k]; }); P_SHOW = 200; renderPayments(); showTab("payments"); }
@@ -1247,6 +2308,38 @@ function wire() {
   $("#clSearch").oninput = () => { CL_SHOW = 60; renderClassify(); };
   $("#clTbl").addEventListener("keydown", e => { if (e.key === "Enter" && e.target.closest(".clV,.clC,.clP")) { e.preventDefault(); clSave(e.target.closest("tr")); } });
   $("#vSearch").oninput = renderVendors;
+  ["cdMonth", "cdKind", "cdState"].forEach(id => { $("#" + id).onchange = () => { CD_SHOW = 100; renderChat(); }; });
+  $("#cdSearch").oninput = () => { CD_SHOW = 100; renderChat(); };
+  $("#cdReset").onclick = () => { $("#cdMonth").value = ""; $("#cdKind").value = "bill"; $("#cdState").value = ""; $("#cdSearch").value = ""; CD_SHOW = 100; renderChat(); };
+  $("#tkFile").onchange = e => { const fs = Array.from(e.target.files || []); if (fs.length) onTallyFiles(fs); e.target.value = ""; };
+  ["tkList", "tkMonth"].forEach(id => { $("#" + id).onchange = () => { TK_SHOW = 100; renderTally(); }; });
+  $("#tkSearch").oninput = () => { TK_SHOW = 100; renderTally(); };
+  ["bkBook", "bkKind", "bkChgSt"].forEach(id => { $("#" + id).onchange = () => { BK_SHOW = 150; renderBooks(); }; });
+  $("#bkSearch").oninput = () => { BK_SHOW = 150; renderBooks(); };
+  $("#tgSearch").oninput = renderTagQueue;
+  $("#rwDocKind").onchange = () => { RW_SHOW = 100; renderRaw(); };
+  $("#rwDocShow").onchange = () => { RW_SHOW = 100; RW_DSEL = {}; renderRaw(); };
+  $("#rwDocTbl").addEventListener("change", e => {
+    const tr = e.target.closest("tr"), d = tr && S.docs.filter(x => x.id === tr.dataset.id)[0]; if (!d) return;
+    if (e.target.classList.contains("rwDocChk")) { RW_DSEL[d.id] = e.target.checked; $("#rwDocSel").textContent = Object.keys(RW_DSEL).filter(x => RW_DSEL[x]).length + " ticked"; return; }
+    if (e.target.classList.contains("rwDP") || e.target.classList.contains("rwDE")) { const k = tgSetField(d, e.target.classList.contains("rwDP") ? "project" : "equip", e.target.value); persist(); renderAll(); toast(k > 1 ? "Saved, with " + (k - 1) + " tied entries" : "Saved"); }
+  });
+  Object.keys(TG_FOLD).forEach(k => { if (TG_FOLD[k] && $("#" + k)) $("#" + k).classList.add("shut"); });
+  $("#tab-tag").addEventListener("click", e => { const h = e.target.closest("h2.fold"); if (h) tgFold(h); });
+  $("#rwPcShow").onchange = () => { RW_SHOW = 100; RW_SEL = {}; renderRaw(); };
+  $("#rwPcTbl").addEventListener("change", e => { if (e.target.classList.contains("rwPcChk")) { RW_SEL[e.target.closest("tr").dataset.id] = e.target.checked; $("#rwPcSel").textContent = Object.keys(RW_SEL).filter(k => RW_SEL[k]).length + " ticked"; } });
+  $("#tiShow").onchange = () => { TI_SHOW = 60; renderTie(); };
+  $("#tiPayer").onchange = () => { TI_SHOW = 60; renderTie(); };
+  $("#rwPcTbl").addEventListener("keydown", e => { if (e.key === "Enter" && e.target.closest(".rwPay,.rwCat,.rwProj")) { e.preventDefault(); rwPcSave(e.target.closest("tr")); } });
+  $("#tgDone").onchange = renderTagQueue;
+  document.addEventListener("change", e => {
+    if (!e.target.classList.contains("tgOne")) return;
+    const x = TG_IDX[e.target.dataset.id]; if (!x) return;
+    const k = tgSetField(x.rec, e.target.dataset.f, e.target.value); persist(); renderAll(); toast(k > 1 ? "Saved, with " + (k - 1) + " tied entries" : "Saved");
+  });
+  $("#sfFile").onchange = e => { const f = e.target.files[0]; if (f) onFloatFile(f); e.target.value = ""; };
+  $("#sfPayee").onchange = e => { S.settings.floatPayee = e.target.value.trim(); persist(); };
+  $("#cdFile").onchange = e => { const f = e.target.files[0]; if (f) onChatFile(f); e.target.value = ""; };
   $("#bkFile").onchange = e => { const fs = Array.from(e.target.files || []); if (fs.length) onBankFiles(fs); };
   $("#catNew").onkeydown = e => { if (e.key === "Enter") catAdd(); };
   document.addEventListener("change", e => {
@@ -1257,9 +2350,11 @@ function wire() {
   });
   $("#prFile").onchange = e => { const f = e.target.files[0]; if (f) onProjectFile(f); e.target.value = ""; };
   $("#setSources").onchange = e => { S.settings.sources = e.target.value.trim(); persist(); renderAll(); };
+  $("#setPayers").onchange = e => { S.settings.payers = e.target.value.split(",").map(x => x.trim()).filter(Boolean).join(", "); persist(); renderAll(); };
+  $("#setFloatHolder").onchange = e => { S.settings.floatHolder = e.target.value.trim(); persist(); renderAll(); };
   $("#setDupDays").onchange = e => { S.settings.dupDays = Math.max(0, +e.target.value || 0); persist(); renderAll(); };
   $("#setDupMin").onchange = e => { S.settings.dupMin = Math.max(0, +e.target.value || 0); persist(); renderAll(); };
-  document.addEventListener("keydown", e => { if (e.key === "Escape") { $$(".cmenu").forEach(m => m.classList.add("hide")); closeModal(); } });
+  document.addEventListener("keydown", e => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey) && $("#rvForm")) { e.preventDefault(); rvSave("1"); return; } if (e.key === "Escape") { $$(".cmenu").forEach(m => m.classList.add("hide")); closeModal(); } });
   document.addEventListener("click", e => {
     const t = e.target.closest("[data-act]");
     $$(".cmenu").forEach(m => { if (!t || t.dataset.act !== "cmenu" || m.parentNode !== t.parentNode) m.classList.add("hide"); });
@@ -1276,6 +2371,60 @@ function wire() {
     else if (act === "clsave") clSave(t.closest("tr"));
     else if (act === "cldg") clSave(t.closest("tr"), true);
     else if (act === "clmore") { CL_SHOW += 60; renderClassify(); }
+    else if (act === "tkmore") { TK_SHOW += 100; renderTally(); }
+    else if (act === "bkmore") { BK_SHOW += 150; renderBooks(); }
+    else if (act === "bkled") bkLedger(id);
+    else if (act === "bknew") bkForm("new", null, id || "");
+    else if (act === "bkedit" || act === "bkcancel") { const r = S.tally.filter(x => x.id === id)[0]; if (r) bkForm(act === "bkedit" ? "edit" : "cancel", r, bkKey(r.book, r.party)); }
+    else if (act === "bksave") bkSave();
+    else if (act === "bkpost") bkStatus(id, "Posted");
+    else if (act === "bkposted") { const c = S.tchg.filter(x => x.id === id)[0]; if (c && c.status === "To post") { c.status = "Posted"; c.postedBy = USER ? USER.email : ""; c.postedOn = today(); c.tallyNo = $("#bkPostNo").value.trim(); persist(); renderBooks(); closeModal(); toast("Marked posted in Tally"); } }
+    else if (act === "bkwd") bkStatus(id, "Withdrawn");
+    else if (act === "bksnap") bkSnapshot();
+    else if (act === "bksnapdl") bkSnapCsv();
+    else if (act === "bkchgcsv") bkChgCsv();
+    else if (act === "tgstep") { TG_STEP = id; renderTag(); }
+    else if (act === "rwrev" || act === "rwrev1") { e.preventDefault(); const k = $("#rwDocKind").value; cdReview(id, act === "rwrev" ? rwDocs().filter(d => !rwDone(d) && (!k || cdKind(d) === k)).sort((a, b) => (cdDate(a) < cdDate(b) ? -1 : cdDate(a) > cdDate(b) ? 1 : 0)).map(d => d.id) : [id]); }
+    else if (act === "rwnot") cdSet(id, "ignore");
+    else if (act === "rwmore") { RW_SHOW += 100; renderRaw(); }
+    else if (act === "rwpc") rwPcSave(t.closest("tr"));
+    else if (act === "rwdocall") { $$("#rwDocTbl .rwDocChk").forEach(c => { c.checked = t.checked; RW_DSEL[c.closest("tr").dataset.id] = t.checked; }); $("#rwDocSel").textContent = Object.keys(RW_DSEL).filter(x => RW_DSEL[x]).length + " ticked"; }
+    else if (act === "rwdocbulk") {
+      const pj = $("#rwDocBP").value, eq = $("#rwDocBE").value, ct = $("#rwDocBC").value, ids = Object.keys(RW_DSEL).filter(x => RW_DSEL[x]);
+      if (!ids.length || (!pj && !eq && !ct)) { toast(ids.length ? "Pick a project, equipment or purchase type first" : "Tick the documents first"); return; }
+      S.docs.filter(d => RW_DSEL[d.id]).forEach(d => { if (pj) tgSetField(d, "project", pj); if (eq) tgSetField(d, "equip", eq); if (ct) d.cat = ct; });
+      RW_DSEL = {}; persist(); renderAll(); toast(ids.length + " documents set");
+    }
+    else if (act === "rwpcall") { $$("#rwPcTbl .rwPcChk").forEach(c => { c.checked = t.checked; RW_SEL[c.closest("tr").dataset.id] = t.checked; }); $("#rwPcSel").textContent = Object.keys(RW_SEL).filter(k => RW_SEL[k]).length + " ticked"; }
+    else if (act === "rwpcbulk") {
+      const pj = $("#rwPcBP").value, ids = Object.keys(RW_SEL).filter(k => RW_SEL[k]);
+      if (!pj || !ids.length) { toast(pj ? "Tick the lines first" : "Pick the project first"); return; }
+      S.pays.filter(p => RW_SEL[p.id]).forEach(p => { tgSetField(p, "project", pj); if (!p.checkedOn) { p.checkedBy = USER ? USER.email : ""; p.checkedOn = today(); } });
+      RW_SEL = {}; persist(); renderAll(); toast(ids.length + " lines set to " + projName(pj));
+    }
+    else if (act === "tiset") tiSet(id, t.dataset.k, t.dataset.v);
+    else if (act === "tiun") tiSet(id, t.dataset.k, "");
+    else if (act === "timore") { TI_SHOW += 60; renderTie(); }
+    else if (act === "tgsrc") { TG_SRC[id] = t.checked ? 1 : 0; TG_CUR = ""; renderTag(); }
+    else if (act === "tgparty") { TG_CUR = id; TG_SEL = {}; renderTagQueue(); }
+    else if (act === "tgsel") TG_SEL[id] = t.checked;
+    else if (act === "tgselall") $$("#tgParty [data-act=tgsel]").forEach(c => { c.checked = t.checked; TG_SEL[c.dataset.id] = t.checked; });
+    else if (act === "tgapply") tgApply(false);
+    else if (act === "tgnext") tgApply(true);
+    else if (act === "tgcsv") tgCsv();
+    else if (act === "eqnew") openEquip(null);
+    else if (act === "eqedit") openEquip(id);
+    else if (act === "eqfrom") openEquip(null, id);
+    else if (act === "eqsave") eqSave(id);
+    else if (act === "eqdel") eqDel(id);
+    else if (act === "tkgo") { $("#tkList").value = t.dataset.l; $("#tkMonth").value = id; TK_SHOW = 100; renderTally(); }
+    else if (act === "cdmore") { CD_SHOW += 100; renderChat(); }
+    else if (act === "cdmon") { $("#cdMonth").value = id; CD_SHOW = 100; renderChat(); }
+    else if (act === "cdok") cdSet(id, "ok", t.dataset.line);
+    else if (act === "cdset") cdSet(id, t.dataset.s);
+    else if (act === "cdpick") cdPick(id);
+    else if (act === "cdrev") cdReview(id);
+    else if (act === "rvsave") rvSave(t.dataset.go);
     else if (act === "newvendor") openVendor(null);
     else if (act === "vedit") openVendor(id);
     else if (act === "vdel") { S.vendors = S.vendors.filter(v => v.id !== id); closeModal(); persist(); renderAll(); toast("Vendor deleted"); }
