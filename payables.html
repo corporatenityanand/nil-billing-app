@@ -117,7 +117,7 @@ label.btnlike{display:inline-flex;align-items:center;cursor:pointer;border:1px s
 .form label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted)}
 .form label .chk{display:flex;gap:6px;align-items:center;white-space:nowrap}
 .form label .chk input{width:auto;flex:none;margin:0}
-.form input,.form select{width:100%}
+.form input,.form select,.form textarea{width:100%}.form textarea{font:inherit}
 .preview{display:flex;flex-wrap:wrap;gap:16px;margin-top:12px;padding:10px 12px;background:var(--surface2);border-radius:9px;font-size:13px}
 .preview b{display:block;font-size:16px}
 .flag{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
@@ -125,6 +125,10 @@ label.btnlike{display:inline-flex;align-items:center;cursor:pointer;border:1px s
 .dot{width:10px;height:10px;border-radius:50%;margin-top:5px;flex:none}
 .dot.high{background:var(--bad)}.dot.med{background:var(--pi)}.dot.low{background:var(--muted)}
 .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+#odLines input{width:100%;min-width:0;padding:4px 6px}#odLines td{padding:3px 4px;vertical-align:top}#odLines .od-d{min-width:220px}#odLines .od-n{width:84px}#odLines .od-s{width:64px}
+.tltbl{border-collapse:separate;border-spacing:0;font-size:12px;width:auto;min-width:100%}.tltbl th,.tltbl td{padding:4px 5px;border-bottom:1px solid var(--line)}.tltbl .tlname{position:sticky;left:0;background:var(--surface);min-width:190px;max-width:240px;z-index:1}
+.tltbl .tlc{text-align:center;min-width:52px;white-space:nowrap;font-variant-numeric:tabular-nums}.tltbl .tlon{background:color-mix(in srgb,var(--inv) 16%,transparent)}.tltbl .tlopen{color:var(--bad);font-weight:600}.tltbl td[data-act]{cursor:pointer;text-decoration:underline dotted}.tltbl .tlsel{outline:2px solid var(--inv);outline-offset:-2px}.tltbl tr.tlx td{background:var(--surface)}
+.odtot{display:grid;grid-template-columns:auto auto;gap:2px 18px;justify-content:end;font-size:13px;margin-top:6px}.odtot b{text-align:right}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--accent);color:var(--bg);padding:8px 14px;border-radius:8px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:50}
 .toast.show{opacity:1}
 #modalbg{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:40;padding:16px}
@@ -329,6 +333,8 @@ td.nar{white-space:normal;text-align:left;font-size:12px;color:var(--muted);min-
     <button class="dx" data-tab="projects">Projects</button>
     <button class="dx" data-tab="masters">Masters</button>
     <button class="dx" data-tab="import">Import</button>
+    <button data-tab="timeline">Timeline</button>
+    <button data-tab="orders">PO / WO <span class="cnt" id="ordCnt"></span></button>
   </nav>
 
   <div class="viewbar" role="group" aria-label="Period">
@@ -353,7 +359,8 @@ td.nar{white-space:normal;text-align:left;font-size:12px;color:var(--muted);min-
       <div class="toolbar" style="margin-bottom:6px"><h2 style="margin:0">Payees to classify</h2><span class="sub" id="clSum"></span><span style="flex:1"></span>
         <label class="sub">Show <select id="clMin"><option value="20000">payees paid &#8377;20,000 or more</option><option value="0">every payee</option></select></label>
         <input type="text" id="clSearch" placeholder="Search payee or note"></div>
-      <div class="help">Each row is one name as the bank wrote it. Pick or type the vendor, its usual category and project, and Save (or press Enter; the cursor moves on to the next payee): every payment to that name, past and future, follows. Typing a vendor that already exists adds this spelling to it. Mark DG set to leave the payee out of piling payables.</div>
+      <div class="help">Each row is one name as the bank wrote it. If one vendor shows under several spellings, tick them and use Save ticked as one vendor. Pick or type the vendor, its usual category and project, and Save (or press Enter; the cursor moves on to the next payee): every payment to that name, past and future, follows. Typing a vendor that already exists adds this spelling to it. Mark DG set to leave the payee out of piling payables.</div>
+      <div class="selbar"><span id="clSel">Same vendor under different spellings? Tick them (search helps), then save them as one vendor.</span><input type="text" id="clBV" list="vendorList" placeholder="Vendor name" style="min-width:180px"><select id="clBC"></select><select id="clBP"></select><button class="small primary" data-act="clbulk">Save ticked as one vendor</button><button class="small" data-act="clclear">Clear ticks</button></div>
       <div class="tblwrap" id="clTbl"></div>
     </div>
   </section>
@@ -449,6 +456,28 @@ td.nar{white-space:normal;text-align:left;font-size:12px;color:var(--muted);min-
       <div class="tblwrap" id="ckProjTbl" style="margin-bottom:10px"></div>
       <div class="selbar"><span id="ckSel">Tick lines to mark them together</span><button class="small primary" data-act="ckbulk">Mark ticked correct</button></div>
       <div class="tblwrap" id="ckTbl"></div>
+    </div>
+  </section>
+  <section id="tab-timeline" class="hide">
+    <div class="card">
+      <div class="toolbar"><h2 style="margin:0">Timeline by month</h2><span style="flex:1"></span>
+        <label class="sub">From <input type="month" id="tlFrom"></label><label class="sub">To <input type="month" id="tlTo"></label>
+        <select id="tlSrc"></select></div>
+      <div class="help">Shaded months: the project is running (its start and end dates, set in All data &gt; Projects). Amounts are what each project spent that month from the chosen source; one source at a time so nothing is counted twice. Click an amount to see the entries, and tag the "Not tagged yet" ones: the projects running that month come first in the pick list.</div>
+      <div class="tblwrap" id="tlGrid"></div>
+    </div>
+    <div class="card" id="tlList"></div>
+    <div class="card"><h2>Equipment by month</h2><div class="help">Which project each machine's tagged entries (all sources) went to each month. Hover a cell for amounts.</div><div class="tblwrap" id="tlEq"></div></div>
+  </section>
+  <section id="tab-orders" class="hide">
+    <div class="card">
+      <div class="toolbar"><h2 style="margin:0">Purchase orders and work orders</h2><span class="sub" id="odSum"></span><span style="flex:1"></span>
+        <button class="primary small" data-act="ordnew" data-id="PO">+ Purchase order</button><button class="primary small" data-act="ordnew" data-id="WO">+ Work order</button></div>
+      <div class="toolbar"><select id="odKind"><option value="">PO and WO</option><option value="PO">Purchase orders</option><option value="WO">Work orders</option></select>
+        <select id="odStatus"><option value="">All</option><option value="Issued">Issued</option><option value="Cancelled">Cancelled</option></select>
+        <input type="search" id="odSearch" placeholder="Search vendor, number, item" style="max-width:260px"></div>
+      <div class="help">Make an order, then Print to save it as a PDF and send it yourself. Nothing is sent from here. Numbers run per financial year (set the prefix and the company details in All data &gt; Masters).</div>
+      <div class="tblwrap" id="odTbl"></div>
     </div>
   </section>
   <section id="tab-tag" class="hide">
@@ -559,6 +588,20 @@ td.nar{white-space:normal;text-align:left;font-size:12px;color:var(--muted);min-
   </section>
 
   <section id="tab-masters" class="hide">
+    <div class="card">
+      <h2>Company details on purchase and work orders</h2>
+      <div class="form">
+        <label>Company name<input type="text" id="setCoName" data-set="coName"></label>
+        <label>GSTIN<input type="text" id="setCoGstin" data-set="coGstin"></label>
+        <label>Phone<input type="text" data-set="coPhone"></label>
+        <label>Email<input type="text" data-set="coEmail"></label>
+        <label style="grid-column:1/-1">Address<input type="text" data-set="coAddr"></label>
+        <label>Order number prefix<input type="text" data-set="ordPrefix" placeholder="NIL"></label>
+        <label>Signed by (name, designation)<input type="text" data-set="ordSign"></label>
+        <label style="grid-column:1/-1">Purchase order terms (one per line)<textarea rows="5" data-set="poTerms"></textarea></label>
+        <label style="grid-column:1/-1">Work order terms (one per line)<textarea rows="5" data-set="woTerms"></textarea></label>
+      </div>
+    </div>
     <div class="card" style="margin-bottom:12px">
       <div class="toolbar" style="margin-bottom:6px"><h2 style="margin:0">Categories</h2><span class="sub" id="catSum"></span></div>
       <div class="help">Rename a category and every payment in it follows. "Left out" keeps its payments out of the payables totals (like the DG set). "No project" is for company-level payments that never belong to a site. A category in use cannot be deleted: hide it instead, so it stops showing in the pick lists. The categories the bank text sets by itself (tax, GST, PF and ESIC, loans, card bills, bank charges, own accounts, DG set) can be renamed but not removed.</div>
@@ -637,13 +680,13 @@ function mergeCats(list) {
 const catOpts = (sel, blank) => (blank ? '<option value="">' + esc(blank) + "</option>" : "") + CATS.filter(c => !c.hidden || c.id === sel).map(c => '<option value="' + esc(c.id) + '"' + (c.id === sel ? " selected" : "") + ">" + esc(c.name || c.id) + "</option>").join("");
 
 /* ---------- state ---------- */
-const NEW_STATE = () => ({ vendors: [], projects: [], lines: [], pays: [], docs: [], tally: [], tsnap: [], tchg: [], equip: [], cats: mergeCats([]), settings: { sources: "", dupDays: 3, dupMin: 10000, floatPayee: "", payers: "NIL Kotak, NIL HDFC, Dayaram Purbey, Vignesh Prabhu, Jayanth Prabhu, Akhtar, Sujeet, NMFP Kotak", floatHolder: "Dayaram Purbey" } });
+const NEW_STATE = () => ({ vendors: [], projects: [], lines: [], pays: [], docs: [], tally: [], tsnap: [], tchg: [], equip: [], cats: mergeCats([]), settings: { sources: "", dupDays: 3, dupMin: 10000, floatPayee: "", payers: "NIL Kotak, NIL HDFC, Dayaram Purbey, Vignesh Prabhu, Jayanth Prabhu, Akhtar, Sujeet, NMFP Kotak", floatHolder: "Dayaram Purbey", coName: "Nityanand Infrastructure Ltd.", coAddr: "711, Highway Commerce Centre, I B Patel Road, Goregaon (East), Mumbai 400 063", coGstin: "27AAACN1981E1ZL", coPhone: "022-40021405", coEmail: "", ordPrefix: "NIL", ordSign: "", poTerms: "Please quote this PO number on your invoice, delivery challan and all letters.\nMaterial must match the description and quantity above. Rejected material will be returned at your cost.\nDeliver to the site above with the delivery challan, and test certificates where applicable.\nYour tax invoice must show our GSTIN. GST is paid only against a valid tax invoice.\nPayment as per the payment terms above, after receipt and acceptance at site.", woTerms: "Please quote this work order number on all bills and letters.\nWork to be done as per the scope above, the drawings and the site engineer's instructions.\nBills must carry measurement sheets certified by our site engineer.\nYou are responsible for your workers' wages, PF, ESIC, insurance and safety on site as per law.\nTDS will be deducted as applicable.\nPayment as per the payment terms above, against certified bills." }, orders: [] });
 let S = NEW_STATE();
 let saveTimer = null, HIST = [], LAST = null;
 function normalize(o) {
   if (o) o = JSON.parse(JSON.stringify(o));   // snapshot data can be read-only; always work on a copy
   const n = NEW_STATE(); if (!o) return n;
-  ["vendors", "projects", "lines", "pays", "docs", "tally", "tsnap", "tchg", "equip"].forEach(k => { n[k] = Array.isArray(o[k]) ? o[k] : []; });
+  ["vendors", "projects", "lines", "pays", "docs", "tally", "tsnap", "tchg", "equip", "orders"].forEach(k => { n[k] = Array.isArray(o[k]) ? o[k] : []; });
   n.cats = mergeCats(o.cats);
   n.settings = Object.assign(n.settings, o.settings || {});
   return n;
@@ -677,14 +720,15 @@ const TABS = {
   equipment: ["id", "name", "kind", "make", "model", "serial", "words", "project", "status", "note"],
   tally_snap: ["id", "book", "from", "asOn", "vouchers", "dr", "cr", "fingerprint", "takenBy", "takenAt"],
   tally_changes: ["id", "kind", "ref", "book", "date", "party", "type", "no", "dr", "cr", "was", "reason", "by", "at", "status", "postedBy", "postedOn", "tallyNo", "tallyId"],
+  orders: ["id", "kind", "no", "date", "vendorId", "vendor", "gstin", "vaddr", "vphone", "project", "site", "delivery", "ref", "subject", "lines", "taxMode", "subtotal", "tax", "total", "payTerms", "terms", "status", "by", "on", "note"],
   settings: ["key", "value"],
   audit: ["timestamp", "user_email", "action", "entity", "entity_id", "before_json", "after_json"]
 };
-const SKEY = { vendors: "vendors", projects: "projects", bank_lines: "lines", payments: "pays", categories: "cats", chat_docs: "docs", tally: "tally", tally_snap: "tsnap", tally_changes: "tchg", equipment: "equip" };
-const EDITABLE = ["vendors", "projects", "bank_lines", "payments", "categories", "chat_docs", "tally", "tally_snap", "tally_changes", "equipment", "settings"];
-const NUMC = { debit: 1, credit: 1, balance: 1, amt: 1, tdsPct: 1, sort: 1, taxable: 1, gst: 1, total: 1, paid: 1, post: 1, dr: 1, cr: 1, vouchers: 1 };
+const SKEY = { vendors: "vendors", projects: "projects", bank_lines: "lines", payments: "pays", categories: "cats", chat_docs: "docs", tally: "tally", tally_snap: "tsnap", tally_changes: "tchg", equipment: "equip", orders: "orders" };
+const EDITABLE = ["vendors", "projects", "bank_lines", "payments", "categories", "chat_docs", "tally", "tally_snap", "tally_changes", "equipment", "orders", "settings"];
+const NUMC = { debit: 1, credit: 1, balance: 1, amt: 1, tdsPct: 1, sort: 1, taxable: 1, gst: 1, total: 1, paid: 1, post: 1, dr: 1, cr: 1, vouchers: 1, subtotal: 1, tax: 1 };
 const BOOLC = { adv: 1, dupOk: 1, leftOut: 1, noProject: 1, hidden: 1 };
-const DATEC = { date: 1, start: 1, end: 1, importedOn: 1, on: 1, addedOn: 1, docDate: 1, checkedOn: 1, tagOkOn: 1, gone: 1, from: 1, asOn: 1, postedOn: 1 };
+const DATEC = { date: 1, start: 1, end: 1, importedOn: 1, on: 1, addedOn: 1, docDate: 1, checkedOn: 1, tagOkOn: 1, gone: 1, from: 1, asOn: 1, postedOn: 1, delivery: 1 };
 
 let USER = null, TOKEN = null, TOKEN_EXP = 0, tokenClient = null, onTokenError = null;
 const GRANT_KEY = "rcr_sheets_granted";   // shared with the receivables app: same Google client and permission
@@ -772,7 +816,7 @@ async function loadAll() {
     });
   });
   const n = NEW_STATE();
-  n.vendors = raw.vendors; n.projects = raw.projects; n.lines = raw.bank_lines; n.pays = raw.payments; n.docs = raw.chat_docs; n.tally = raw.tally; n.tsnap = raw.tally_snap; n.tchg = raw.tally_changes; n.equip = raw.equipment; n.cats = raw.categories;
+  n.vendors = raw.vendors; n.projects = raw.projects; n.lines = raw.bank_lines; n.pays = raw.payments; n.docs = raw.chat_docs; n.tally = raw.tally; n.tsnap = raw.tally_snap; n.tchg = raw.tally_changes; n.equip = raw.equipment; n.cats = raw.categories; n.orders = raw.orders;
   raw.settings.forEach(x => { const k = String(x.key).trim(); if (k in n.settings) n.settings[k] = typeof n.settings[k] === "number" ? toNum(x.value, n.settings[k]) : String(x.value); });
   S = normalize(n);
   BASE = rowsView();
@@ -1045,7 +1089,12 @@ function fillPeriods() {
 }
 const vName = r => r.v ? r.v.name : r.payee;
 const projName = id => (id === "_co" ? "Company level" : PBY[id] ? PBY[id].name || id : id);
-const projOpts = (sel, blank) => (blank != null ? '<option value="">' + esc(blank) + "</option>" : "") + S.projects.slice().sort((a, b) => String(a.id).localeCompare(String(b.id))).map(p => '<option value="' + esc(p.id) + '"' + (p.id === sel ? " selected" : "") + ">" + esc(p.id + " · " + (p.name || "")) + "</option>").join("");
+const projOpts = (sel, blank, date) => {   // with a date: the projects running then come first
+  const o = p => '<option value="' + esc(p.id) + '"' + (p.id === sel ? " selected" : "") + ">" + esc(p.id + " · " + (p.name || "")) + "</option>";
+  const all = S.projects.slice().sort((a, b) => String(a.id).localeCompare(String(b.id))), ym = date ? String(date).slice(0, 7) : "";
+  const run = ym ? all.filter(p => tlRunsIn(p, ym)) : [];
+  return (blank != null ? '<option value="">' + esc(blank) + "</option>" : "") + (run.length ? '<optgroup label="Running in ' + esc(tlMonLbl(ym)) + '">' + run.map(o).join("") + '</optgroup><optgroup label="Other projects">' + all.filter(p => run.indexOf(p) < 0).map(o).join("") + "</optgroup>" : all.map(o).join(""));
+};
 const srcList = () => uniq(S.lines.map(l => l.acct).concat(["Direct", "Site float"]).concat(String(S.settings.sources || "").split(",").map(s => s.trim())));
 
 /* ---------- render ---------- */
@@ -1054,7 +1103,7 @@ function renderAll() {
   $("#vendorList").innerHTML = S.vendors.slice().sort((a, b) => a.name.localeCompare(b.name)).map(v => '<option value="' + esc(v.name) + '">').join("");
   const n = S.lines.length, accts = uniq(S.lines.map(l => l.acct));
   $("#vbinfo").textContent = n ? n.toLocaleString("en-IN") + " bank lines from " + accts.join(", ") : "No bank statement imported yet";
-  renderOverview(); renderClassify(); renderPayments(); renderChat(); renderBooks(); renderTally(); renderTag(); renderVendors(); renderProjects(); renderImport(); renderMasters(); renderFocus();
+  renderOverview(); renderClassify(); renderPayments(); renderChat(); renderBooks(); renderTally(); renderTag(); renderVendors(); renderProjects(); renderImport(); renderMasters(); renderFocus(); renderOrders();
 }
 function bars(el, items, total, click) {
   const max = Math.max.apply(null, items.map(x => x[1]).concat([1]));
@@ -1082,19 +1131,23 @@ function renderOverview() {
   $("#byMonth").innerHTML = bm.length ? '<table><thead><tr><th>Month</th><th>Paid out</th><th>Not classified</th></tr></thead><tbody>' + bm.map(x => "<tr><td>" + x[0] + "</td><td>" + fmt(x[1]) + "</td><td>" + fmt(sum(open.filter(r => r.date.slice(0, 7) === x[0]))) + "</td></tr>").join("") + "</tbody></table>" : '<div class="sub">Import a bank statement to start.</div>';
 }
 
-let CL_SHOW = 60;
+let CL_SHOW = 60, CL_SEL = {};   // CL_SEL: ticked bank spellings (by name key) to save as one vendor
 function renderClassify() {
   const min = +$("#clMin").value || 0, q = $("#clSearch").value.trim().toUpperCase();
   const g = {}; OPEN.forEach(r => { const x = g[r.key] || (g[r.key] = { key: r.key, payee: r.payee, n: 0, amt: 0, first: r.date, last: r.date, notes: [], proj: {} }); x.n++; x.amt += r.amt; if (r.date < x.first) x.first = r.date; if (r.date > x.last) x.last = r.date; if (r.note && x.notes.length < 4 && x.notes.indexOf(r.note) < 0) x.notes.push(r.note); if (r.project) x.proj[r.project] = (x.proj[r.project] || 0) + 1; });
-  let list = Object.keys(g).map(k => g[k]).sort((a, b) => b.amt - a.amt);
+  let list = Object.keys(g).map(k => g[k]);
+  list.sort((a, b) => b.amt - a.amt);
   const all = list.length, allAmt = list.reduce((s, x) => s + x.amt, 0);
   list = list.filter(x => x.amt >= min && (!q || x.payee.toUpperCase().indexOf(q) >= 0 || x.notes.join(" ").toUpperCase().indexOf(q) >= 0));
   $("#clSum").textContent = all ? all + " names, " + cmp(allAmt) + (list.length < all ? " · showing " + list.length : "") : "";
   if (!all) { $("#clTbl").innerHTML = '<div class="sub">' + (S.lines.length ? "Every bank payment has a vendor or category." : "Import a bank statement first (Import tab).") + "</div>"; return; }
   const shown = list.slice(0, CL_SHOW);
-  $("#clTbl").innerHTML = '<table class="cltbl"><colgroup><col style="width:29%"><col style="width:13%"><col style="width:20%"><col style="width:15%"><col style="width:14%"><col style="width:9%"></colgroup><thead><tr><th>Name in the bank</th><th>Payments</th><th class="l">Vendor</th><th class="l">Category</th><th class="l">Project</th><th></th></tr></thead><tbody>' + shown.map(x => {
+  const sel = Object.keys(CL_SEL).filter(k => CL_SEL[k] && g[k]);
+  $("#clSel").textContent = sel.length ? sel.length + " ticked: " + sel.map(k => g[k].payee).join(" · ") + " (" + fmt(sel.reduce((a, k) => a + g[k].amt, 0)) + ")" : "Same vendor under different spellings? Tick them (search helps), then save them as one vendor.";
+  if (!$("#clBC").options.length) { $("#clBC").innerHTML = catOpts("", "Category…"); $("#clBP").innerHTML = projOpts("", "Project: varies / not set"); }
+  $("#clTbl").innerHTML = '<table class="cltbl"><colgroup><col style="width:4%"><col style="width:27%"><col style="width:12%"><col style="width:19%"><col style="width:15%"><col style="width:14%"><col style="width:9%"></colgroup><thead><tr><th></th><th>Name in the bank</th><th>Payments</th><th class="l">Vendor</th><th class="l">Category</th><th class="l">Project</th><th></th></tr></thead><tbody>' + shown.map(x => {
     const pj = Object.keys(x.proj).sort((a, b) => x.proj[b] - x.proj[a])[0] || "";
-    return '<tr data-key="' + esc(x.key) + '"><td class="l"><b>' + esc(x.payee) + '</b><div class="nar" title="' + esc(x.notes.join(" · ")) + '">' + esc(x.notes.join(" · ")) + "</div></td>" +
+    return '<tr data-key="' + esc(x.key) + '"><td><input type="checkbox" class="chk1 clChk"' + (CL_SEL[x.key] ? " checked" : "") + '></td><td class="l"><b>' + esc(x.payee) + "</b>" + '<div class="nar" title="' + esc(x.notes.join(" · ")) + '">' + esc(x.notes.join(" · ")) + "</div></td>" +
       "<td>" + fmt(x.amt) + '<div class="sub">' + x.n + " · " + dmy(x.first) + (x.first !== x.last ? " to " + dmy(x.last) : "") + "</div></td>" +
       '<td class="l"><input type="text" class="clV" list="vendorList" value="' + esc(titleCase(x.payee)) + '"></td>' +
       '<td class="l"><select class="clC">' + catOpts("", "Pick…") + "</select></td>" +
@@ -1111,6 +1164,18 @@ function ensureVendor(name, alias, patch) {
   Object.keys(patch || {}).forEach(k => { if (patch[k] !== undefined && patch[k] !== "") v[k] = patch[k]; });
   return v;
 }
+function clBulk() {   // the ticked spellings become one vendor: the first spelling creates or finds it, the rest are added as its aliases
+  const keys = Object.keys(CL_SEL).filter(k => CL_SEL[k]), R = keys.map(k => OPEN.filter(r => r.key === k)[0]).filter(Boolean);
+  const name = $("#clBV").value.trim(), cat = $("#clBC").value, proj = $("#clBP").value;
+  if (R.length < 1) { toast("Tick the spellings first"); return; }
+  if (!name) { $("#clBV").classList.add("bad"); $("#clBV").focus(); toast("Type the vendor name"); return; }
+  if (!cat) { $("#clBC").classList.add("bad"); toast("Pick a category"); return; }
+  $("#clBV").classList.remove("bad"); $("#clBC").classList.remove("bad");
+  const v = ensureVendor(name, R[0].payee, { cat: cat, project: proj });
+  R.slice(1).forEach(r => ensureVendor(v.name, r.payee));
+  if (!v.cat) v.cat = cat;
+  CL_SEL = {}; $("#clBV").value = ""; persist(); renderAll(); toast(R.length + " spellings saved as " + v.name);
+}
 function clSave(tr, dg) {
   const key = tr.dataset.key, r0 = OPEN.filter(r => r.key === key)[0]; if (!r0) return;
   const name = $(".clV", tr).value.trim(), cat = dg ? "dg" : $(".clC", tr).value, proj = $(".clP", tr).value;
@@ -1121,7 +1186,8 @@ function clSave(tr, dg) {
   const idx = [].indexOf.call(tr.parentNode.children, tr);
   persist(); renderAll();
   // the saved row drops out of the list: put the cursor on the next payee's category, so each one is a pick and Enter
-  const next = $$("#clTbl tbody tr")[idx]; if (next) $(".clC", next).focus();
+  const rows = $$("#clTbl tbody tr"), next = rows[idx] || rows[rows.length - 1]; if (next) $(".clC", next).focus();
+  delete CL_SEL[key];
   toast(r0.payee + (dg ? " marked DG set" : " → " + v.name));
 }
 
@@ -1402,6 +1468,7 @@ function renderImport() {
   if (document.activeElement && /^set/.test(document.activeElement.id)) return;
   if (document.activeElement !== $("#sfPayee")) $("#sfPayee").value = S.settings.floatPayee || "";
   $("#setSources").value = S.settings.sources || ""; $("#setPayers").value = S.settings.payers || ""; $("#setFloatHolder").value = S.settings.floatHolder || ""; $("#setDupDays").value = S.settings.dupDays; $("#setDupMin").value = S.settings.dupMin;
+  $$("[data-set]").forEach(el => { if (document.activeElement !== el) el.value = S.settings[el.dataset.set] || ""; });
 }
 /* ---------- masters: categories ---------- */
 function renderMasters() {
@@ -1609,30 +1676,43 @@ function cdReview(id, list) {
     const v = d[f[0]] == null ? "" : d[f[0]];
     if (f[2] === "payer") { const cur = payerOf(v); return '<label>' + f[1] + '<select data-f="' + f[0] + '"><option value="">Not known</option>' + uniq(payerList().concat([cur])).filter(Boolean).map(o => '<option' + (o === cur ? " selected" : "") + ">" + esc(o) + "</option>").join("") + "</select></label>"; }
     if (f[2] === "cat") { const g = v || ((vendorByName(d.vendor) || {}).cat) || (/fuel|pump/i.test(d.type || "") ? "fuel" : ""); return '<label>' + f[1] + '<select data-f="' + f[0] + '">' + catOpts(g, "Not set") + "</select></label>"; }
+    if (f[0] === "paid") { const full = CD_BILL[d.type] && +d.total > 0 && Math.abs((+d.paid || 0) - +d.total) < 0.5;
+      return '<label>' + f[1] + '<input type="text" inputmode="decimal" data-f="paid" value="' + esc(v === "" || v === 0 ? "" : v) + '"' + (full ? " readonly" : "") + '></label><label id="rvFullBox"' + (CD_BILL[d.type] ? "" : ' class="hide"') + '>Bill paid?<span class="chk" style="min-height:34px"><input type="checkbox" id="rvPaidFull"' + (full ? " checked" : "") + '> Paid in full (amount paid = bill total)</span></label>'; }
     if (f[2] === "sel") return '<label>' + f[1] + '<select data-f="' + f[0] + '">' + uniq(RV_TYPES.concat([String(v)])).filter(Boolean).map(o => "<option" + (o === v ? " selected" : "") + ">" + esc(o) + "</option>").join("") + "</select></label>";
     return '<label' + (f[2] === "wide" ? ' class="w"' : "") + ">" + f[1] + '<input type="' + (f[2] === "date" ? "date" : "text") + '"' + (f[2] === "num" ? ' inputmode="decimal"' : "") + ' data-f="' + f[0] + '" value="' + esc(f[2] === "num" ? (v === "" || v === 0 ? "" : v) : v) + '"></label>';
   };
   openModal('<h2>Review ' + esc(d.type || "document") + ' <span class="sub">' + (pos + 1) + " of " + RV_LIST.length + " in this list</span></h2>" +
     '<div class="rvgrid"><div class="rvdoc">' + (url ? '<iframe src="' + esc(url) + '" title="The bill" allow="autoplay"></iframe>' : '<div class="help" style="padding:12px">No Drive copy of this file.</div>') + "</div>" +
     '<div><div class="help">' + esc(d.who || "") + (d.posted ? " posted it on " + esc(dmy(d.posted)) : "") + (d.caption ? ": " + esc(d.caption) : "") + (url ? ' · <a href="' + esc(url.replace(/\/preview$/, "/view")) + '" target="_blank" rel="noopener">Open in Drive</a>' : "") + "</div>" +
-    '<div class="form" id="rvForm"><label>Project<select data-f="project">' + tgProjOpts(d.project || "", "No project yet") + '</select></label><label>Equipment<select data-f="equip">' + eqOpts(d.equip || "", "No equipment") + "</select></label>" + RV_F.map(fld).join("") + "</div>" +
+    '<div class="form" id="rvForm"><label>Project<select data-f="project">' + tgProjOpts(d.project || "", "No project yet", cdDate(d)) + '</select></label><label>Equipment<select data-f="equip">' + eqOpts(d.equip || "", "No equipment") + "</select></label>" + RV_F.map(fld).join("") + "</div>" +
     (d.reviewedOn ? '<div class="sub" style="margin-top:6px">Reviewed by ' + esc(d.reviewedBy) + " on " + esc(dmy(d.reviewedOn)) + "</div>" : "") +
     '<div class="toolbar" style="margin-top:12px;justify-content:flex-end"><button data-act="mclose">Close</button>' +
     (pos > 0 ? '<button data-act="rvsave" data-go="-1">Save, previous</button>' : "") + '<button data-act="rvsave" data-go="0">Save</button>' +
     '<button class="primary" data-act="rvsave" data-go="1">Save and next</button></div></div></div>', "review");
   $("#modal").className = "review"; $("#modal").dataset.id = id;
   const first = $('#rvForm [data-f="total"]') || $("#rvForm input"); if (first) first.focus();
+  // Paid in full: amount paid follows the bill total; only offered on bills
+  const fp = $('#rvForm [data-f="paid"]'), ft = $('#rvForm [data-f="total"]'), fb = $("#rvPaidFull"), sync = () => { if (fb.checked) fp.value = ft.value; fp.readOnly = fb.checked; };
+  fb.onchange = sync; ft.addEventListener("input", sync);
+  $('#rvForm [data-f="type"]').onchange = e => { const bill = !!CD_BILL[e.target.value]; $("#rvFullBox").classList.toggle("hide", !bill); if (!bill && fb.checked) { fb.checked = false; sync(); } };
 }
 function rvSave(go) {
   const id = $("#modal").dataset.id, d = S.docs.filter(x => x.id === id)[0]; if (!d) return;
-  let bad = false;
+  let bad = false; const V = {}, F = {};
   $$("#rvForm [data-f]").forEach(el => {
     const f = el.dataset.f, num = ["taxable", "gst", "total", "paid"].indexOf(f) >= 0;
-    let v = el.value.trim();
+    let v = el.value.trim(); el.classList.remove("bad"); F[f] = el;
     if (num) { if (v === "") v = 0; else { const n = toNum(v.replace(/[^\d.\-]/g, ""), NaN); if (isNaN(n)) { el.classList.add("bad"); bad = true; return; } v = n; } }
-    d[f] = v;
+    V[f] = v;
   });
   if (bad) { toast("Check the amounts"); return; }
+  if (CD_BILL[V.type]) {   // a bill needs its amounts
+    if (!(V.total > 0)) { F.total.classList.add("bad"); F.total.focus(); toast("A bill needs its bill total"); return; }
+    if (V.taxable > 0 && Math.abs(V.taxable + (V.gst || 0) - V.total) > 2) { F.taxable.classList.add("bad"); F.gst.classList.add("bad"); toast("Taxable value + GST should add up to the bill total"); return; }
+    if ($("#rvPaidFull") && $("#rvPaidFull").checked) V.paid = V.total;
+    if (V.paid > V.total + 1) { F.paid.classList.add("bad"); toast("Amount paid is more than the bill total"); return; }
+  }
+  Object.keys(V).forEach(f => { d[f] = V[f]; });
   if (d.docDate) d.month = d.docDate.slice(0, 7);
   d.reviewedBy = USER ? USER.email : ""; d.reviewedOn = today();
   if (d.project) tgSetField(d, "project", d.project); if (d.equip) tgSetField(d, "equip", d.equip);   // tied bank line, Tally voucher and float line follow
@@ -2036,7 +2116,7 @@ function renderRaw() {
   const open = all.filter(d => (!k || cdKind(d) === k) && (sh0 === "open" ? !rwDone(d) : sh0 === "notag" ? d.status !== "ignore" && !d.project && !d.equip : true)).sort((a, b) => (cdDate(a) < cdDate(b) ? -1 : cdDate(a) > cdDate(b) ? 1 : 0));
   $("#rwDocTbl").innerHTML = open.length ? '<table class="tgtbl" style="min-width:1000px"><colgroup><col style="width:3%"><col style="width:8%"><col style="width:12%"><col style="width:15%"><col style="width:20%"><col style="width:11%"><col style="width:16%"><col style="width:15%"></colgroup><thead><tr><th><input type="checkbox" class="chk1" data-act="rwdocall"></th><th class="l">Date</th><th class="l">Read as</th><th class="l">Vendor</th><th class="l">Detail</th><th>Amount</th><th class="l">Project</th><th class="l">Equipment</th></tr></thead><tbody>' +
     open.slice(0, RW_SHOW).map(d => { const sg = dSug(d); return '<tr data-id="' + esc(d.id) + '"><td><input type="checkbox" class="chk1 rwDocChk"' + (RW_DSEL[d.id] ? " checked" : "") + '></td><td class="l">' + dmy(cdDate(d)) + '</td><td class="l">' + esc(d.type || "") + (d.cat && CAT[d.cat] ? '<div class="nar">' + esc(CAT[d.cat]) + "</div>" : "") + (rwDone(d) ? '<br><span class="pill ok">' + (d.status === "ignore" ? "not a bill" : "reviewed") + "</span>" : "") + '</td><td class="l">' + esc(d.vendor || d.who || "") + '</td><td class="l"><div class="nar">' + esc([d.site ? "site: " + d.site : "", d.docNo, d.items, d.caption].filter(Boolean).join(" · ")) + "</div></td><td>" + (cdAmt(d) ? fmt(cdAmt(d)) : "") +
-      '<div class="acts" style="justify-content:flex-end;margin-top:3px"><button class="small primary" data-act="rwrev" data-id="' + esc(d.id) + '">Review</button>' + (d.status === "ignore" ? "" : '<button class="small" data-act="rwnot" data-id="' + esc(d.id) + '">Not a bill</button>') + '</div></td><td class="l"><select class="rwDP" style="width:100%">' + tgProjOpts(sg, "No project") + "</select>" + (sg && !d.project ? '<div class="nar">suggested: pick to confirm</div>' : "") +
+      '<div class="acts" style="justify-content:flex-end;margin-top:3px"><button class="small primary" data-act="rwrev" data-id="' + esc(d.id) + '">Review</button>' + (d.status === "ignore" ? "" : '<button class="small" data-act="rwnot" data-id="' + esc(d.id) + '">Not a bill</button>') + '</div></td><td class="l"><select class="rwDP" style="width:100%">' + tgProjOpts(sg, "No project", cdDate(d)) + "</select>" + (sg && !d.project ? '<div class="nar">suggested: pick to confirm</div>' : "") +
       '</td><td class="l"><select class="rwDE" style="width:100%">' + eqOpts(d.equip || "", "No equipment") + "</select></td></tr>"; }).join("") + "</tbody></table>" +
     (open.length > RW_SHOW ? '<div style="margin-top:8px"><button class="small" data-act="rwmore">Show ' + Math.min(100, open.length - RW_SHOW) + " more</button></div>" : "")
     : '<div class="sub">' + (all.length ? "Nothing in this list." : "No WhatsApp documents imported yet (Import tab).") + "</div>";
@@ -2048,7 +2128,7 @@ function renderRaw() {
   const pSug = p => p.project || wordsProject([p.payee, p.note, p.ref].join(" ")) || (S.docs.filter(d => d.payId === p.id && d.project)[0] || {}).project || "";
   $("#rwPcTbl").innerHTML = fo.length ? '<table class="tgtbl" style="min-width:1050px"><colgroup><col style="width:3%"><col style="width:8%"><col style="width:20%"><col style="width:9%"><col style="width:15%"><col style="width:13%"><col style="width:16%"><col style="width:16%"></colgroup><thead><tr><th><input type="checkbox" class="chk1" data-act="rwpcall"></th><th class="l">Date</th><th class="l">Book says</th><th>Amount</th><th class="l">Paid to</th><th class="l">What for</th><th class="l">Project</th><th class="l">Equipment</th></tr></thead><tbody>' +
     fo.slice(0, RW_SHOW).map(p => { const sg = pSug(p); return '<tr data-id="' + esc(p.id) + '"><td><input type="checkbox" class="chk1 rwPcChk"' + (RW_SEL[p.id] ? " checked" : "") + '></td><td class="l">' + dmy(p.date) + '</td><td class="l"><div class="nar">' + esc([p.payee, p.note].filter(Boolean).join(" · ")) + "</div>" + (p.checkedOn ? '<span class="pill ok">classified</span>' : "") + "</td><td>" + fmt(p.amt) +
-      '</td><td class="l"><input type="text" class="rwPay" list="vendorList" value="' + esc(VBY[p.vendorId] ? VBY[p.vendorId].name : p.payee || "") + '" style="width:100%"></td><td class="l"><select class="rwCat" style="width:100%">' + catOpts(p.cat || "site") + '</select></td><td class="l"><select class="rwProj" style="width:100%">' + tgProjOpts(sg, "No project yet") + "</select>" + (sg && !p.project ? '<div class="nar">suggested</div>' : "") + '</td><td class="l"><div style="display:flex;gap:4px"><select class="rwEq" style="flex:1;min-width:0">' + eqOpts(p.equip || "", "No equipment") + '</select><button class="small primary" data-act="rwpc" data-id="' + esc(p.id) + '">Save</button></div></td></tr>'; }).join("") + "</tbody></table>" +
+      '</td><td class="l"><input type="text" class="rwPay" list="vendorList" value="' + esc(VBY[p.vendorId] ? VBY[p.vendorId].name : p.payee || "") + '" style="width:100%"></td><td class="l"><select class="rwCat" style="width:100%">' + catOpts(p.cat || "site") + '</select></td><td class="l"><select class="rwProj" style="width:100%">' + tgProjOpts(sg, "No project yet", p.date) + "</select>" + (sg && !p.project ? '<div class="nar">suggested</div>' : "") + '</td><td class="l"><div style="display:flex;gap:4px"><select class="rwEq" style="flex:1;min-width:0">' + eqOpts(p.equip || "", "No equipment") + '</select><button class="small primary" data-act="rwpc" data-id="' + esc(p.id) + '">Save</button></div></td></tr>'; }).join("") + "</tbody></table>" +
     (fo.length > RW_SHOW ? '<div style="margin-top:8px"><button class="small" data-act="rwmore">Show ' + Math.min(100, fo.length - RW_SHOW) + " more</button></div>" : "")
     : '<div class="sub">' + (fl.length ? "Nothing in this list." : "No site float book imported yet (Import tab).") + "</div>";
   $("#rwPcSel").textContent = Object.keys(RW_SEL).filter(k => RW_SEL[k]).length ? Object.keys(RW_SEL).filter(k => RW_SEL[k]).length + " ticked" : "Tick lines to set them together";
@@ -2190,7 +2270,7 @@ function renderCheck() {
   $("#ckTbl").innerHTML = L.length ? '<table class="tgtbl" style="min-width:1100px"><colgroup><col style="width:3%"><col style="width:8%"><col style="width:9%"><col style="width:15%"><col style="width:20%"><col style="width:9%"><col style="width:14%"><col style="width:12%"><col style="width:10%"></colgroup><thead><tr><th><input type="checkbox" class="chk1" data-act="ckall"></th><th class="l">Date</th><th class="l">Source</th><th class="l">Paid to / vendor</th><th class="l">Detail</th><th>Amount</th><th class="l">Project</th><th class="l">Equipment</th><th></th></tr></thead><tbody>' +
     L.slice(0, CK_SHOW).map(e => { const r = e.rec, who = r.tagBy || r.checkedBy || r.reviewedBy || "";
       return '<tr data-id="' + esc(e.k) + '"><td><input type="checkbox" class="chk1 ckChk"' + (CK_SEL[e.k] ? " checked" : "") + '></td><td class="l">' + dmy(e.date) + '</td><td class="l">' + (e.src === "pay" ? "Site float" : "WhatsApp" + (r.driveId || r.file ? '<br><a href="#" data-act="rwrev1" data-id="' + esc(r.id) + '">open</a>' : "")) + '</td><td class="l">' + esc(e.party) + (r.cat && CAT[r.cat] ? '<div class="nar">' + esc(CAT[r.cat]) + "</div>" : "") + '</td><td class="l"><div class="nar">' + esc(e.detail) + "</div>" + (who ? '<span class="sub">tagged by ' + esc(whoName(who)) + (who === me ? " (you)" : "") + "</span>" : "") + "</td><td>" + (e.amt ? fmt(e.amt) : "") +
-        '</td><td class="l"><select class="ckP" style="width:100%">' + tgProjOpts(r.project || "", "No project") + '</select></td><td class="l"><select class="ckE" style="width:100%">' + eqOpts(r.equip || "", "No equipment") + "</select></td><td>" +
+        '</td><td class="l"><select class="ckP" style="width:100%">' + tgProjOpts(r.project || "", "No project", r.date) + '</select></td><td class="l"><select class="ckE" style="width:100%">' + eqOpts(r.equip || "", "No equipment") + "</select></td><td>" +
         (r.tagOkOn ? '<span class="pill ok">checked</span><div class="nar">' + esc(whoName(r.tagOkBy)) + " · " + dmy(r.tagOkOn) + '</div><button class="small" data-act="ckundo" data-id="' + esc(e.k) + '">Undo</button>' : '<button class="small primary" data-act="ckok" data-id="' + esc(e.k) + '">Correct</button>') + "</td></tr>"; }).join("") + "</tbody></table>" +
     (L.length > CK_SHOW ? '<div style="margin-top:8px"><button class="small" data-act="ckmore">Show ' + Math.min(150, L.length - CK_SHOW) + " more</button></div>" : "")
     : '<div class="sub">' + (all.length ? "Nothing in this list." : "Nothing tagged yet: tag site float lines and WhatsApp documents first.") + "</div>";
@@ -2202,7 +2282,7 @@ const TG_SRC_L = { bank: "Bank statements", pay: "Site float and direct", doc: "
 let TG_SRC = { bank: 1, pay: 1, doc: 1, tp: 1, tm: 0 }, TG_STEP = "1", TG_CUR = "", TG_SEL = {}, TG_IDX = {};
 const EBY = () => { const m = {}; S.equip.forEach(e => { m[e.id] = e; }); return m; };
 const eqOpts = (sel, blank) => (blank != null ? '<option value="">' + esc(blank) + "</option>" : "") + S.equip.slice().sort((a, b) => String(a.name).localeCompare(String(b.name))).map(e => '<option value="' + esc(e.id) + '"' + (e.id === sel ? " selected" : "") + ">" + esc(e.name || e.id) + "</option>").join("");
-const tgProjOpts = (sel, blank) => projOpts(sel, blank) + '<option value="_co"' + (sel === "_co" ? " selected" : "") + ">Company level (no project)</option>";
+const tgProjOpts = (sel, blank, date) => projOpts(sel, blank, date) + '<option value="_co"' + (sel === "_co" ? " selected" : "") + ">Company level (no project)</option>";
 let TG_KC = {};
 function tgKey(name) { const s0 = String(name || "").trim(); if (TG_KC[s0]) return TG_KC[s0]; const v = vendorByName(s0); return (TG_KC[s0] = v ? ["v:" + v.id, v.name] : ["n:" + norm(s0), s0]); }
 function tgEntries() {
@@ -2291,7 +2371,7 @@ function renderTagParty() {
     pos + '<div class="tblwrap" style="margin-top:10px;max-height:58vh"><table class="tgtbl" style="min-width:1050px"><colgroup><col style="width:3%"><col style="width:8%"><col style="width:11%"><col style="width:24%"><col style="width:9%"><col style="width:9%"><col style="width:10%"><col style="width:14%"><col style="width:12%"></colgroup><thead><tr><th><input type="checkbox" class="chk1" data-act="tgselall"></th><th class="l">Date</th><th class="l">Source</th><th class="l">Detail</th><th title="Paid to the party">Debit</th><th title="Billed by the party">Credit</th><th>Balance</th><th class="l">Project</th><th class="l">Equipment</th></tr></thead><tbody>' +
     L.map(e => { const k = e.src + "|" + e.id, b = inBal(e);
       return '<tr' + (b ? "" : ' class="tgref"') + '><td><input type="checkbox" class="chk1" data-act="tgsel" data-id="' + esc(k) + '"' + (TG_SEL[k] ? " checked" : "") + '></td><td class="l">' + dmy(e.date) + '</td><td class="l">' + esc(e.where) + '</td><td class="l"><div class="nar">' + esc(e.detail) + "</div>" + (tgLinked(e.rec).length > 1 ? '<span class="pill ok">tied</span>' : "") + "</td><td>" + (e.side === "dr" ? fmt(e.amt) : "") + "</td><td>" + (e.side === "cr" ? fmt(e.amt) : "") + '</td><td class="bal">' + (b ? balTxt(RUN[k]) : "") +
-        '</td><td class="l"><select class="tgOne" data-f="project" data-id="' + esc(k) + '">' + tgProjOpts(e.rec.project || "", "Not tagged") + '</select></td><td class="l"><select class="tgOne" data-f="equip" data-id="' + esc(k) + '">' + eqOpts(e.rec.equip || "", "None") + "</select></td></tr>"; }).join("") +
+        '</td><td class="l"><select class="tgOne" data-f="project" data-id="' + esc(k) + '">' + tgProjOpts(e.rec.project || "", "Not tagged", e.date) + '</select></td><td class="l"><select class="tgOne" data-f="equip" data-id="' + esc(k) + '">' + eqOpts(e.rec.equip || "", "None") + "</select></td></tr>"; }).join("") +
     "</tbody></table></div>";
 }
 function tgApply(next) {
@@ -2371,10 +2451,215 @@ function showTab(name) {
   $$("#tabs button").forEach(x => x.classList.toggle("on", x.dataset.tab === name));
   if (name === "ffloat") $("#tab-ffloat").appendChild($("#rwPcCard")); else if (name === "fdocs") $("#tab-fdocs").appendChild($("#rwDocCard"));
   else if (name === "tag") { $("#tgStep1").appendChild($("#rwPcCard")); $("#tgStep1").appendChild($("#rwDocCard")); }
+  if (name === "orders") renderOrders(); else if (name === "timeline") setTimeout(renderTimeline, 0);
   if (name === "tag") setTimeout(renderTag, 0); else if (FX_TABS.indexOf(name) >= 0) setTimeout(renderFocus, 0);
   FX_TABS.forEach(t => $("#tab-" + t).classList.toggle("hide", t !== name));
-  ["overview", "classify", "payments", "chat", "books", "tally", "tag", "vendors", "projects", "masters", "import"].forEach(t => $("#tab-" + t).classList.toggle("hide", t !== name));
+  ["overview", "classify", "payments", "chat", "books", "tally", "tag", "vendors", "projects", "masters", "import", "orders", "timeline"].forEach(t => $("#tab-" + t).classList.toggle("hide", t !== name));
   window.scrollTo(0, 0);
+}
+/* ---------- timeline: projects, spend and equipment month by month; tag a month's entries against the projects running then ---------- */
+let TL_SEL = null, TL_SHOW = 100;
+const tlYm = iso => String(iso || "").slice(0, 7);
+const tlMonLbl = ym => { const m = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][+ym.slice(5, 7) - 1]; return m + "-" + ym.slice(2, 4); };
+const tlNext = ym => { let y = +ym.slice(0, 4), m = +ym.slice(5, 7) + 1; if (m > 12) { m = 1; y++; } return y + "-" + String(m).padStart(2, "0"); };
+function tlMonths(a, b) { const out = []; if (!a || !b || a > b) return out; for (let m = a; m <= b && out.length < 72; m = tlNext(m)) out.push(m); return out; }
+const tlRunsIn = (p, ym) => !!p.start && tlYm(p.start) <= ym && (!p.end || tlYm(p.end) >= ym);
+const TL_SRC = { money: "Payments: bank and logged (incl. site float)", float: "Site float only", doc: "WhatsApp bills", tp: "Tally Piling: payments", tm: "Tally Main: payments" };
+function tlEntries(src) {
+  return tgEntries().filter(e => src === "money" ? (e.src === "bank" || e.src === "pay") && e.side === "dr" : src === "float" ? e.src === "pay" && e.rec.source === "Site float" : src === "doc" ? e.src === "doc" : e.src === src && e.side === "dr");
+}
+function renderTimeline() {
+  const el = $("#tlGrid"); if (!el) return;
+  const src = $("#tlSrc").value || "money", E = tlEntries(src).filter(e => e.date);
+  const P = S.projects.slice().sort((a, b) => String(a.start || "9").localeCompare(String(b.start || "9")) || String(a.id).localeCompare(String(b.id)));
+  const ds = E.map(e => tlYm(e.date)).concat(P.map(p => tlYm(p.start)).filter(Boolean)).sort();
+  if (!$("#tlFrom").value) { const ago = tlYm(isoOf(new Date(Date.now() - 540 * 864e5))); $("#tlFrom").value = ds.length && ds[0] > ago ? ds[0] : ago; }   // the last 18 months, or from the first entry
+  if (!$("#tlTo").value) $("#tlTo").value = tlYm(today());
+  const M = tlMonths($("#tlFrom").value, $("#tlTo").value);
+  const sum = {}, add = (row, ym, a) => { const r = sum[row] || (sum[row] = {}); r[ym] = (r[ym] || 0) + a; };
+  E.forEach(e => { const ym = tlYm(e.date); add(e.rec.project || "_none", ym, e.amt); });
+  const eqm = {};   // equipment -> month -> project -> amount, from every source's tags
+  tgEntries().forEach(e => { if (!e.rec.equip || !e.date) return; const ym = tlYm(e.date), q = eqm[e.rec.equip] || (eqm[e.rec.equip] = {}), c = q[ym] || (q[ym] = {}); const p = e.rec.project || "?"; c[p] = (c[p] || 0) + e.amt; });
+  const cell = (row, ym, run) => { const a = (sum[row] || {})[ym] || 0, on = TL_SEL && TL_SEL.row === row && TL_SEL.ym === ym;
+    return '<td class="tlc' + (run ? " tlon" : "") + (row === "_none" && a ? " tlopen" : "") + (on ? " tlsel" : "") + '"' + (a ? ' data-act="tlcell" data-id="' + esc(row + "|" + ym) + '" title="' + esc(fmt(a)) + '"' : "") + ">" + (a ? cmp(a).replace("₹", "") : "") + "</td>"; };
+  const tot = r => M.reduce((t, m) => t + ((sum[r] || {})[m] || 0), 0);
+  const head = '<thead><tr><th class="l tlname">Project</th>' + M.map(m => '<th class="tlc">' + tlMonLbl(m) + "</th>").join("") + '<th class="num">Total</th></tr></thead>';
+  const prow = p => '<tr><td class="l tlname"><b>' + esc(p.id) + "</b> " + esc(p.name || "") + '<div class="sub">' + (p.start ? dmy(p.start) + " to " + (p.end ? dmy(p.end) : "now") : "no dates yet") + "</div></td>" + M.map(m => cell(p.id, m, tlRunsIn(p, m))).join("") + '<td class="num">' + fmt(tot(p.id)) + "</td></tr>";
+  const xrow = (r, lbl) => '<tr class="tlx"><td class="l tlname"><b>' + lbl + "</b></td>" + M.map(m => cell(r, m, false)).join("") + '<td class="num">' + fmt(tot(r)) + "</td></tr>";
+  const running = m => P.filter(p => tlRunsIn(p, m)).length;
+  el.innerHTML = M.length ? '<table class="tltbl">' + head + "<tbody>" + '<tr class="tlx"><td class="l tlname sub">Projects running</td>' + M.map(m => '<td class="tlc sub">' + (running(m) || "") + "</td>").join("") + "<td></td></tr>" +
+    P.map(prow).join("") + xrow("_co", "Company level") + xrow("_none", "Not tagged yet") + "</tbody></table>" : '<div class="sub">Pick a month range.</div>';
+  const EQ = S.equip.slice().sort((a, b) => String(a.name).localeCompare(String(b.name)));
+  $("#tlEq").innerHTML = EQ.length && M.length ? '<table class="tltbl"><thead><tr><th class="l tlname">Equipment</th>' + M.map(m => '<th class="tlc">' + tlMonLbl(m) + "</th>").join("") + "</tr></thead><tbody>" +
+    EQ.map(q => '<tr><td class="l tlname"><b>' + esc(q.name || q.id) + '</b><div class="sub">' + esc([q.kind, q.project ? "home: " + q.project : ""].filter(Boolean).join(" · ")) + "</div></td>" + M.map(m => { const c = (eqm[q.id] || {})[m] || {}, ks = Object.keys(c).sort((a, b) => c[b] - c[a]);
+      return '<td class="tlc' + (ks.length ? " tlon" : "") + '" title="' + esc(ks.map(k => (k === "?" ? "no project" : k === "_co" ? "company level" : k) + " " + fmt(c[k])).join(", ")) + '">' + esc(ks.map(k => k === "?" ? "?" : k === "_co" ? "Co" : k).join(" ")) + "</td>"; }).join("") + "</tr>").join("") + "</tbody></table>"
+    : '<div class="sub">' + (EQ.length ? "" : "No equipment listed yet (All data > Project tags, step 3).") + "</div>";
+  renderTlList(E);
+}
+function renderTlList(E) {
+  const box = $("#tlList"); if (!TL_SEL) { box.innerHTML = '<div class="sub">Click an amount in the grid to see its entries. "Not tagged yet" cells list the month\'s untagged entries, with the projects running that month first in the pick list.</div>'; return; }
+  const L = E.filter(e => tlYm(e.date) === TL_SEL.ym && (TL_SEL.row === "_none" ? !e.rec.project : e.rec.project === TL_SEL.row)).sort((a, b) => b.amt - a.amt);
+  const run = S.projects.filter(p => tlRunsIn(p, TL_SEL.ym)).map(p => p.id);
+  const SRCN = { bank: "Bank", pay: "Logged", doc: "WhatsApp", tp: "Tally Piling", tm: "Tally Main" };
+  box.innerHTML = '<div class="toolbar" style="margin-bottom:6px"><h2 style="margin:0">' + esc(TL_SEL.row === "_none" ? "Not tagged" : TL_SEL.row === "_co" ? "Company level" : TL_SEL.row) + " · " + tlMonLbl(TL_SEL.ym) + '</h2><span class="sub">' + L.length + " entries, " + fmt(L.reduce((t, e) => t + e.amt, 0)) + (run.length ? " · running then: " + esc(run.join(", ")) : " · no project has dates covering this month") + '</span><span style="flex:1"></span><button class="small" data-act="tlclose">Close</button></div>' +
+    (L.length ? '<div class="tblwrap"><table class="tgtbl" style="min-width:900px"><thead><tr><th class="l">Date</th><th class="l">Source</th><th class="l">Party</th><th class="l">Detail</th><th class="num">Amount</th><th class="l">Project</th><th class="l">Equipment</th></tr></thead><tbody>' +
+      L.slice(0, TL_SHOW).map(e => '<tr data-id="' + esc(e.src + "|" + e.id) + '"><td class="l">' + dmy(e.date) + '</td><td class="l">' + esc(e.src === "pay" ? e.rec.source || "Logged" : SRCN[e.src]) + '</td><td class="l">' + esc(e.party) + '</td><td class="l"><div class="nar">' + esc(e.detail || "") + '</div></td><td class="num">' + fmt(e.amt) + '</td><td class="l"><select class="tlP" style="width:100%">' + tgProjOpts(e.rec.project || "", "Not tagged", e.date) + '</select></td><td class="l"><select class="tlE" style="width:100%">' + eqOpts(e.rec.equip || "", "No equipment") + "</select></td></tr>").join("") + "</tbody></table></div>" +
+      (L.length > TL_SHOW ? '<div style="margin-top:8px"><button class="small" data-act="tlmore">Show ' + Math.min(100, L.length - TL_SHOW) + " more</button></div>" : "") : '<div class="sub">Nothing left here.</div>');
+}
+/* ---------- purchase orders and work orders: made here, printed to PDF, sent by the user (nothing is sent from the app) ---------- */
+let OD_LINES = [];
+const odFy = iso => { const a = fyOf(iso || today()); return String(a).slice(2) + "-" + String(a + 1).slice(2); };
+function nextOrdNo(kind, date, skipId) {
+  const pre = (S.settings.ordPrefix || "NIL").trim(), base = (pre ? pre + "/" : "") + kind + "/" + odFy(date) + "/";
+  let max = 0;
+  S.orders.forEach(o => { if (o.id === skipId || String(o.no).indexOf(base) !== 0) return; const n = parseInt(String(o.no).slice(base.length), 10); if (n > max) max = n; });
+  return base + String(max + 1).padStart(3, "0");
+}
+const odLinesOf = o => { try { const a = JSON.parse(o.lines || "[]"); return Array.isArray(a) ? a : []; } catch (e) { return []; } };
+const odAmt = l => round2((+l.q || 0) * (+l.r || 0));
+function odCalc(lines, mode) {   // per GST rate; intra state splits into CGST + SGST
+  let sub = 0; const by = {};
+  lines.forEach(l => { const a = odAmt(l); sub += a; const g = mode === "none" ? 0 : +l.g || 0; if (g) by[g] = (by[g] || 0) + a; });
+  const taxes = Object.keys(by).sort((a, b) => a - b).map(g => ({ g: +g, base: round2(by[g]), tax: round2(by[g] * g / 100) }));
+  const tax = round2(taxes.reduce((t, x) => t + x.tax, 0)), raw = round2(sub + tax), total = Math.round(raw);
+  return { sub: round2(sub), taxes: taxes, tax: tax, roundOff: round2(total - raw), total: total };
+}
+function inWordsINR(n) {   // Indian system: crore, lakh, thousand
+  const a = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+  const t = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+  const two = x => x < 20 ? a[x] : t[Math.floor(x / 10)] + (x % 10 ? " " + a[x % 10] : "");
+  const three = x => (x >= 100 ? a[Math.floor(x / 100)] + " Hundred" + (x % 100 ? " " : "") : "") + (x % 100 ? two(x % 100) : "");
+  const w = x => {
+    if (!x) return "";
+    const cr = Math.floor(x / 1e7), l = Math.floor(x / 1e5) % 100, th = Math.floor(x / 1000) % 100, h = x % 1000;
+    return [cr ? w(cr) + " Crore" : "", l ? two(l) + " Lakh" : "", th ? two(th) + " Thousand" : "", h ? three(h) : ""].filter(Boolean).join(" ");
+  };
+  n = Math.round((+n || 0) * 100); const r = Math.floor(n / 100), p = n % 100;
+  return "Rupees " + (r ? w(r) : "Zero") + (p ? " and " + two(p) + " Paise" : "") + " Only";
+}
+const odState = g => String(g || "").trim().slice(0, 2);
+const odMode = g => !String(g || "").trim() || odState(g) === odState(S.settings.coGstin || "27") ? "intra" : "inter";
+function renderOrders() {
+  const el = $("#odTbl"); if (!el) return;
+  const k = $("#odKind").value, st = $("#odStatus").value, q = $("#odSearch").value.trim().toLowerCase();
+  const all = S.orders.slice().sort((a, b) => String(b.date).localeCompare(String(a.date)) || String(b.no).localeCompare(String(a.no)));
+  const rs = all.filter(o => (!k || o.kind === k) && (!st || o.status === st) && (!q || [o.no, o.vendor, o.subject, o.project, o.site, o.lines].join(" ").toLowerCase().indexOf(q) >= 0));
+  $("#ordCnt").textContent = all.length ? "(" + all.length + ")" : "";
+  const live = all.filter(o => o.status !== "Cancelled");
+  $("#odSum").textContent = live.length ? live.length + " orders, " + fmt(live.reduce((t, o) => t + (+o.total || 0), 0)) : "";
+  el.innerHTML = rs.length ? "<table><thead><tr><th>No.</th><th>Date</th><th>Vendor</th><th>Project</th><th>For</th><th class=num>Total</th><th>Status</th><th></th></tr></thead><tbody>" + rs.map(o =>
+    '<tr data-id="' + esc(o.id) + '"' + (o.status === "Cancelled" ? ' style="opacity:.55"' : "") + "><td><b>" + esc(o.no) + "</b></td><td>" + dmy(o.date) + "</td><td>" + esc(o.vendor) + "</td><td>" + esc(o.project || "") + "</td><td>" + esc(o.subject || odLinesOf(o).map(l => l.d).filter(Boolean).slice(0, 2).join(", ")) + '</td><td class=num>' + fmt(o.total) + "</td><td>" + esc(o.status || "Issued") + "</td>" +
+    '<td style="white-space:nowrap"><button class="small primary" data-act="ordprint" data-id="' + esc(o.id) + '">Print</button> <button class="small" data-act="ordedit" data-id="' + esc(o.id) + '">Edit</button> <button class="small" data-act="orddup" data-id="' + esc(o.id) + '">Copy</button>' +
+    (o.status !== "Cancelled" ? ' <button class="small danger" data-act="ordcancel" data-id="' + esc(o.id) + '">Cancel</button>' : "") + "</td></tr>").join("") + "</tbody></table>"
+    : '<div class="sub">' + (all.length ? "No orders match." : "No orders yet. Use + Purchase order or + Work order.") + "</div>";
+}
+function odLinesDraw() {
+  $("#odLines tbody").innerHTML = OD_LINES.map((l, i) => '<tr data-i="' + i + '"><td class="od-d"><input data-f="d" value="' + esc(l.d) + '" placeholder="Item or work"></td><td class="od-n"><input data-f="hsn" value="' + esc(l.hsn) + '"></td><td class="od-n"><input data-f="q" inputmode="decimal" value="' + esc(l.q) + '"></td><td class="od-s"><input data-f="u" value="' + esc(l.u) + '" placeholder="nos"></td><td class="od-n"><input data-f="r" inputmode="decimal" value="' + esc(l.r) + '"></td><td class="od-s"><input data-f="g" inputmode="decimal" value="' + esc(l.g) + '"></td><td class="num od-a">' + fmt(odAmt(l)) + '</td><td><button class="small" data-act="oddel" data-id="' + i + '" title="Remove line">&times;</button></td></tr>').join("");
+  odTotals();
+}
+function odLinesRead() { $$("#odLines tbody tr").forEach(tr => { const l = OD_LINES[+tr.dataset.i]; if (l) tr.querySelectorAll("input").forEach(inp => { l[inp.dataset.f] = inp.value.trim(); }); }); }
+function odTotals() {
+  const mode = $("#odTax").value, c = odCalc(OD_LINES, mode);
+  $$("#odLines tbody tr").forEach(tr => { const l = OD_LINES[+tr.dataset.i]; if (l) tr.querySelector(".od-a").textContent = fmt(odAmt(l)); });
+  $("#odTot").innerHTML = "<span>Before GST</span><b>" + fmt(c.sub) + "</b>" + c.taxes.map(x => mode === "intra" ? "<span>CGST " + x.g / 2 + "% + SGST " + x.g / 2 + "%</span><b>" + fmt(x.tax) + "</b>" : "<span>IGST " + x.g + "%</span><b>" + fmt(x.tax) + "</b>").join("") + "<span>Total</span><b>" + fmt(c.total) + "</b><span></span><span class=sub>" + esc(inWordsINR(c.total)) + "</span>";
+}
+function openOrder(id, kind, copy) {
+  const src = id ? S.orders.filter(o => o.id === id)[0] : null; if (id && !src) return;
+  const o = src ? Object.assign({}, src) : { kind: kind || "PO", date: today(), taxMode: "intra", status: "Issued" };
+  if (copy) { o.date = today(); o.status = "Issued"; o.no = ""; }
+  const isNew = !src || copy; kind = o.kind;
+  if (!o.no) o.no = nextOrdNo(kind, o.date);
+  OD_LINES = src ? odLinesOf(src).map(l => Object.assign({}, l)) : [];
+  if (!OD_LINES.length) OD_LINES.push({ d: "", hsn: "", q: "", u: "", r: "", g: 18 });
+  const W = kind === "WO";
+  openModal("<h2>" + (isNew ? "New " : "Edit ") + (W ? "work order" : "purchase order") + (copy ? " (copy of " + esc(src.no) + ")" : "") + "</h2>" +
+    '<div class="form"><label>Type<select id="odK"><option value="PO"' + (W ? "" : " selected") + '>Purchase order</option><option value="WO"' + (W ? " selected" : "") + '>Work order</option></select></label>' +
+    '<label>Number<input type="text" id="odNo" value="' + esc(o.no) + '"></label><label>Date<input type="date" id="odDate" value="' + esc(o.date) + '"></label>' +
+    '<label>' + (W ? "Complete by" : "Deliver by") + '<input type="date" id="odDel" value="' + esc(o.delivery || "") + '"></label>' +
+    '<label>Vendor<input type="text" id="odV" list="vendorList" value="' + esc(o.vendor || "") + '"></label><label>Vendor GSTIN<input type="text" id="odG" value="' + esc(o.gstin || "") + '"></label>' +
+    '<label>Vendor phone<input type="text" id="odPh" value="' + esc(o.vphone || "") + '"></label><label>Quotation ref.<input type="text" id="odRef" value="' + esc(o.ref || "") + '"></label>' +
+    '<label style="grid-column:1/-1">Vendor address<input type="text" id="odAd" value="' + esc(o.vaddr || "") + '"></label>' +
+    '<label>Project<select id="odP">' + projOpts(o.project || "", "No project") + '</select></label><label style="grid-column:span 2">' + (W ? "Site / place of work" : "Deliver to (site address)") + '<input type="text" id="odSite" value="' + esc(o.site || "") + '"></label>' +
+    '<label>GST<select id="odTax"><option value="intra">CGST + SGST (Maharashtra)</option><option value="inter">IGST (other state)</option><option value="none">No GST</option></select></label>' +
+    '<label style="grid-column:1/-1">Subject<input type="text" id="odSub" value="' + esc(o.subject || "") + '" placeholder="' + (W ? "e.g. Piling labour work at site" : "e.g. Supply of TMT bars") + '"></label></div>' +
+    '<div class="tblwrap" style="margin-top:10px"><table id="odLines"><thead><tr><th>' + (W ? "Work / item" : "Item") + "</th><th>" + (W ? "SAC" : "HSN") + "</th><th>Qty</th><th>Unit</th><th>Rate</th><th>GST %</th><th class=num>Amount</th><th></th></tr></thead><tbody></tbody></table></div>" +
+    '<div class="toolbar" style="margin:6px 0 0"><button class="small" data-act="odadd">+ Line</button><span style="flex:1"></span></div><div class="odtot" id="odTot"></div>' +
+    '<div class="form" style="margin-top:10px"><label style="grid-column:1/-1">Payment terms<input type="text" id="odPay" value="' + esc(o.payTerms || "") + '" placeholder="e.g. 30 days from receipt of material and invoice"></label>' +
+    '<label style="grid-column:1/-1">Terms and conditions (one per line)<textarea id="odTerms" rows="5">' + esc(isNew && !copy ? S.settings[W ? "woTerms" : "poTerms"] || "" : o.terms || "") + "</textarea></label>" +
+    '<label style="grid-column:1/-1">Note (not printed)<input type="text" id="odNote" value="' + esc(o.note || "") + '"></label></div>' +
+    '<div id="odMsg" style="margin-top:8px;font-size:13px;font-weight:600;color:var(--bad)"></div>' +
+    '<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><span style="flex:1"></span><button data-act="mclose">Close</button><button id="odSave">Save</button><button class="primary" id="odSavePrint">Save and print</button></div>', true);
+  $("#odTax").value = o.taxMode || "intra";
+  odLinesDraw();
+  $("#odLines").addEventListener("input", () => { odLinesRead(); odTotals(); });
+  $("#odTax").onchange = odTotals;
+  const renum = () => { if (isNew) $("#odNo").value = nextOrdNo($("#odK").value, $("#odDate").value); };
+  $("#odK").onchange = () => { const w = $("#odK").value === "WO", t = $("#odTerms"); if (t.value.trim() === String(S.settings[w ? "poTerms" : "woTerms"] || "").trim()) t.value = S.settings[w ? "woTerms" : "poTerms"] || ""; renum(); };
+  $("#odDate").onchange = renum;
+  $("#odV").onchange = () => {   // fill what we know of this vendor: GSTIN and phone from the vendor list, address from its last order
+    const name = $("#odV").value.trim(), v = vendorByName(name), last = S.orders.filter(x => x.id !== (src && src.id) && (v ? x.vendorId === v.id : norm(x.vendor) === norm(name))).sort((a, b) => String(b.date).localeCompare(String(a.date)))[0] || {};
+    if (!$("#odG").value) $("#odG").value = (v && v.gstin) || last.gstin || "";
+    if (!$("#odPh").value) $("#odPh").value = (v && v.phone) || last.vphone || "";
+    if (!$("#odAd").value) $("#odAd").value = last.vaddr || "";
+    if ($("#odG").value) { $("#odTax").value = odMode($("#odG").value); odTotals(); }
+  };
+  $("#odG").onchange = () => { if ($("#odG").value.trim() && $("#odTax").value !== "none") { $("#odTax").value = odMode($("#odG").value); odTotals(); } };
+  $("#odSave").onclick = () => saveOrder(isNew ? null : src.id, false);
+  $("#odSavePrint").onclick = () => saveOrder(isNew ? null : src.id, true);
+}
+function saveOrder(id, print) {
+  odLinesRead();
+  const lines = OD_LINES.filter(l => l.d || +l.q || +l.r), msg = t => { $("#odMsg").textContent = t; };
+  const kind = $("#odK").value, no = $("#odNo").value.trim(), date = $("#odDate").value, vendor = $("#odV").value.trim(), gstin = $("#odG").value.trim().toUpperCase();
+  if (!vendor) return msg("Enter the vendor.");
+  if (!date) return msg("Enter the date.");
+  if (!no) return msg("Enter the order number.");
+  if (S.orders.some(o => o.id !== id && String(o.no).toLowerCase() === no.toLowerCase())) return msg("Number " + no + " is already used.");
+  if (!lines.length) return msg("Add at least one line.");
+  const bad = lines.findIndex(l => !l.d || !(+l.q > 0) || !(+l.r >= 0) || isNaN(+l.g || 0));
+  if (bad >= 0) return msg("Line " + (bad + 1) + ": needs a description, a quantity above 0 and a rate.");
+  if (gstin && !/^\d{2}[A-Z0-9]{13}$/.test(gstin)) return msg("The vendor GSTIN should be 15 characters, starting with the 2-digit state code.");
+  const mode = $("#odTax").value, c = odCalc(lines, mode), v = vendorByName(vendor), me = USER ? USER.email : "";
+  let o = id ? S.orders.filter(x => x.id === id)[0] : null;
+  if (!o) { o = { id: uid(), status: "Issued", by: me, on: today() }; S.orders.push(o); }
+  Object.assign(o, { kind: kind, no: no, date: date, vendorId: v ? v.id : "", vendor: v ? v.name : vendor, gstin: gstin, vaddr: $("#odAd").value.trim(), vphone: $("#odPh").value.trim(),
+    project: $("#odP").value, site: $("#odSite").value.trim(), delivery: $("#odDel").value, ref: $("#odRef").value.trim(), subject: $("#odSub").value.trim(),
+    lines: JSON.stringify(lines.map(l => ({ d: l.d, hsn: l.hsn, q: +l.q || 0, u: l.u, r: +l.r || 0, g: mode === "none" ? 0 : +l.g || 0 }))), taxMode: mode,
+    subtotal: c.sub, tax: c.tax, total: c.total, payTerms: $("#odPay").value.trim(), terms: $("#odTerms").value.trim(), note: $("#odNote").value.trim() });
+  if (v && !v.gstin && gstin) v.gstin = gstin;
+  closeModal(); persist(); renderAll(); toast(o.no + " saved");
+  if (print) printOrder(o.id);
+}
+function ordCancel(id) {
+  const o = S.orders.filter(x => x.id === id)[0]; if (!o) return;
+  if (!confirm("Cancel " + o.no + "? It stays in the list marked Cancelled and its number is not reused.")) return;
+  o.status = "Cancelled"; persist(); renderAll(); toast(o.no + " cancelled");
+}
+function printOrder(id) {
+  const o = S.orders.filter(x => x.id === id)[0]; if (!o) return;
+  const L = odLinesOf(o), c = odCalc(L, o.taxMode), W = o.kind === "WO", st = S.settings, intra = o.taxMode === "intra";
+  const m2 = v => (+v || 0).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 }), n2 = v => (+v || 0).toLocaleString("en-IN", { maximumFractionDigits: 3 });
+  const p = PBY[o.project], title = W ? "WORK ORDER" : "PURCHASE ORDER", terms = String(o.terms || "").split(/\n+/).map(x => x.trim()).filter(Boolean);
+  const rows = L.map((l, i) => "<tr><td>" + (i + 1) + "</td><td class=l>" + esc(l.d) + "</td><td>" + esc(l.hsn || "") + "</td><td>" + n2(l.q) + "</td><td class=c>" + esc(l.u || "") + "</td><td>" + m2(l.r) + "</td><td>" + (o.taxMode === "none" ? "-" : (+l.g || 0) + "%") + "</td><td>" + m2(odAmt(l)) + "</td></tr>").join("");
+  const tax = c.taxes.map(x => intra ? "<tr><td class=l>CGST @ " + x.g / 2 + "% on " + m2(x.base) + "</td><td>" + m2(x.tax / 2) + "</td></tr><tr><td class=l>SGST @ " + x.g / 2 + "% on " + m2(x.base) + "</td><td>" + m2(x.tax - round2(x.tax / 2)) + "</td></tr>" : "<tr><td class=l>IGST @ " + x.g + "% on " + m2(x.base) + "</td><td>" + m2(x.tax) + "</td></tr>").join("");
+  const html = "<!doctype html><html><head><meta charset=utf-8><title>" + esc(o.no + " " + o.vendor) + "</title><style>body{font:12px/1.45 Arial,sans-serif;margin:24px;color:#000}.hd{text-align:center;border-bottom:2px solid #000;padding-bottom:8px}.hd h1{font-size:18px;margin:0}.hd div{font-size:11px}h2{text-align:center;font-size:15px;letter-spacing:1px;margin:10px 0}" +
+    ".two{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid #444}.two>div{padding:6px 8px}.two>div+div{border-left:1px solid #444}table{border-collapse:collapse;width:100%;margin-top:10px}th,td{border:1px solid #444;padding:4px 6px;text-align:right;vertical-align:top}th{background:#eee}.l{text-align:left}.c{text-align:center}" +
+    ".it th:nth-child(2){width:42%}.tot{width:55%;margin-left:auto}.tot td{border:1px solid #444}.tot tr:last-child td{font-weight:bold;font-size:13px}ol{margin:4px 0 0 18px;padding:0}.sig{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:56px}.sig div{border-top:1px solid #000;padding-top:4px}" +
+    ".x{position:fixed;top:40%;left:0;right:0;text-align:center;font-size:80px;color:rgba(200,0,0,.18);transform:rotate(-20deg)}@media print{body{margin:10mm}}</style></head><body>" +
+    (o.status === "Cancelled" ? "<div class=x>CANCELLED</div>" : "") +
+    "<div class=hd><h1>" + esc(st.coName || "") + "</h1><div>" + esc(st.coAddr || "") + "</div><div>" + [st.coGstin ? "GSTIN: " + esc(st.coGstin) : "", st.coPhone ? "Phone: " + esc(st.coPhone) : "", st.coEmail ? "Email: " + esc(st.coEmail) : ""].filter(Boolean).join(" &middot; ") + "</div></div>" +
+    "<h2>" + title + "</h2><div class=two><div><b>To</b><br><b>" + esc(o.vendor) + "</b><br>" + esc(o.vaddr || "") + (o.gstin ? "<br>GSTIN: " + esc(o.gstin) : "") + (o.vphone ? "<br>Phone: " + esc(o.vphone) : "") + "</div>" +
+    "<div><b>" + (W ? "WO" : "PO") + " no.:</b> " + esc(o.no) + "<br><b>Date:</b> " + dmy(o.date) + (o.ref ? "<br><b>Your quotation:</b> " + esc(o.ref) : "") + (p ? "<br><b>Project:</b> " + esc(p.name || p.id) : o.project ? "<br><b>Project:</b> " + esc(o.project) : "") + (o.site ? "<br><b>" + (W ? "Site" : "Deliver to") + ":</b> " + esc(o.site) : "") + (o.delivery ? "<br><b>" + (W ? "Complete by" : "Deliver by") + ":</b> " + dmy(o.delivery) : "") + "</div></div>" +
+    (o.subject ? "<p><b>Subject:</b> " + esc(o.subject) + "</p>" : "") + "<p>Dear Sir/Madam,<br>" + (W ? "We are pleased to award you the following work on the terms below." : "Please supply the following on the terms below.") + "</p>" +
+    "<table class=it><thead><tr><th>Sr</th><th class=l>Description</th><th>" + (W ? "SAC" : "HSN") + "</th><th>Qty</th><th class=c>Unit</th><th>Rate (Rs)</th><th>GST</th><th>Amount (Rs)</th></tr></thead><tbody>" + rows + "</tbody></table>" +
+    "<table class=tot><tr><td class=l>Total before GST</td><td>" + m2(c.sub) + "</td></tr>" + tax + (c.roundOff ? "<tr><td class=l>Rounded off</td><td>" + m2(c.roundOff) + "</td></tr>" : "") + "<tr><td class=l>Total</td><td>Rs " + m2(c.total) + "</td></tr></table>" +
+    "<p><b>Amount in words:</b> " + esc(inWordsINR(c.total)) + "</p>" + (o.payTerms ? "<p><b>Payment terms:</b> " + esc(o.payTerms) + "</p>" : "") +
+    (terms.length ? "<div><b>Terms and conditions</b><ol>" + terms.map(t => "<li>" + esc(t) + "</li>").join("") + "</ol></div>" : "") +
+    "<div class=sig><div>For " + esc(st.coName || "") + "<br>" + (st.ordSign ? esc(st.ordSign) + "<br>" : "") + "Authorised signatory</div><div>Accepted by " + esc(o.vendor) + "<br>Name, signature, stamp and date</div></div></body></html>";
+  const win = window.open("", "_blank");
+  if (!win) { toast("Allow pop-ups for this page to print the order"); return; }
+  win.document.open(); win.document.write(html); win.document.close();
+  setTimeout(() => { try { win.focus(); win.print(); } catch (e) {} }, 300);
 }
 function drillPay(o) { ["pSource", "pCat", "pProj", "pFlag", "pSearch"].forEach(id => { $("#" + id).value = ""; }); Object.keys(o).forEach(k => { $("#" + k).value = o[k]; }); P_SHOW = 200; renderPayments(); showTab("payments"); }
 function wire() {
@@ -2398,6 +2683,9 @@ function wire() {
   $("#pSelClear").onclick = () => { P_SEL = {}; renderPayments(); };
   $("#clMin").onchange = () => { CL_SHOW = 60; renderClassify(); };
   $("#clSearch").oninput = () => { CL_SHOW = 60; renderClassify(); };
+  $("#clTbl").addEventListener("change", e => { if (!e.target.classList.contains("clChk")) return; const k = e.target.closest("tr").dataset.key; CL_SEL[k] = e.target.checked;
+    if (e.target.checked && !$("#clBV").value) $("#clBV").value = $(".clV", e.target.closest("tr")).value;   // first tick suggests its name
+    renderClassify(); });
   $("#clTbl").addEventListener("keydown", e => { if (e.key === "Enter" && e.target.closest(".clV,.clC,.clP")) { e.preventDefault(); clSave(e.target.closest("tr")); } });
   $("#vSearch").oninput = renderVendors;
   ["cdMonth", "cdKind", "cdState"].forEach(id => { $("#" + id).onchange = () => { CD_SHOW = 100; renderChat(); }; });
@@ -2443,6 +2731,15 @@ function wire() {
   $("#prFile").onchange = e => { const f = e.target.files[0]; if (f) onProjectFile(f); e.target.value = ""; };
   $("#setSources").onchange = e => { S.settings.sources = e.target.value.trim(); persist(); renderAll(); };
   $("#setPayers").onchange = e => { S.settings.payers = e.target.value.split(",").map(x => x.trim()).filter(Boolean).join(", "); persist(); renderAll(); };
+  $$("[data-set]").forEach(el => { el.onchange = () => { S.settings[el.dataset.set] = el.value.trim(); persist(); renderAll(); }; });
+  $("#tlSrc").innerHTML = Object.keys(TL_SRC).map(k => '<option value="' + k + '">' + esc(TL_SRC[k]) + "</option>").join("");
+  ["#tlSrc", "#tlFrom", "#tlTo"].forEach(id => { $(id).onchange = () => { TL_SEL = null; renderTimeline(); }; });
+  $("#tlList").addEventListener("change", e => {
+    const tr = e.target.closest("tr"); if (!tr || !tr.dataset.id) return; const en = TG_IDX[tr.dataset.id]; if (!en) return;
+    const f = e.target.classList.contains("tlP") ? "project" : e.target.classList.contains("tlE") ? "equip" : ""; if (!f) return;
+    const n = tgSetField(en.rec, f, e.target.value); persist(); renderAll(); renderTimeline(); toast(n > 1 ? "Tagged, with " + (n - 1) + " tied entr" + (n === 2 ? "y" : "ies") : "Tagged");
+  });
+  ["#odKind", "#odStatus"].forEach(id => { $(id).onchange = renderOrders; }); $("#odSearch").oninput = renderOrders;
   $("#setFloatHolder").onchange = e => { S.settings.floatHolder = e.target.value.trim(); persist(); renderAll(); };
   $("#setDupDays").onchange = e => { S.settings.dupDays = Math.max(0, +e.target.value || 0); persist(); renderAll(); };
   $("#setDupMin").onchange = e => { S.settings.dupMin = Math.max(0, +e.target.value || 0); persist(); renderAll(); };
@@ -2454,6 +2751,16 @@ function wire() {
     const id = t.dataset.id, act = t.dataset.act;
     if (act === "cmenu") t.nextElementSibling.classList.toggle("hide");
     else if (act === "mclose") closeModal();
+    else if (act === "ordnew") openOrder(null, id);
+    else if (act === "tlcell") { const i = id.lastIndexOf("|"); TL_SEL = { row: id.slice(0, i), ym: id.slice(i + 1) }; TL_SHOW = 100; renderTimeline(); $("#tlList").scrollIntoView({ block: "start" }); }
+    else if (act === "tlclose") { TL_SEL = null; renderTimeline(); }
+    else if (act === "tlmore") { TL_SHOW += 100; renderTimeline(); }
+    else if (act === "ordedit") openOrder(id);
+    else if (act === "orddup") openOrder(id, null, true);
+    else if (act === "ordprint") printOrder(id);
+    else if (act === "ordcancel") ordCancel(id);
+    else if (act === "odadd") { odLinesRead(); OD_LINES.push({ d: "", hsn: "", q: "", u: "", r: "", g: OD_LINES.length ? OD_LINES[OD_LINES.length - 1].g : 18 }); odLinesDraw(); }
+    else if (act === "oddel") { odLinesRead(); OD_LINES.splice(+id, 1); if (!OD_LINES.length) OD_LINES.push({ d: "", hsn: "", q: "", u: "", r: "", g: 18 }); odLinesDraw(); }
     else if (act === "newpay") openPay(null);
     else if (act === "pedit") openPay(id);
     else if (act === "pdel") delPay(id);
@@ -2461,6 +2768,8 @@ function wire() {
     else if (act === "psel") { P_SEL[id] = t.checked; renderPayments(); }
     else if (act === "pselall") { payFilter().slice(0, P_SHOW).forEach(r => { P_SEL[r.id] = t.checked; }); renderPayments(); }
     else if (act === "clsave") clSave(t.closest("tr"));
+    else if (act === "clbulk") clBulk();
+    else if (act === "clclear") { CL_SEL = {}; $("#clBV").value = ""; renderClassify(); }
     else if (act === "cldg") clSave(t.closest("tr"), true);
     else if (act === "clmore") { CL_SHOW += 60; renderClassify(); }
     else if (act === "tkmore") { TK_SHOW += 100; renderTally(); }
