@@ -15,5 +15,5 @@ window.RCR_CONFIG = {
   // Google Drive folder (id from its URL) where bill documents are uploaded, shared with the team as Editor.
   // Blank: each uploader gets "NIL Contracts" in their own My Drive.
   driveRoot: "",
-  allowedEmails: ["vjprabhu9@gmail.com", "corporate.nityanand@gmail.com", "ajit.nityanand@gmail.com", "jayanthsprabhu@gmail.com", "nilmisetu3@gmail.com"]
+  allowedEmails: ["vjprabhu9@gmail.com", "corporate.nityanand@gmail.com", "ajit.nityanand@gmail.com", "jayanthsprabhu@gmail.com", "nilmisetu3@gmail.com", "nityanandltdit5@gmail.com"]
 };
